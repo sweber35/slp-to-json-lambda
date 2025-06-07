@@ -40,6 +40,7 @@ exports.handler = async (event) => {
   try {
     console.log('Parsing SLP file into JSON');
     const game = new SlippiGame(tempPath);
+    console.log('debug:', game);
     const stats = game.getStats();
     const allSettings = getSettingsData(game.getSettings());
     settings = allSettings.jsonl;
