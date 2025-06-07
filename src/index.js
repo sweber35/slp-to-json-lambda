@@ -42,7 +42,6 @@ exports.handler = async (event) => {
     const game = new SlippiGame(tempPath);
     const stats = game.getStats();
     const allSettings = getSettingsData(game.getSettings());
-    console.log('settings:', allSettings);
     settings = allSettings.jsonl;
     playerIndex = allSettings.playerIndex;
     opponentIndex = allSettings.opponentIndex;
