@@ -16,7 +16,7 @@ const streamToBuffer = async (stream) => {
 };
 
 exports.handler = async (event) => {
-  const record = event.Records[0];
+  const record = event;
   console.log(JSON.stringify(record));
   const bucket = record.s3.bucket.name;
   const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
