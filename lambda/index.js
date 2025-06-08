@@ -2,7 +2,6 @@ const fs = require('fs').promises;
 const path = require('path');
 const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { SlippiGame } = require('@slippi/slippi-js');
-const { getSettingsData, getFrameData, getConversionsData } = require('./slp-util');
 const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
@@ -55,20 +54,8 @@ exports.handler = async (event) => {
 
   try {
     console.log('Parsing SLP file into JSON');
-    const game = new SlippiGame(tempPath);
-    const stats = game.getStats();
-    const allSettings = getSettingsData(game.getSettings());
-    settings = allSettings.jsonl;
-    playerIndex = allSettings.playerIndex;
-    opponentIndex = allSettings.opponentIndex;
-    
-    frames = getFrameData(game.getFrames(), playerIndex, opponentIndex);
-    conversions = getConversionsData(stats);
-
     const outputPath = '/tmp/output.json';
-
     await parseWithSlippc(tempPath, outputPath);
-
     output = require('fs').readFileSync(outputPath, 'utf-8');
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
