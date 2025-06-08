@@ -6,7 +6,7 @@ const { getSettingsData, getFrameData, getConversionsData } = require('./slp-uti
 const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
-
+// debug
 // Convert S3 stream to buffer
 const streamToBuffer = async (stream) => {
     const chunks = [];
