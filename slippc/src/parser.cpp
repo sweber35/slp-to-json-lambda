@@ -414,7 +414,7 @@ namespace slip {
       return false;
     }
 
-    Frame& cur_frame = _replay.player[p].frame[f]; // Store reference for cleaner access
+    auto& cur_frame = _replay.player[p].frame[f]; // Store reference for cleaner access
 
     _replay.last_frame          = fnum;
     _replay.frame_count         = f + 1;
