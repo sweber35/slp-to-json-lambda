@@ -99,9 +99,9 @@ exports.handler = async (event) => {
     let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats }
         = analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE);
 
-    playerAttacks = _playerAttacks.map(obj => JSON.stringify(obj)).join('\n');;
-    playerPunishes = _playerPunishes.map(obj => JSON.stringify(obj)).join('\n');;
-    playerStats = _playerStats.map(obj => JSON.stringify(obj)).join('\n');;
+    playerAttacks = _playerAttacks.map(obj => JSON.stringify(obj)).join('\n');
+    playerPunishes = _playerPunishes.map(obj => JSON.stringify(obj)).join('\n');
+    playerStats = JSON.stringify(_playerStats);
 
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
