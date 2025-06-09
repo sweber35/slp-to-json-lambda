@@ -81,10 +81,10 @@ exports.handler = async (event) => {
       end_type: output.end_type,
       player_index: playerIndex,
       player_character: Object.keys(players[playerIndex].characters)[0],
-      player_code: players[playerIndex].code,
+      player_code: players[playerIndex].names.code,
       opponent_index: opponentIndex,
       opponent_character: Object.keys(players[opponentIndex].characters)[0],
-      opponent_code: players[opponentIndex].code,
+      opponent_code: players[opponentIndex].names.code,
     });
 
   } catch (err) {
