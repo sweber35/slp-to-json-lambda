@@ -66,8 +66,7 @@ exports.handler = async (event) => {
 
     await parseWithSlippc(tempPath, '/tmp/');
     const output = JSON.parse(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
-    analysis = require('fs').readFileSync('/tmp/analysis.json', 'utf-8');
-    console.log('analysis:', analysis);
+    analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
     startAt = output.metadata.startAt;
     const playersArray = Object.values(output.metadata.players);
