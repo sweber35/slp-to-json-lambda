@@ -196,7 +196,7 @@ exports.handler = async (event) => {
       Body: opponentStats,
       ContentType: 'text/plain'
     });
-    await s3.send(opponentStatKey);
+    await s3.send(putOpponentStatsCommand);
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
   }
