@@ -58,7 +58,7 @@ exports.handler = async (event) => {
     await parseWithSlippc(tempPath, outputPath);
     const output = JSON.parse(require('fs').readFileSync(outputPath, 'utf-8'));
     frames = output.players.find(
-        player => player.slippi_uid === process.env.SLIPPI_USER_ID)
+        player => player.slippi_uid === process.env.SLIPPI_USER_ID).frames
           .map(obj => JSON.stringify(obj)).join('\n');
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
