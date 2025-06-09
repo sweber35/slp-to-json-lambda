@@ -1,4 +1,4 @@
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+FROM public.ecr.aws/amazonlinux/amazonlinux:2-arm64
 
 RUN yum install -y gcc gcc-c++ make xz-devel glibc-static libstdc++-static
 
