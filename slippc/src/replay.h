@@ -19,6 +19,7 @@ struct SlippiFrame {
   bool     alive         = false;  //For checking if this frame was actually set
 
   //Pre-frame stuff
+  uint32_t byte_offset   = 0;
   int32_t  frame         = 0;      //In-game frame number corresponding to this SlippiFrame (starts at -123)
   uint8_t  player        = 0;      //Port id of the player (0 = Port 1, 1 = Port 2, etc.)
   bool     follower      = false;  //Whether this player is a follower (e.g., 2nd climber)
