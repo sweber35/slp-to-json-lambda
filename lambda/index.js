@@ -72,7 +72,7 @@ exports.handler = async (event) => {
 
     const players = output.metadata.players;
 
-    settings = {
+    settings = JSON.stringify({
       slippi_version: output.slippi_version,
       start_time: output.start_time,
       frame_count: output.frame_count,
@@ -85,7 +85,7 @@ exports.handler = async (event) => {
       opponent_index: opponentIndex,
       opponent_character: Object.keys(players[opponentIndex].characters)[0],
       opponent_code: players[opponentIndex].code,
-    }
+    });
 
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
