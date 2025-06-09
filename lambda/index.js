@@ -153,6 +153,24 @@ exports.handler = async (event) => {
     });
     await s3.send(putPlayerAttacksCommand);
 
+    const playerPunishesKey = `json/${startAt}_player_punishes.jsonl`;
+    const putPlayerPunishesCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: playerPunishesKey,
+      Body: playerPunishes,
+      ContentType: 'text/plain'
+    });
+    await s3.send(putPlayerPunishesCommand);
+
+    const playerStatsKey = `json/${startAt}_player_stats.jsonl`;
+    const putPlayerStatsCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: playerStatsKey,
+      Body: playerStats,
+      ContentType: 'text/plain'
+    });
+    await s3.send(putPlayerStatsCommand);
+
     const opponentAttacksKey = `json/${startAt}_opponent_attacks.jsonl`;
     const putOpponentAttacksCommand = new PutObjectCommand({
       Bucket: bucket,
@@ -161,6 +179,24 @@ exports.handler = async (event) => {
       ContentType: 'application/json'
     });
     await s3.send(putOpponentAttacksCommand);
+
+    const opponentPunishesKey = `json/${startAt}_opponent_punishes.jsonl`;
+    const putOpponentPunishesCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: opponentPunishesKey,
+      Body: opponentPunishes,
+      ContentType: 'text/plain'
+    });
+    await s3.send(putOpponentPunishesCommand);
+
+    const opponentStatKey = `json/${startAt}_opponent_stats.jsonl`;
+    const putOpponentStatsCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: opponentStatKey,
+      Body: opponentStats,
+      ContentType: 'text/plain'
+    });
+    await s3.send(opponentStatKey);
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
   }
