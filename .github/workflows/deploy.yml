@@ -23,7 +23,7 @@ jobs:
       - name: Copy binary out of container
         run: |
           CONTAINER_ID=$(docker create slippc-builder)
-          docker cp "$CONTAINER_ID":/src/slippc/slippc ./lambda/slippc/slippc
+          docker cp "$CONTAINER_ID":/src/slippc/slippc ./lambda/slippc
           docker rm "$CONTAINER_ID"
 
       - name: Ensure binary is executable
