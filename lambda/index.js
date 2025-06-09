@@ -36,7 +36,7 @@ exports.handler = async (event) => {
   const tempPath = '/tmp/game.slp';
 
   let startAt;
-  let playerFrames, opponentFrames;//, settings, conversions;
+  let playerFrames, opponentFrames, settings;
   let playerIndex, opponentIndex;
 
   try {
@@ -70,6 +70,23 @@ exports.handler = async (event) => {
     opponentFrames = output.players[opponentIndex].frames
         .map(obj => JSON.stringify(obj)).join('\n');
 
+    const players = output.metadata.players;
+
+    settings = {
+      slippi_version: output.slippi_version,
+      start_time: output.start_time,
+      frame_count: output.frame_count,
+      winner_id: output.winner_id,
+      stage: output.stage,
+      end_type: output.end_type,
+      player_index: playerIndex,
+      player_character: Object.keys(players[playerIndex].characters)[0],
+      player_code: players[playerIndex].code,
+      opponent_index: opponentIndex,
+      opponent_character: Object.keys(players[opponentIndex].characters)[0],
+      opponent_code: players[opponentIndex].code,
+    }
+
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }
@@ -77,10 +94,17 @@ exports.handler = async (event) => {
   try {
     const playerKey = `json/${startAt}_player_frames.jsonl`;
     const opponentKey = `json/${startAt}_opponent_frames.jsonl`;
-    // const settingsKey = `json/${path.basename(key + '-settings').replace(".slp", ".jsonl")}`;
+    const settingsKey = `json/${startAt}_settings.json`;
     // const conversionsKey = `json/${path.basename(key + '-conversions').replace(".slp", ".jsonl")}`;
-    // const slippcKey = `json/${path.basename(key).replace(".slp", "_player_frames.json")}`;
     console.log('Writing JSON to S3');
+
+    const putSettingsCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: settingsKey,
+      Body: settings,
+      ContentType: 'application/json',
+    });
+    await s3.send(putSettingsCommand);
 
     const putPlayerFramesCommand = new PutObjectCommand({
       Bucket: bucket,
@@ -94,25 +118,10 @@ exports.handler = async (event) => {
       Bucket: bucket,
       Key: opponentKey,
       Body: opponentFrames,
-      ContentType: 'text/plain'
+      ContentType: 'text/plain',
     });
     await s3.send(putOpponentFramesCommandPlayer);
-    //
-    // const putCommandOpponent = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: opponentKey,
-    //   Body: frames.opponent,
-    //   ContentType: 'text/plain'
-    // });
-    // await s3.send(putCommandOpponent);
-    //
-    // const putCommandSettings = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: settingsKey,
-    //   Body: settings,
-    //   ContentType: 'text/plain'
-    // });
-    // await s3.send(putCommandSettings);
+
     //
     // const putCommandConversions = new PutObjectCommand({
     //   Bucket: bucket,
