@@ -20,12 +20,18 @@ function parseWithSlippc(inputPath, outputPath) {
   return new Promise((resolve, reject) => {
     // -f argument tells slippc to output data on the whole frame, instead of just the changes since last frame.
     // While it makes the files quite a bit larger, I think it will ultimately be worth the simplicity during analysis
-    execFile(slippcPath, ['-i', inputPath, '-j', outputPath, '-f'], (error, stdout, stderr) => {
-      if (error) {
-        return reject(`Error running slippc: ${error.message}`);
-      }
-      resolve({ stdout, stderr });
-    });
+    execFile(slippcPath,
+        [
+          '-i', inputPath,
+          '-j', outputPath + 'output.json',
+          '-f',
+          '-a', outputPath + 'analysis.json'
+        ], (error, stdout, stderr) => {
+          if (error) {
+            return reject(`Error running slippc: ${error.message}`);
+          }
+          resolve({ stdout, stderr });
+        });
   });
 }
 
@@ -36,7 +42,7 @@ exports.handler = async (event) => {
   const tempPath = '/tmp/game.slp';
 
   let startAt;
-  let playerFrames, opponentFrames, settings;
+  let playerFrames, opponentFrames, settings, analysis;
   let playerIndex, opponentIndex;
 
   try {
@@ -54,10 +60,11 @@ exports.handler = async (event) => {
 
   try {
     console.log('Parsing SLP file into JSON');
-    const outputPath = '/tmp/output.json';
 
-    await parseWithSlippc(tempPath, outputPath);
-    const output = JSON.parse(require('fs').readFileSync(outputPath, 'utf-8'));
+    await parseWithSlippc(tempPath, '/tmp/');
+    const output = JSON.parse(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
+    analysis = require('fs').readFileSync('/tmp/analysis.json', 'utf-8');
+    console.log('analysis:', analysis);
 
     startAt = output.metadata.startAt;
     const playersArray = Object.values(output.metadata.players);
@@ -65,7 +72,7 @@ exports.handler = async (event) => {
     opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
 
     playerFrames = output.players[playerIndex].frames
-          .map(obj => JSON.stringify(obj)).join('\n');
+        .map(obj => JSON.stringify(obj)).join('\n');
 
     opponentFrames = output.players[opponentIndex].frames
         .map(obj => JSON.stringify(obj)).join('\n');
@@ -95,7 +102,7 @@ exports.handler = async (event) => {
     const playerKey = `json/${startAt}_player_frames.jsonl`;
     const opponentKey = `json/${startAt}_opponent_frames.jsonl`;
     const settingsKey = `json/${startAt}_settings.json`;
-    // const conversionsKey = `json/${path.basename(key + '-conversions').replace(".slp", ".jsonl")}`;
+    const analysisKey = `json/${startAt}_analysis.json`;
     console.log('Writing JSON to S3');
 
     const putSettingsCommand = new PutObjectCommand({
@@ -122,14 +129,13 @@ exports.handler = async (event) => {
     });
     await s3.send(putOpponentFramesCommandPlayer);
 
-    //
-    // const putCommandConversions = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: conversionsKey,
-    //   Body: conversions,
-    //   ContentType: 'text/plain'
-    // });
-    // await s3.send(putCommandConversions);
+    const putAnalysisCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: analysisKey,
+      Body: analysis,
+      ContentType: 'applicaiton/json'
+    });
+    await s3.send(putAnalysisCommand);
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
   }
