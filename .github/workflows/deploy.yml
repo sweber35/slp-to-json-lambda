@@ -1,4 +1,4 @@
-name: Deploy Lambda to AWS
+name: Build Binary and Deploy Lambda
 
 on:
   push:
@@ -6,25 +6,37 @@ on:
       - feature/slippc
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Zip Lambda code
-        run: (cd lambda && zip -r ../function.zip .)
+      - name: Build binary in Docker
+        run: |
+          docker build -t slippc-builder -f ./Dockerfile .
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Copy binary out of container
+        run: |
+          CONTAINER_ID=$(docker create slippc-builder)
+          docker cp "$CONTAINER_ID":/src/slippc/slippc ./lambda/slippc
+          docker rm "$CONTAINER_ID"
+
+      - name: Ensure binary is executable
+        run: chmod +x lambda/slippc
+
+      - name: Install Lambda dependencies
+        working-directory: lambda
+        run: npm ci
+
+      - name: Zip Lambda source
+        working-directory: lambda
+        run: zip -r ../lambda.zip .
 
       - name: Deploy to Lambda
-        run: |
-          aws lambda update-function-code \
-            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
-            --zip-file fileb://function.zip
+        uses: aws-actions/aws-lambda-deploy@v1
+        with:
+          function-name: slp-to-json-lambda
+          zip-file: lambda.zip
+          region: us-east-2
