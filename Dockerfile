@@ -1,14 +1,15 @@
-FROM ubuntu:20.04
+FROM amazonlinux:2
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    g++ \
-    make \
-    libstdc++-static
+RUN yum install -y \
+    gcc gcc-c++ make xz-devel glibc-static libstdc++-static \
+    yum-plugin-versionlock gcc9 gcc9-c++ \
+    && alternatives --install /usr/bin/gcc gcc /usr/bin/gcc9 60 \
+    && alternatives --install /usr/bin/g++ g++ /usr/bin/g++9 60 \
 
-WORKDIR /src/slippc
+RUN mkdir -p /src/slippc
 COPY slippc/ /src/slippc/
+WORKDIR /src/slippc
 
-RUN mkdir -p build
 RUN make clean || true
+RUN mkdir -p build
 RUN make static
