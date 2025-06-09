@@ -1,7 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
-const { SlippiGame } = require('@slippi/slippi-js');
 const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
@@ -19,7 +18,7 @@ function parseWithSlippc(inputPath, outputPath) {
   const slippcPath = path.join(__dirname, 'slippc');
 
   return new Promise((resolve, reject) => {
-    execFile(slippcPath, ['-i', inputPath, '-j', outputPath], (error, stdout, stderr) => {
+    execFile(slippcPath, ['-i', inputPath, '-j', outputPath, '-f'], (error, stdout, stderr) => {
       if (error) {
         return reject(`Error running slippc: ${error.message}`);
       }
