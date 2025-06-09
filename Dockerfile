@@ -7,4 +7,7 @@ COPY slippc/ /src/slippc/
 WORKDIR /src/slippc
 
 RUN make clean || true
+
+RUN mkdir -p build
+
 RUN make static
