@@ -60,8 +60,9 @@ exports.handler = async (event) => {
     const output = JSON.parse(require('fs').readFileSync(outputPath, 'utf-8'));
 
     startAt = output.metadata.startAt;
-    playerIndex = Object.values(output.metadata.players).findIndex(player => player.names.code === process.env.SLIPPI_CODE);
-    opponentIndex = Object.values(output.metadata.players).findIndex(player => player.name.code !== process.env.SLIPPI_CODE);
+    const playersArray = Object.values(output.metadata.players);
+    playerIndex = playersArray.findIndex(player => player.names.code === process.env.SLIPPI_CODE);
+    opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
 
     playerFrames = output.players[playerIndex].frames
           .map(obj => JSON.stringify(obj)).join('\n');
