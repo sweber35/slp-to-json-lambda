@@ -1,13 +1,14 @@
-FROM amazonlinux:2
+FROM ubuntu:20.04
 
-RUN yum install -y gcc gcc-c++ make xz-devel glibc-static libstdc++-static
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    g++ \
+    make \
+    libstdc++-static
 
-RUN mkdir -p /src/slippc
-COPY slippc/ /src/slippc/
 WORKDIR /src/slippc
-
-RUN make clean || true
+COPY slippc/ /src/slippc/
 
 RUN mkdir -p build
-
+RUN make clean || true
 RUN make static
