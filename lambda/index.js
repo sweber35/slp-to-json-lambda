@@ -74,8 +74,8 @@ exports.handler = async (event) => {
   }
 
   try {
-    const playerKey = `json/${startAt}"_player_frames.jsonl")}`;
-    const opponentKey = `json/${startAt}"_opponent_frames.jsonl")}`;
+    const playerKey = `json/${startAt}_player_frames.jsonl`;
+    const opponentKey = `json/${startAt}_opponent_frames.jsonl`;
     // const settingsKey = `json/${path.basename(key + '-settings').replace(".slp", ".jsonl")}`;
     // const conversionsKey = `json/${path.basename(key + '-conversions').replace(".slp", ".jsonl")}`;
     // const slippcKey = `json/${path.basename(key).replace(".slp", "_player_frames.json")}`;
