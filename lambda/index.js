@@ -103,6 +103,13 @@ exports.handler = async (event) => {
     playerPunishes = _playerPunishes.map(obj => JSON.stringify(obj)).join('\n');
     playerStats = JSON.stringify(_playerStats);
 
+    let { attacks: _opponentAttacks, punishes: _opponentPunishes, ..._opponentStats }
+        = analysis.players.find( player => player.tag_code !== process.env.SLIPPI_CODE);
+
+    opponentAttacks = _opponentAttacks.map(obj => JSON.stringify(obj)).join('\n');
+    playerPunishes = _opponentPunishes.map(obj => JSON.stringify(obj)).join('\n');
+    playerStats = JSON.stringify(_opponentStats);
+
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }
@@ -137,14 +144,23 @@ exports.handler = async (event) => {
     });
     await s3.send(putOpponentFramesCommandPlayer);
 
-    const playerAttacksKey = `json/${startAt}_player_attacks.json`;
+    const playerAttacksKey = `json/${startAt}_player_attacks.jsonl`;
     const putPlayerAttacksCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: playerAttacksKey,
       Body: playerAttacks,
-      ContentType: 'application/json'
+      ContentType: 'text/plain'
     });
     await s3.send(putPlayerAttacksCommand);
+
+    const opponentAttacksKey = `json/${startAt}_opponent_attacks.jsonl`;
+    const putOpponentAttacksCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: opponentAttacksKey,
+      Body: opponentAttacks,
+      ContentType: 'application/json'
+    });
+    await s3.send(putOpponentAttacksCommand);
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
   }
