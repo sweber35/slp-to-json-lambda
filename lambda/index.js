@@ -35,8 +35,9 @@ exports.handler = async (event) => {
   const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
   const tempPath = '/tmp/game.slp';
 
-  let frames;//, settings, conversions;
-  // let playerIndex, opponentIndex;
+  let startAt;
+  let playerFrames, opponentFrames;//, settings, conversions;
+  let playerIndex, opponentIndex;
 
   try {
     console.log('Retrieving SLP file from S3:', key);
@@ -57,36 +58,44 @@ exports.handler = async (event) => {
 
     await parseWithSlippc(tempPath, outputPath);
     const output = JSON.parse(require('fs').readFileSync(outputPath, 'utf-8'));
-    frames = output.players.find(
-        player => player.slippi_uid === process.env.SLIPPI_USER_ID).frames
+
+    startAt = output.metadata.startAt;
+    playerIndex = output.metadata.players.findIndex(player => player.names.code === process.env.SLIPPI_CODE);
+    opponentIndex = output.metadata.players.findIndex(player => player.name.code !== process.env.SLIPPI_CODE);
+
+    playerFrames = output.players[playerIndex].frames
           .map(obj => JSON.stringify(obj)).join('\n');
+
+    opponentFrames = output.players[opponentIndex].frames
+        .map(obj => JSON.stringify(obj)).join('\n');
+
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }
 
   try {
-    // const playerKey = `json/${path.basename(key + '-player').replace(".slp", ".jsonl")}`;
-    // const opponentKey = `json/${path.basename(key + '-opponent').replace(".slp", ".jsonl")}`;
+    const playerKey = `json/${startAt}"_player_frames.jsonl")}`;
+    const opponentKey = `json/${startAt}"_opponent_frames.jsonl")}`;
     // const settingsKey = `json/${path.basename(key + '-settings').replace(".slp", ".jsonl")}`;
     // const conversionsKey = `json/${path.basename(key + '-conversions').replace(".slp", ".jsonl")}`;
-    const slippcKey = `json/${path.basename(key).replace(".slp", "_player_frames.json")}`;
+    // const slippcKey = `json/${path.basename(key).replace(".slp", "_player_frames.json")}`;
     console.log('Writing JSON to S3');
 
-    const putCommand = new PutObjectCommand({
+    const putPlayerFramesCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: slippcKey,
-      Body: frames,
-      ContentType: 'application/json',
+      Key: playerKey,
+      Body: playerFrames,
+      ContentType: 'text/plain',
     });
-    await s3.send(putCommand);
+    await s3.send(putPlayerFramesCommand);
 
-    // const putCommandPlayer = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: playerKey,
-    //   Body: frames.player,
-    //   ContentType: 'text/plain'
-    // });
-    // await s3.send(putCommandPlayer);
+    const putOpponentFramesCommandPlayer = new PutObjectCommand({
+      Bucket: bucket,
+      Key: opponentKey,
+      Body: opponentFrames,
+      ContentType: 'text/plain'
+    });
+    await s3.send(putOpponentFramesCommandPlayer);
     //
     // const putCommandOpponent = new PutObjectCommand({
     //   Bucket: bucket,
