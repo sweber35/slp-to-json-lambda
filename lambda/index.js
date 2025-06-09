@@ -43,6 +43,9 @@ exports.handler = async (event) => {
 
   let startAt;
   let playerFrames, opponentFrames, settings, analysis;
+  let playerStats, playerAttacks, playerPunishes;
+  let opponentStats, opponentAttacks, opponentPunishes;
+
   let playerIndex, opponentIndex;
 
   try {
@@ -94,17 +97,21 @@ exports.handler = async (event) => {
       opponent_code: players[opponentIndex].names.code,
     });
 
+    let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats }
+        = analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE);
+
+    playerAttacks = _playerAttacks.map(obj => JSON.stringify(obj)).join('\n');;
+    playerPunishes = _playerPunishes.map(obj => JSON.stringify(obj)).join('\n');;
+    playerStats = _playerStats.map(obj => JSON.stringify(obj)).join('\n');;
+
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }
 
   try {
-    const playerKey = `json/${startAt}_player_frames.jsonl`;
-    const opponentKey = `json/${startAt}_opponent_frames.jsonl`;
-    const settingsKey = `json/${startAt}_settings.json`;
-    const analysisKey = `json/${startAt}_analysis.json`;
     console.log('Writing JSON to S3');
 
+    const settingsKey = `json/${startAt}_settings.json`;
     const putSettingsCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: settingsKey,
@@ -113,6 +120,7 @@ exports.handler = async (event) => {
     });
     await s3.send(putSettingsCommand);
 
+    const playerKey = `json/${startAt}_player_frames.jsonl`;
     const putPlayerFramesCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: playerKey,
@@ -121,6 +129,7 @@ exports.handler = async (event) => {
     });
     await s3.send(putPlayerFramesCommand);
 
+    const opponentKey = `json/${startAt}_opponent_frames.jsonl`;
     const putOpponentFramesCommandPlayer = new PutObjectCommand({
       Bucket: bucket,
       Key: opponentKey,
@@ -129,13 +138,14 @@ exports.handler = async (event) => {
     });
     await s3.send(putOpponentFramesCommandPlayer);
 
-    const putAnalysisCommand = new PutObjectCommand({
+    const playerAttacksKey = `json/${startAt}_player_attacks.json`;
+    const putPlayerAttacksCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: analysisKey,
-      Body: analysis,
-      ContentType: 'applicaiton/json'
+      Key: playerAttacksKey,
+      Body: playerAttacks,
+      ContentType: 'application/json'
     });
-    await s3.send(putAnalysisCommand);
+    await s3.send(putPlayerAttacksCommand);
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
   }
