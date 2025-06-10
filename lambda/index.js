@@ -5,6 +5,20 @@ const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
 
+function roundInteractionDamageValues(obj) {
+  if (obj.interaction_damage && typeof obj.interaction_damage === 'object') {
+    const rounded = {};
+    for (const [key, value] of Object.entries(obj.interaction_damage)) {
+      rounded[key] = Math.round(value);
+    }
+    return {
+      ...obj,
+      interaction_damage: rounded
+    };
+  }
+  return obj;
+}
+
 // Convert S3 stream to buffer
 async function streamToBuffer(stream) {
   const chunks = [];
@@ -126,7 +140,8 @@ exports.handler = async (event) => {
 
     playerAttacks = _playerAttacks.map(obj => JSON.stringify(obj)).join('\n');
     playerPunishes = _playerPunishes.map(obj => JSON.stringify(obj)).join('\n');
-    playerStats = JSON.stringify(_playerStats);
+
+    playerStats = JSON.stringify(roundInteractionDamageValues(_playerStats));
 
     let { attacks: _opponentAttacks, punishes: _opponentPunishes, ..._opponentStats }
         = analysis.players.find( player => player.tag_code !== process.env.SLIPPI_CODE);
