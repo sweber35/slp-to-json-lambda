@@ -186,9 +186,9 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         if (CHANGED(joy_y))
           ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
         if (CHANGED(c_x))
-          ss << JEND(a) << "\"c_x\":" << std::fixed << std::setprecision(2) << s.player[p].frame[f].c_x;
+          ss << JEND(a) << "\"c_x\":" << std::fixed << std::setprecision(2) << static_cast<double>(s.player[p].frame[f].c_x);
         if (CHANGED(c_y))
-          ss << JEND(a) << "\"c_y\":" << std::fixed << std::setprecision(2) << s.player[p].frame[f].c_y;
+          ss << JEND(a) << "\"c_y\":" << std::fixed << std::setprecision(2) << static_cast<double>(s.player[p].frame[f].c_y);
         if (CHANGED(trigger))
           ss << JEND(a) << JFLT(2,"trigger"       ,s.player[p].frame[f].trigger);
         if (CHANGED(buttons))
