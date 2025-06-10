@@ -7,19 +7,10 @@ const s3 = new S3Client({ region: 'us-east-2' });
 
 const floatKeys = new Set(['c_x', 'c_y']);
 
-function parseWithTargetedFloatCoercion(jsonString) {
-  return JSON.parse(jsonString, (key, value) => {
-    if (floatKeys.has(key)) {
-      return parseFloat(Number(value).toFixed(2));
-    }
-    return value;
-  });
-}
-
 function stringifyWithTargetedFloatCoercion(json) {
   return JSON.stringify(json, (key, value) => {
     if (floatKeys.has(key) && typeof value === 'number') {
-      return value.toFixed(6); // returns a string like "0.000000"
+      return value.toFixed(2); // returns a string like "0.000000"
     }
     return value;
   }, 2);
@@ -138,7 +129,7 @@ exports.handler = async (event) => {
 
     await parseWithSlippc(tempPath, '/tmp/');
     // const output = JSON.parse(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
-    const output = parseWithTargetedFloatCoercion(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
+    const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
     startAt = output.metadata.startAt;
