@@ -16,9 +16,24 @@ async function streamToBuffer(stream) {
 
 async function sendFilesToS3( startAt, bucket, files ) {
   for await (const file of files) {
+
+    let filePath;
+
+    if (file.key.includes('_')) {
+      if (file.key.includes('player')) {
+        filePath = `${file.key.split('_')[1]}/player=1/`;
+        continue;
+      }
+      if (file.key.includes('opponent')) {
+        filePath = `${file.key.split('_')[1]}/player=2/`;
+        continue;
+      }
+      filePath = `${file.key}/`;
+    }
+
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `${file.type}/${startAt}_${file.key}.${file.type}`,
+      Key: `${filePath}/${startAt}_${file.key}.${file.type}`,
       Body: file.body,
       ContentType: `application/${file.type}`
     });
