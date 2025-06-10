@@ -136,7 +136,7 @@ exports.handler = async (event) => {
         type: 'json'
       },
       {
-        key: 'player_farmes',
+        key: 'player_frames',
         body: playerFrames,
         type: 'jsonl'
       },
