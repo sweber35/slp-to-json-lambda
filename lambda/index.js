@@ -7,16 +7,25 @@ const s3 = new S3Client({ region: 'us-east-2' });
 
 const floatKeys = new Set(['c_x', 'c_y']);
 
-function stringifyWithTargetedFloatCoercion(json) {
-  let result = JSON.stringify(json, (key, value) => {
-    if (floatKeys.has(key) && typeof value === 'number') {
-      return value.toFixed(2); // returns a string like "0.000000"
+function patchFloats(obj) {
+  function recurse(current) {
+    if (Array.isArray(current)) {
+      current.forEach(recurse);
+    } else if (typeof current === 'object' && current !== null) {
+      for (const [k, v] of Object.entries(current)) {
+        if (floatKeys.includes(k) && typeof v === 'number') {
+          // Round and preserve float format with 2 decimal places
+          current[k] = parseFloat(v.toFixed(2));
+        } else {
+          recurse(v);
+        }
+      }
     }
-    return value;
-  }, 2);
+  }
 
-  result = result.replace(/: 0([,\n])/g, ': 0.0$1');
-  return result;
+  const cloned = JSON.parse(JSON.stringify(obj)); // deep clone
+  recurse(cloned);
+  return JSON.stringify(cloned, null, 2); // pretty print
 }
 
 function roundInteractionDamageValues(obj) {
@@ -141,7 +150,7 @@ exports.handler = async (event) => {
     opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
 
     playerFrames = output.players[playerIndex].frames
-        .map(obj => stringifyWithTargetedFloatCoercion(obj)).join('\n');
+        .map(obj => patchFloats(obj)).join('\n');
 
     opponentFrames = output.players[opponentIndex].frames
         .map(obj => JSON.stringify(obj)).join('\n');
