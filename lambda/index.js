@@ -5,7 +5,7 @@ const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
 
-const floatKeys = new Set(['c_x', 'c_y']);
+const floatKeys = ['c_x', 'c_y'];
 
 function patchFloats(obj) {
   function recurse(current) {
