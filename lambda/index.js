@@ -6,6 +6,7 @@ const { execFile } = require('child_process');
 const s3 = new S3Client({ region: 'us-east-2' });
 
 // JSON spec does not respect the difference between 0 and 0.0, which in turn confuses Glue Crawler when inferring schema
+// TODO: pretty big performance hit though, maybe worth circling back on
 function patchFloats(obj, decimals = 2) {
   const floatKeys = ['c_x', 'c_y'];
   let jsonStr = JSON.stringify(obj);
