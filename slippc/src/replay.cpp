@@ -1,5 +1,6 @@
 #include "replay.h"
 #include <iomanip>  // for std::fixed and std::setprecision
+#include <iostream>
 
 //JSON Output shortcuts
 // Modified to maintain double precision even if value is only 0
@@ -193,6 +194,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
           ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
         if (CHANGED(c_x))
           ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
+        std::cout << "DEBUG c_x = " << s.player[p].frame[f].c_x << std::endl;
         if (CHANGED(c_y))
           ss << JEND(a) << JFLT(2,"c_y"           ,s.player[p].frame[f].c_y);
         if (CHANGED(trigger))
