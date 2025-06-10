@@ -148,7 +148,7 @@ exports.handler = async (event) => {
 
     opponentAttacks = _opponentAttacks.map(obj => JSON.stringify(obj)).join('\n');
     opponentPunishes = _opponentPunishes.map(obj => JSON.stringify(obj)).join('\n');
-    opponentStats = JSON.stringify(_opponentStats);
+    opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
 
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
