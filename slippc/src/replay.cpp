@@ -1,14 +1,7 @@
 #include "replay.h"
-#include <iomanip>  // for std::fixed and std::setprecision
-#include <iostream>
 
 //JSON Output shortcuts
-// Modified to maintain double precision even if value is only 0
-#define JFLT(i,k,n) ([&]() -> std::string { \
-  std::ostringstream oss; \
-  oss << std::fixed << std::setprecision(6) << std::showpoint << static_cast<double>(n); \
-  return SPACE[ILEV*(i)] + "\"" + (k) + "\" : " + oss.str(); \
-})()
+#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << float(n)
 #define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << int32_t(n)
 #define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << uint32_t(n)
 #define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\" : \"" << (s) << "\""
@@ -193,7 +186,6 @@ std::string SlippiReplay::replayAsJson(bool delta) {
           ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
         if (CHANGED(c_x))
           ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
-        std::cout << "DEBUG c_x = " << s.player[p].frame[f].c_x << std::endl;
         if (CHANGED(c_y))
           ss << JEND(a) << JFLT(2,"c_y"           ,s.player[p].frame[f].c_y);
         if (CHANGED(trigger))
