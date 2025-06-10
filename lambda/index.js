@@ -5,6 +5,26 @@ const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
 
+const floatKeys = new Set(['c_x', 'c_y']);
+
+function parseWithTargetedFloatCoercion(jsonString) {
+  return JSON.parse(jsonString, (key, value) => {
+    if (floatKeys.has(key)) {
+      return parseFloat(Number(value).toFixed(2));
+    }
+    return value;
+  });
+}
+
+function stringifyWithTargetedFloatCoercion(json) {
+  return JSON.stringify(json, (key, value) => {
+    if (floatKeys.has(key) && typeof value === 'number') {
+      return value.toFixed(6); // returns a string like "0.000000"
+    }
+    return value;
+  }, 2);
+}
+
 function roundInteractionDamageValues(obj) {
   if (obj.interaction_damage && typeof obj.interaction_damage === 'object') {
     const rounded = {};
@@ -117,7 +137,8 @@ exports.handler = async (event) => {
     console.log('Parsing SLP file into JSON');
 
     await parseWithSlippc(tempPath, '/tmp/');
-    const output = JSON.parse(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
+    // const output = JSON.parse(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
+    const output = parseWithTargetedFloatCoercion(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
     startAt = output.metadata.startAt;
@@ -126,7 +147,7 @@ exports.handler = async (event) => {
     opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
 
     playerFrames = output.players[playerIndex].frames
-        .map(obj => JSON.stringify(obj)).join('\n');
+        .map(obj => stringifyWithTargetedFloatCoercion(obj)).join('\n');
 
     opponentFrames = output.players[opponentIndex].frames
         .map(obj => JSON.stringify(obj)).join('\n');
