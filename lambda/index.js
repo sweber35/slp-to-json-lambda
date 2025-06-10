@@ -18,7 +18,7 @@ async function sendFilesToS3( startAt, bucket, files ) {
   for await (const file of files) {
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `json/${startAt}_${file.key}.${file.type}`,
+      Key: `${file.type}/${startAt}_${file.key}.${file.type}`,
       Body: file.body,
       ContentType: `application/${file.type}`
     });
