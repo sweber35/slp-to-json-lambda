@@ -21,15 +21,13 @@ async function sendFilesToS3( startAt, bucket, files ) {
 
     if (file.key.includes('_')) {
       if (file.key.includes('player')) {
-        filePath = `${file.key.split('_')[1]}/player=1/`;
-        continue;
+        filePath = `${file.key.split('_')[1]}/player=1`;
       }
-      if (file.key.includes('opponent')) {
-        filePath = `${file.key.split('_')[1]}/player=2/`;
-        continue;
+      else if (file.key.includes('opponent')) {
+        filePath = `${file.key.split('_')[1]}/player=2`;
       }
-      filePath = `${file.key}/`;
     }
+    else filePath = `${file.key}`;
 
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
