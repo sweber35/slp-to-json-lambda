@@ -4,11 +4,10 @@
 
 //JSON Output shortcuts
 // Modified to maintain double precision even if value is only 0
-#define JFLT(i,k,n) [&](){ \
-  std::ostringstream __oss__; \
-  __oss__ << SPACE[ILEV*(i)] << "\"" << (k) << "\" : " \
-          << std::fixed << std::setprecision(2) << static_cast<double>(n); \
-  return __oss__.str(); \
+#define JFLT(i,k,n) [&]() { \
+  std::ostringstream oss; \
+  oss << std::fixed << std::setprecision(6) << static_cast<double>(n); \
+  return SPACE[ILEV*(i)] + "\"" + (k) + "\" : " + oss.str(); \
 }()
 #define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << int32_t(n)
 #define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << uint32_t(n)
