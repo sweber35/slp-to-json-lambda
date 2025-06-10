@@ -167,6 +167,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         ss << SPACE[ILEV*2] << "{";
 
         int a = 0; //True for only the first thing output per line
+        ss << JEND(a) << JUIN(2, "frame_number"   ,f);
         ss << JEND(a) << JUIN(2, "byte_offset"    ,s.player[p].frame[f].byte_offset);
         if (CHANGED(follower))
           ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
