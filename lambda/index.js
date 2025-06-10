@@ -53,24 +53,37 @@ async function sendFilesToS3( startAt, bucket, files ) {
   }
 }
 
+
 function parseWithSlippc(inputPath, outputPath) {
   const slippcPath = path.join(__dirname, 'slippc');
 
   return new Promise((resolve, reject) => {
-    // -f argument tells slippc to output data on the whole frame, instead of just the changes since last frame.
-    // While it makes the files quite a bit larger, I think it will ultimately be worth the simplicity during analysis
-    execFile(slippcPath,
+    execFile(
+        slippcPath,
         [
           '-i', inputPath,
           '-j', outputPath + 'output.json',
           '-f',
           '-a', outputPath + 'analysis.json'
-        ], (error, stdout, stderr) => {
+        ],
+        (error, stdout, stderr) => {
           if (error) {
-            return reject(`Error running slippc: ${error.message}`);
+            console.error('Error running slippc:', error);
+            console.error('stderr:', stderr);
+            return reject(new Error(`slippc failed: ${error.message}`));
           }
-          resolve({ stdout, stderr });
-        });
+
+          console.log('slippc stdout:', stdout);
+          console.log('slippc stderr:', stderr);
+
+          resolve({
+            stdout,  // usually empty if slippc only writes to files
+            stderr,
+            outputJsonPath: outputPath + 'output.json',
+            analysisJsonPath: outputPath + 'analysis.json'
+          });
+        }
+    );
   });
 }
 
