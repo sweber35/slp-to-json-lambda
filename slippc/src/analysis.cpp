@@ -134,16 +134,21 @@ std::string Analysis::asJson() {
 
     ss << SPACE[ILEV] << "\"moves_landed\" : {\n";
     unsigned _total_moves = 0;
-    for(unsigned d = 0; d < Move::BUBBLE; ++d) {
+    for (unsigned d = 0; d < Move::BUBBLE; ++d) {
       std::string moveName = Move::name[d];
 
-      // Check if moveName is numeric — if so, skip it.
+      // Check if move name is purely numeric
       bool isNumber = !moveName.empty() && std::all_of(moveName.begin(), moveName.end(), ::isdigit);
+      if (isNumber) continue;
 
-      if (!isNumber) {
-        ss << JUIN(2, moveName, ap[p].move_counts[d]) << ",\n";
-        _total_moves += ap[p].move_counts[d];
-      }
+      // Remove all spaces from the move name
+      moveName.erase(std::remove(moveName.begin(), moveName.end(), ' '), moveName.end());
+
+      // Print move
+      ss << JUIN(2, moveName, ap[p].move_counts[d]) << ",\n";
+
+      // Accumulate total moves
+      _total_moves += ap[p].move_counts[d];
     }
     ss << JUIN(2,"_total", _total_moves) << "\n";
     ss << SPACE[ILEV] << "},\n";
