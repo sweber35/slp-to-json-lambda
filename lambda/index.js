@@ -8,12 +8,15 @@ const s3 = new S3Client({ region: 'us-east-2' });
 const floatKeys = new Set(['c_x', 'c_y']);
 
 function stringifyWithTargetedFloatCoercion(json) {
-  return JSON.stringify(json, (key, value) => {
+  let result = JSON.stringify(json, (key, value) => {
     if (floatKeys.has(key) && typeof value === 'number') {
       return value.toFixed(2); // returns a string like "0.000000"
     }
     return value;
   }, 2);
+
+  result = result.replace(/: 0([,\n])/g, ': 0.0$1');
+  return result;
 }
 
 function roundInteractionDamageValues(obj) {
