@@ -5,27 +5,21 @@ const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
 
-const floatKeys = ['c_x', 'c_y'];
 
-function patchFloats(obj) {
-  function recurse(current) {
-    if (Array.isArray(current)) {
-      current.forEach(recurse);
-    } else if (typeof current === 'object' && current !== null) {
-      for (const [k, v] of Object.entries(current)) {
-        if (floatKeys.includes(k) && typeof v === 'number') {
-          // Round and preserve float format with 2 decimal places
-          current[k] = parseFloat(v.toFixed(2));
-        } else {
-          recurse(v);
-        }
-      }
-    }
+function patchFloats(obj, decimals = 2) {
+  const floatKeys = ['c_x', 'c_y'];
+  let jsonStr = JSON.stringify(obj, null, 2);
+
+  for (const key of floatKeys) {
+    // Escape special regex characters in keys to safely build the regex pattern
+    const keyPattern = key.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    // Regex looks for "key": 0 followed by comma or newline
+    const regex = new RegExp(`("${keyPattern}"\\s*:\\s*)0([,\\n])`, 'g');
+    // Replace 0 with 0.000000 (decimal count customizable)
+    const decimalZeros = (0).toFixed(decimals);
+    jsonStr = jsonStr.replace(regex, `$1${decimalZeros}$2`);
   }
-
-  const cloned = JSON.parse(JSON.stringify(obj)); // deep clone
-  recurse(cloned);
-  return JSON.stringify(cloned, null, 2); // pretty print
+  return jsonStr;
 }
 
 function roundInteractionDamageValues(obj) {
