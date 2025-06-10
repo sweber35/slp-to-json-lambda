@@ -2,6 +2,7 @@
 #include <iomanip>  // for std::fixed and std::setprecision
 
 //JSON Output shortcuts
+// Modified to maintain double precision even if value is only 0
 #define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << std::fixed << std::setprecision(6) << static_cast<double>(n)
 #define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << int32_t(n)
 #define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << uint32_t(n)
