@@ -5,7 +5,7 @@ const { execFile } = require('child_process');
 
 const s3 = new S3Client({ region: 'us-east-2' });
 
-
+// JSON spec does not respect the difference between 0 and 0.0, which in turn confuses Glue Crawler when inferring schema
 function patchFloats(obj, decimals = 2) {
   const floatKeys = ['c_x', 'c_y'];
   let jsonStr = JSON.stringify(obj, null, 2);
@@ -147,7 +147,7 @@ exports.handler = async (event) => {
         .map(obj => patchFloats(obj)).join('\n');
 
     opponentFrames = output.players[opponentIndex].frames
-        .map(obj => JSON.stringify(obj)).join('\n');
+        .map(obj => patchFloats(obj)).join('\n');
 
     const players = output.metadata.players;
 
