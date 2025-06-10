@@ -2,7 +2,7 @@
 #include <iomanip>  // for std::fixed and std::setprecision
 
 //JSON Output shortcuts
-#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << float(n)
+#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << std::fixed << std::setprecision(6) << static_cast<double>(n)
 #define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << int32_t(n)
 #define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << uint32_t(n)
 #define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\" : \"" << (s) << "\""
@@ -186,9 +186,9 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         if (CHANGED(joy_y))
           ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
         if (CHANGED(c_x))
-          ss << JEND(a) << "\"c_x\":" << std::fixed << std::setprecision(2) << static_cast<double>(s.player[p].frame[f].c_x);
+          ss << JEND(a) << JFLT(2,"c_x"         ,s.player[p].frame[f].c_x);
         if (CHANGED(c_y))
-          ss << JEND(a) << "\"c_y\":" << std::fixed << std::setprecision(2) << static_cast<double>(s.player[p].frame[f].c_y);
+          ss << JEND(a) << JFLT(2,"c_y"         ,s.player[p].frame[f].c_y);
         if (CHANGED(trigger))
           ss << JEND(a) << JFLT(2,"trigger"       ,s.player[p].frame[f].trigger);
         if (CHANGED(buttons))
