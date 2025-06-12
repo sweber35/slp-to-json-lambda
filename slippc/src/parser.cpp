@@ -602,11 +602,11 @@ namespace slip {
     }
 
     uint8_t platform = _rb[_bp+O_PLATFORM];
-    float height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
+    float platform_height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
 
     int32_t frame = fnum;
     _replay.platform_events.emplace_back(SlippiFodPlatform {
-      frame, platform, height
+      frame, platform, platform_height
     });
 
     return true;
