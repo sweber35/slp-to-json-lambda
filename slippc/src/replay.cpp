@@ -370,7 +370,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
       ss << SPACE[ILEV] << "{";
       int a = 0;
 
-      ss << JEND(a) << JUIN(1, "frame", e.fnum);
+      ss << JEND(a) << JUIN(1, "frame", e.frame);
       ss << JEND(a) << JUIN(1, "platform", e.platform);
       ss << JEND(a) << JFLT(1, "height", e.platform_height);
 
