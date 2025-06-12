@@ -153,19 +153,19 @@ exports.handler = async (event) => {
 
     items = output.items;
     const { players: _players, items: _items, ...everythingElse } = output;
-    console.log('SETTINGS:', JSON.stringify(everythingElse));
 
     const players = output.metadata.players;
 
     settings = JSON.stringify({
       slippi_version: output.slippi_version,
       start_time: output.start_time,
+      timer_start: output.timer,
       frame_count: output.frame_count,
       winner_id: output.winner_id,
       stage: output.stage,
       end_type: output.end_type,
       player_index: playerIndex,
-      player_character: Object.keys(players[playerIndex].characters)[0],
+      internal_character_id: Object.keys(players[playerIndex].characters)[0],
       player_code: players[playerIndex].names.code,
       opponent_index: opponentIndex,
       opponent_character: Object.keys(players[opponentIndex].characters)[0],
