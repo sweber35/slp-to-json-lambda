@@ -150,6 +150,10 @@ exports.handler = async (event) => {
     opponentFrames = output.players[opponentIndex].frames
         .map(obj => patchFloats(obj)).join('\n');
 
+    console.log('ITEMS:', JSON.stringify(output.items));
+    const { players: _players, ...everythingElse } = output;
+    console.log('SETTINGS:', JSON.stringify(everythingElse));
+
     const players = output.metadata.players;
 
     settings = JSON.stringify({
