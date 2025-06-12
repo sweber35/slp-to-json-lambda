@@ -605,7 +605,7 @@ namespace slip {
     float height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
 
     _replay.platform_events.emplace_back(SlippiFodPlatform {
-      fnum, platform, platform_height
+      fnum, platform, height
     });
 
     return true;
