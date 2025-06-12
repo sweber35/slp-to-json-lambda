@@ -116,27 +116,27 @@ std::string SlippiReplay::replayAsJson(bool delta) {
   ss << JUIN(0,"items5"        , s.items5)        << ",\n";
   ss << "\"metadata\" : " << s.metadata << "\n},\n";
 
-  if (MIN_VERSION(3,18,0) && !s.platform_events.empty()) {
-    ss << ",\n";
-    ss << "\"platforms\" : [\n";
-
-    for (size_t i = 0; i < s.platform_events.size(); ++i) {
-      const auto& e = s.platform_events[i];
-      ss << SPACE[ILEV] << "{";
-      int a = 0;
-
-      ss << JEND(a) << JUIN(1, "frame", e.frame);
-      ss << JEND(a) << JUIN(1, "platform", e.platform);
-      ss << JEND(a) << JFLT(1, "height", e.platform_height);
-
-      if (i + 1 == s.platform_events.size()) {
-        ss << "}\n";
-      } else {
-        ss << "},\n";
-      }
-    }
-    ss << "]\n";
-  }
+//   if (MIN_VERSION(3,18,0) && !s.platform_events.empty()) {
+//     ss << ",\n";
+//     ss << "\"platforms\" : [\n";
+//
+//     for (size_t i = 0; i < s.platform_events.size(); ++i) {
+//       const auto& e = s.platform_events[i];
+//       ss << SPACE[ILEV] << "{";
+//       int a = 0;
+//
+//       ss << JEND(a) << JUIN(1, "frame", e.frame);
+//       ss << JEND(a) << JUIN(1, "platform", e.platform);
+//       ss << JEND(a) << JFLT(1, "height", e.platform_height);
+//
+//       if (i + 1 == s.platform_events.size()) {
+//         ss << "}\n";
+//       } else {
+//         ss << "},\n";
+//       }
+//     }
+//     ss << "]\n";
+//   }
 
   ss << "\"players\" : [\n";
   for(unsigned p = 0; p < 8; ++p) {
