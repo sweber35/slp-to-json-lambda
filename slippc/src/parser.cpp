@@ -587,30 +587,30 @@ namespace slip {
     return true;
   }
 
-  bool Parser::_parseFodPlatform() {
-    DOUT2("  Parsing FoD platform event at byte " << +_bp);
-    int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
-
-    if (fnum < LOAD_FRAME) {
-      FAIL_CORRUPT("    Frame index " << fnum << " less than " << +LOAD_FRAME);
-      return false;
-    }
-    if (fnum >= _max_frames) {
-      FAIL_CORRUPT("    Frame index " << fnum << " greater than max frames computed from reported raw size ("
-        << _max_frames << ")");
-      return false;
-    }
-
-    uint8_t platform = _rb[_bp+O_PLATFORM];
-    float platform_height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
-
-    int32_t frame = fnum;
-    _replay.platform_events.emplace_back(SlippiFodPlatform {
-      frame, platform, platform_height
-    });
-
-    return true;
-  }
+//   bool Parser::_parseFodPlatform() {
+//     DOUT2("  Parsing FoD platform event at byte " << +_bp);
+//     int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
+//
+//     if (fnum < LOAD_FRAME) {
+//       FAIL_CORRUPT("    Frame index " << fnum << " less than " << +LOAD_FRAME);
+//       return false;
+//     }
+//     if (fnum >= _max_frames) {
+//       FAIL_CORRUPT("    Frame index " << fnum << " greater than max frames computed from reported raw size ("
+//         << _max_frames << ")");
+//       return false;
+//     }
+//
+//     uint8_t platform = _rb[_bp+O_PLATFORM];
+//     float platform_height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
+//
+//     int32_t frame = fnum;
+//     _replay.platform_events.emplace_back(SlippiFodPlatform {
+//       frame, platform, platform_height
+//     });
+//
+//     return true;
+//   }
 
   bool Parser::_parseGameEnd() {
     DOUT1("  Parsing game end event at byte " << +_bp);
