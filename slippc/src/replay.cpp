@@ -361,6 +361,28 @@ std::string SlippiReplay::replayAsJson(bool delta) {
     ss << "]\n";
   }
 
+  if (!s.platform_events.empty()) {
+    ss << ",\n";
+    ss << "\"platforms\" : [\n";
+
+    for (size_t i = 0; i < s.platform_events.size(); ++i) {
+      const auto& e = s.platform_events[i];
+      ss << SPACE[ILEV] << "{";
+      int a = 0;
+
+      ss << JEND(a) << JUIN(1, "frame", e.fnum);
+      ss << JEND(a) << JUIN(1, "platform", e.platform);
+      ss << JEND(a) << JFLT(1, "height", e.platform_height);
+
+      if (i + 1 == s.platform_events.size()) {
+        ss << "}\n";
+      } else {
+        ss << "},\n";
+      }
+    }
+    ss << "]\n";
+  }
+
   ss << "}" << std::endl;
   return ss.str();
 }
