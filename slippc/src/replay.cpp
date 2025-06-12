@@ -232,7 +232,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
           if (CHANGED(flags_2))
             ss << JEND(a) << JUIN(2,"turnip_face"       ,s.player[p].frame[f].flags_2);
           if (CHANGED(flags_3))
-            ss << JEND(a) << JUIN(2,"flags_3"       ,s.player[p].frame[f].flags_3);
+            ss << JEND(a) << JUIN(2,"is_launched"       ,s.player[p].frame[f].flags_3);
           if (CHANGED(flags_4))
             ss << JEND(a) << JUIN(2,"charge_level"       ,s.player[p].frame[f].flags_4);
           if (CHANGED(flags_5))
@@ -335,7 +335,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
           if (ICHANGED(flags_2))
             ss << JEND(a) << JUIN(2,"turnip_face"     ,s.item[i].frame[f].flags_2);
           if (ICHANGED(flags_3))
-            ss << JEND(a) << JUIN(2,"flags_3"     ,s.item[i].frame[f].flags_3);
+            ss << JEND(a) << JUIN(2,"is_launched"     ,s.item[i].frame[f].flags_3);
           if (ICHANGED(flags_4))
             ss << JEND(a) << JUIN(2,"charge_level"     ,s.item[i].frame[f].flags_4);
           if(MIN_VERSION(3,6,0)) {
