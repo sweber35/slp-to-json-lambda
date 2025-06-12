@@ -115,6 +115,7 @@ exports.handler = async (event) => {
   let playerFrames, opponentFrames, settings, analysis;
   let playerStats, playerAttacks, playerPunishes;
   let opponentStats, opponentAttacks, opponentPunishes;
+  let items;
 
   let playerIndex, opponentIndex;
 
@@ -150,8 +151,8 @@ exports.handler = async (event) => {
     opponentFrames = output.players[opponentIndex].frames
         .map(obj => patchFloats(obj)).join('\n');
 
-    console.log('ITEMS:', JSON.stringify(output.items));
-    const { players: _players, ...everythingElse } = output;
+    items = output.items;
+    const { players: _players, items: _items, ...everythingElse } = output;
     console.log('SETTINGS:', JSON.stringify(everythingElse));
 
     const players = output.metadata.players;
@@ -239,6 +240,11 @@ exports.handler = async (event) => {
         body: opponentStats,
         type: 'json'
       },
+      {
+        key: 'items',
+        body: JSON.stringify(items),
+        type: 'json'
+      }
     ];
 
     await sendFilesToS3(startAt, bucket, puts);
