@@ -97,6 +97,7 @@ struct SlippiItem {
 };
 
 struct SlippiFodPlatform {
+  int32_t          frame           = 0;
   uint8_t          platform        = 0; //Which platform has moved. (0 = Right, 1 = Left)
   float            platform_height = 0; //The platform's new height
 };
@@ -190,7 +191,7 @@ struct SlippiReplay {
   uint8_t           language            = 0;          //Language option (0 = Japanese, 1 = English)
   SlippiPlayer      player[8]           = {};         //Array of SlippiPlayers (1 main + follower for each port)
   SlippiItem        item[MAX_ITEMS]     = {};         //Array of SlippiItems (can track up to MAX_ITEMS per game)
-  SlippiFodPlatform platform_events[64] = {};         //Array of SlippiFodPlatform events which represents every time either FoD platform changes height
+  std::vector<SlippiFodPlatform> platform_events = {};//Array of SlippiFodPlatform events which represents every time either FoD platform changes height
   void setFrames(int32_t max_frames);
   void cleanup();
   std::string replayAsJson(bool delta);
