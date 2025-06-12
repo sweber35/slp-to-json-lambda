@@ -263,7 +263,7 @@ exports.handler = async (event) => {
       {
         key: 'items',
         body: items,
-        type: 'json'
+        type: 'jsonl'
       }
     ];
 
