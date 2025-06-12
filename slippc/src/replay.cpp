@@ -361,7 +361,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
     ss << "]\n";
   }
 
-  if (!s.platform_events.empty()) {
+  if (MIN_VERSION(3,18,0) && !s.platform_events.empty()) {
     ss << ",\n";
     ss << "\"platforms\" : [\n";
 
