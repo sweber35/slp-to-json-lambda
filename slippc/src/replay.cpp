@@ -116,28 +116,6 @@ std::string SlippiReplay::replayAsJson(bool delta) {
   ss << JUIN(0,"items5"        , s.items5)        << ",\n";
   ss << "\"metadata\" : " << s.metadata << "\n},\n";
 
-//   if (MIN_VERSION(3,18,0) && !s.platform_events.empty()) {
-//     ss << ",\n";
-//     ss << "\"platforms\" : [\n";
-//
-//     for (size_t i = 0; i < s.platform_events.size(); ++i) {
-//       const auto& e = s.platform_events[i];
-//       ss << SPACE[ILEV] << "{";
-//       int a = 0;
-//
-//       ss << JEND(a) << JUIN(1, "frame", e.frame);
-//       ss << JEND(a) << JUIN(1, "platform", e.platform);
-//       ss << JEND(a) << JFLT(1, "height", e.platform_height);
-//
-//       if (i + 1 == s.platform_events.size()) {
-//         ss << "}\n";
-//       } else {
-//         ss << "},\n";
-//       }
-//     }
-//     ss << "]\n";
-//   }
-
   ss << "\"players\" : [\n";
   for(unsigned p = 0; p < 8; ++p) {
     unsigned pp = (p % 4);
@@ -189,8 +167,6 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         ss << SPACE[ILEV*2] << "{";
 
         int a = 0; //True for only the first thing output per line
-        ss << JEND(a) << JUIN(2, "frame_number"   ,f);
-        ss << JEND(a) << JUIN(2, "byte_offset"    ,s.player[p].frame[f].byte_offset);
         if (CHANGED(follower))
           ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
         if (CHANGED(seed))
@@ -250,13 +226,13 @@ std::string SlippiReplay::replayAsJson(bool delta) {
 
         if(MIN_VERSION(2,0,0)) {
           if (CHANGED(flags_1))
-            ss << JEND(a) << JUIN(2,"missile_type"       ,s.player[p].frame[f].flags_1);
+            ss << JEND(a) << JUIN(2,"flags_1"       ,s.player[p].frame[f].flags_1);
           if (CHANGED(flags_2))
-            ss << JEND(a) << JUIN(2,"turnip_face"       ,s.player[p].frame[f].flags_2);
+            ss << JEND(a) << JUIN(2,"flags_2"       ,s.player[p].frame[f].flags_2);
           if (CHANGED(flags_3))
-            ss << JEND(a) << JUIN(2,"is_launched"       ,s.player[p].frame[f].flags_3);
+            ss << JEND(a) << JUIN(2,"flags_3"       ,s.player[p].frame[f].flags_3);
           if (CHANGED(flags_4))
-            ss << JEND(a) << JUIN(2,"charge_level"       ,s.player[p].frame[f].flags_4);
+            ss << JEND(a) << JUIN(2,"flags_4"       ,s.player[p].frame[f].flags_4);
           if (CHANGED(flags_5))
             ss << JEND(a) << JUIN(2,"flags_5"       ,s.player[p].frame[f].flags_5);
           if (CHANGED(hitstun))
@@ -353,13 +329,13 @@ std::string SlippiReplay::replayAsJson(bool delta) {
 
         if(MIN_VERSION(3,2,0)) {
           if (ICHANGED(flags_1))
-            ss << JEND(a) << JUIN(2,"missile_type"     ,s.item[i].frame[f].flags_1);
+            ss << JEND(a) << JUIN(2,"flags_1"     ,s.item[i].frame[f].flags_1);
           if (ICHANGED(flags_2))
-            ss << JEND(a) << JUIN(2,"turnip_face"     ,s.item[i].frame[f].flags_2);
+            ss << JEND(a) << JUIN(2,"flags_2"     ,s.item[i].frame[f].flags_2);
           if (ICHANGED(flags_3))
-            ss << JEND(a) << JUIN(2,"is_launched"     ,s.item[i].frame[f].flags_3);
+            ss << JEND(a) << JUIN(2,"flags_3"     ,s.item[i].frame[f].flags_3);
           if (ICHANGED(flags_4))
-            ss << JEND(a) << JUIN(2,"charge_level"     ,s.item[i].frame[f].flags_4);
+            ss << JEND(a) << JUIN(2,"flags_4"     ,s.item[i].frame[f].flags_4);
           if(MIN_VERSION(3,6,0)) {
             if (ICHANGED(owner))
               ss << JEND(a) << JINT(2,"owner"      ,s.item[i].frame[f].owner);

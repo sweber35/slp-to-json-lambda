@@ -269,7 +269,6 @@ namespace slip {
         WARN_CORRUPT("    External character ID " << +_replay.player[p].ext_char_id << " is invalid");
         ++_replay.errors;
       }
-
       _replay.player[p].player_type  = uint8_t(_rb[_bp+i+O_PLAYER_TYPE]);
       _replay.player[p].start_stocks = uint8_t(_rb[_bp+i+O_START_STOCKS]);
       _replay.player[p].color        = uint8_t(_rb[_bp+i+O_COLOR]);
@@ -394,9 +393,8 @@ namespace slip {
 
   bool Parser::_parsePreFrame() {
     DOUT2("  Parsing pre frame event at byte " << +_bp);
-
     int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
-    int32_t f    = fnum - LOAD_FRAME;
+    int32_t f    = fnum-LOAD_FRAME;
 
     if (fnum < LOAD_FRAME) {
       FAIL_CORRUPT("    Frame index " << fnum << " less than " << +LOAD_FRAME);
@@ -408,45 +406,38 @@ namespace slip {
       return false;
     }
 
-    uint8_t p = uint8_t(_rb[_bp + O_PLAYER]) + 4 * uint8_t(_rb[_bp + O_FOLLOWER]);
+    uint8_t p    = uint8_t(_rb[_bp+O_PLAYER])+4*uint8_t(_rb[_bp+O_FOLLOWER]); //Includes follower
     if (p > 7 || _replay.player[p].frame == nullptr) {
       FAIL_CORRUPT("    Invalid player index " << +p);
       return false;
     }
 
-    auto& cur_frame = _replay.player[p].frame[f]; // Store reference for cleaner access
+    _replay.last_frame                      = fnum;
+    _replay.frame_count                     = f+1; //Update the last frame we actually read
+    _replay.player[p].frame[f].frame        = fnum;
+    _replay.player[p].frame[f].player       = p%4;
+    _replay.player[p].frame[f].follower     = (p>3);
+    _replay.player[p].frame[f].alive        = 1;
+    _replay.player[p].frame[f].seed         = readBE4U(&_rb[_bp+O_RNG_PRE]);
+    _replay.player[p].frame[f].action_pre   = readBE2U(&_rb[_bp+O_ACTION_PRE]);
+    _replay.player[p].frame[f].pos_x_pre    = readBE4F(&_rb[_bp+O_XPOS_PRE]);
+    _replay.player[p].frame[f].pos_y_pre    = readBE4F(&_rb[_bp+O_YPOS_PRE]);
+    _replay.player[p].frame[f].face_dir_pre = readBE4F(&_rb[_bp+O_FACING_PRE]);
+    _replay.player[p].frame[f].joy_x        = readBE4F(&_rb[_bp+O_JOY_X]);
+    _replay.player[p].frame[f].joy_y        = readBE4F(&_rb[_bp+O_JOY_Y]);
+    _replay.player[p].frame[f].c_x          = readBE4F(&_rb[_bp+O_CX]);
+    _replay.player[p].frame[f].c_y          = readBE4F(&_rb[_bp+O_CY]);
+    _replay.player[p].frame[f].trigger      = readBE4F(&_rb[_bp+O_TRIGGER]);
+    _replay.player[p].frame[f].buttons      = readBE2U(&_rb[_bp+O_BUTTONS]);
+    _replay.player[p].frame[f].phys_l       = readBE4F(&_rb[_bp+O_PHYS_L]);
+    _replay.player[p].frame[f].phys_r       = readBE4F(&_rb[_bp+O_PHYS_R]);
 
-    _replay.last_frame          = fnum;
-    _replay.frame_count         = f + 1;
-
-    // Store frame offset
-    cur_frame.byte_offset       = _bp; // <-- Store offset here
-
-    // Store actual frame values
-    cur_frame.frame             = fnum;
-    cur_frame.player            = p % 4;
-    cur_frame.follower          = (p > 3);
-    cur_frame.alive             = 1;
-    cur_frame.seed              = readBE4U(&_rb[_bp+O_RNG_PRE]);
-    cur_frame.action_pre        = readBE2U(&_rb[_bp+O_ACTION_PRE]);
-    cur_frame.pos_x_pre         = readBE4F(&_rb[_bp+O_XPOS_PRE]);
-    cur_frame.pos_y_pre         = readBE4F(&_rb[_bp+O_YPOS_PRE]);
-    cur_frame.face_dir_pre      = readBE4F(&_rb[_bp+O_FACING_PRE]);
-    cur_frame.joy_x             = readBE4F(&_rb[_bp+O_JOY_X]);
-    cur_frame.joy_y             = readBE4F(&_rb[_bp+O_JOY_Y]);
-    cur_frame.c_x               = readBE4F(&_rb[_bp+O_CX]);
-    cur_frame.c_y               = readBE4F(&_rb[_bp+O_CY]);
-    cur_frame.trigger           = readBE4F(&_rb[_bp+O_TRIGGER]);
-    cur_frame.buttons           = readBE2U(&_rb[_bp+O_BUTTONS]);
-    cur_frame.phys_l            = readBE4F(&_rb[_bp+O_PHYS_L]);
-    cur_frame.phys_r            = readBE4F(&_rb[_bp+O_PHYS_R]);
-
-    if (MIN_VERSION(1,2,0)) {
-      cur_frame.ucf_x           = uint8_t(_rb[_bp+O_UCF_ANALOG]);
+    if(MIN_VERSION(1,2,0)) {
+      _replay.player[p].frame[f].ucf_x        = uint8_t(_rb[_bp+O_UCF_ANALOG]);
     }
 
-    if (MIN_VERSION(1,4,0)) {
-      cur_frame.percent_pre     = readBE4F(&_rb[_bp+O_DAMAGE_PRE]);
+    if(MIN_VERSION(1,4,0)) {
+      _replay.player[p].frame[f].percent_pre  = readBE4F(&_rb[_bp+O_DAMAGE_PRE]);
     }
 
     return true;
@@ -586,31 +577,6 @@ namespace slip {
 
     return true;
   }
-
-//   bool Parser::_parseFodPlatform() {
-//     DOUT2("  Parsing FoD platform event at byte " << +_bp);
-//     int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
-//
-//     if (fnum < LOAD_FRAME) {
-//       FAIL_CORRUPT("    Frame index " << fnum << " less than " << +LOAD_FRAME);
-//       return false;
-//     }
-//     if (fnum >= _max_frames) {
-//       FAIL_CORRUPT("    Frame index " << fnum << " greater than max frames computed from reported raw size ("
-//         << _max_frames << ")");
-//       return false;
-//     }
-//
-//     uint8_t platform = _rb[_bp+O_PLATFORM];
-//     float platform_height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
-//
-//     int32_t frame = fnum;
-//     _replay.platform_events.emplace_back(SlippiFodPlatform {
-//       frame, platform, platform_height
-//     });
-//
-//     return true;
-//   }
 
   bool Parser::_parseGameEnd() {
     DOUT1("  Parsing game end event at byte " << +_bp);

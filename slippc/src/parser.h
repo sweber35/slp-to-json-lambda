@@ -43,7 +43,6 @@ private:
   bool            _parsePostFrame();
   bool            _parseGameEnd();
   bool            _parseItemUpdate();
-//   bool            _parseFodPlatform();
   bool            _parseMetadata();
   void            _cleanup(); //Cleanup replay data
 public:
