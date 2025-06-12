@@ -146,17 +146,34 @@ exports.handler = async (event) => {
     opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
 
     playerFrames = output.players[playerIndex].frames
-        .map(obj => patchFloats(obj)).join('\n');
+        .map(obj => {
+          return {
+            ...patchFloats(obj),
+            match_id: startAt
+          }
+        }).join('\n');
 
     opponentFrames = output.players[opponentIndex].frames
-        .map(obj => patchFloats(obj)).join('\n');
+        .map(obj => {
+          return {
+            match_id: startAt,
+            ...patchFloats(obj),
+          }
+        }).join('\n');
 
-    items = output.items;
-    const { players: _players, items: _items, ...everythingElse } = output;
+    items = output.items.map(item => {
+      return {
+        match_id: startAt,
+        item_type: item.item_type,
+        spawn_id: item.spawn_id,
+        ...item.frames,
+      }
+    }).join('\n');
 
     const players = output.metadata.players;
 
     settings = JSON.stringify({
+      match_id: startAt,
       slippi_version: output.slippi_version,
       start_time: output.start_time,
       timer_start: output.timer,
@@ -172,17 +189,20 @@ exports.handler = async (event) => {
       opponent_code: players[opponentIndex].names.code,
     });
 
-    let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats }
-        = analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE);
+    let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats } = {
+      match_id: startAt,
+      ...analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE)
+    }
 
     playerAttacks = _playerAttacks.map(obj => JSON.stringify(obj)).join('\n');
     playerPunishes = _playerPunishes.map(obj => JSON.stringify(obj)).join('\n');
 
     playerStats = JSON.stringify(roundInteractionDamageValues(_playerStats));
 
-    let { attacks: _opponentAttacks, punishes: _opponentPunishes, ..._opponentStats }
-        = analysis.players.find( player => player.tag_code !== process.env.SLIPPI_CODE);
-
+    let { attacks: _opponentAttacks, punishes: _opponentPunishes, ..._opponentStats } = {
+      match_id: startAt,
+      ...analysis.players.find(player => player.tag_code !== process.env.SLIPPI_CODE)
+    }
     opponentAttacks = _opponentAttacks.map(obj => JSON.stringify(obj)).join('\n');
     opponentPunishes = _opponentPunishes.map(obj => JSON.stringify(obj)).join('\n');
     opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
@@ -242,7 +262,7 @@ exports.handler = async (event) => {
       },
       {
         key: 'items',
-        body: JSON.stringify(items),
+        body: items,
         type: 'json'
       }
     ];
