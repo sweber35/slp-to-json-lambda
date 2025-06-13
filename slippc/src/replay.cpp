@@ -74,6 +74,8 @@ std::string SlippiReplay::playerFramesAsJson() {
       continue;
     }
 
+    if (s.player[p].player_type == 3) continue;
+
     for(unsigned f = 0; f < s.frame_count; ++f) {
       ss << SPACE[ILEV*2] << "{";
 
