@@ -146,32 +146,18 @@ exports.handler = async (event) => {
     opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
 
     playerFrames = output.players[playerIndex].frames
-        .map(obj => ({
-          ...patchFloats(obj),
-          match_id: startAt
-        }))
-        .map(obj => JSON.stringify(obj))
-        .join('\n');
+        .map(obj => patchFloats(obj)).join('\n');
 
     opponentFrames = output.players[opponentIndex].frames
-        .map(obj => ({
-          ...patchFloats(obj),
-          match_id: startAt
-        }))
-        .map(obj => JSON.stringify(obj))
-        .join('\n');
+        .map(obj => patchFloats(obj)).join('\n');
 
-    items = output.items
-        .map(item => {
-          return {
-            match_id: startAt,
-            item_type: item.item_type,
-            spawn_id: item.spawn_id,
-            ...item.frames,
-          }
-        })
-        .map(obj => JSON.stringify(obj))
-        .join('\n');
+    items = output.items.map(item => {
+      return {
+        item_type: item.item_type,
+        spawn_id: item.spawn_id,
+        ...item.frames,
+      }
+    }).join('\n');
 
     const players = output.metadata.players;
 
