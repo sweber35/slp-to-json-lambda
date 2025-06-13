@@ -818,21 +818,21 @@ namespace slip {
     DOUT1("  Saved to " << outfilename);
 
     DOUT1("  Saving Player Frames");
-    std::ofstream ofile3;
+    std::ofstream ofile2;
     ofile2.open(framesfilename);
     ofile2 << playerFramesAsJson() << std::endl;
     ofile2.close();
     DOUT1("  Saved to " << framesfilename);
 
     DOUT1("  Saving Item Frames");
-    std::ofstream ofile4;
+    std::ofstream ofile3;
     ofile3.open(itemsfilename);
     ofile3 << itemFramesAsJson() << std::endl;
     ofile3.close();
     DOUT1("  Saved to " << itemsfilename);
 
     DOUT1("  Saving Settings");
-    std::ofstream ofile5;
+    std::ofstream ofile4;
     ofile4.open(settingsfilename);
     ofile4 << settingsAsJson() << std::endl;
     ofile4.close();
