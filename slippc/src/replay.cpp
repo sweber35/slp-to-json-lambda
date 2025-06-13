@@ -118,7 +118,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
   ss << JUIN(0,"items5"        , s.items5)        << ",\n";
   ss << "\"metadata\" : " << s.metadata << "\n},\n";
 
-  if (MIN_VERSION(3,18,0) && !s.platform_events.empty()) {
+  if (!s.platform_events.empty()) {
 
     ss << ",\n";
     ss << "\"platforms\" : [\n";

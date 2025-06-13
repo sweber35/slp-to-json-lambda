@@ -595,6 +595,8 @@ namespace slip {
     uint8_t platform = _rb[_bp+O_PLATFORM];
     float platform_height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
 
+    std::cout << "Current frame: " << platform_height << std::endl;
+
     SlippiFodPlatform event = { fnum, platform, platform_height };
     _replay.platform_events.push_back(event);
 
