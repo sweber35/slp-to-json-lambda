@@ -84,6 +84,7 @@ function parseWithSlippc(inputPath, outputPath) {
           '-a', outputPath + 'analysis.json',
           '-w', outputPath + 'frames.json',
           '-l', outputPath + 'items.json',
+          '-m', outputPath + 'platforms.json',
           '-f',
         ],
         (error, stdout, stderr) => {
@@ -154,6 +155,14 @@ exports.handler = async (event) => {
       ContentType: `application/json`
     });
     await s3.send(putCommand2);
+
+    const putCommand3 = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `platforms.json`,
+      Body: require('fs').readFileSync('/tmp/platforms.json', 'utf-8'),
+      ContentType: `application/json`
+    });
+    await s3.send(putCommand3);
 
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));

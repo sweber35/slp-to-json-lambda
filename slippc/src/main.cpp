@@ -86,6 +86,7 @@ cmdoptions getCommandLineOptions(int argc, char** argv) {
   c.outfile      = getCmdOption(   argv, argv+argc, "-j");
   c.framesfile   = getCmdOption(   argv, argv+argc, "-w");
   c.itemsfile    = getCmdOption(   argv, argv+argc, "-l");
+  c.platformsfile = getCmdOption(   argv, argv+argc, "-m");
   c.analysisfile = getCmdOption(   argv, argv+argc, "-a");
   c.nodelta      = cmdOptionExists(argv, argv+argc, "-f");
   c.encode       = cmdOptionExists(argv, argv+argc, "-x");
