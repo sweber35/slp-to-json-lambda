@@ -207,7 +207,7 @@ namespace slip {
         case Event::POST_FRAME:  success = _parsePostFrame();  break;
         case Event::GAME_END:    success = _parseGameEnd();    break;
         case Event::ITEM_UPDATE: success = _parseItemUpdate(); break;
-
+        case Event::FOD_PLATFORM: success = _parseFodPlatform(); break;
         case Event::SPLIT_MSG:   success = true;               break;
         case Event::FRAME_START: success = true;               break;
         case Event::BOOKEND:     success = true;               break;
