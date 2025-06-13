@@ -796,7 +796,11 @@ namespace slip {
     return _replay.playerFramesAsJson();
   }
 
-  void Parser::save(const char* outfilename, const char* framesfilename, bool delta) {
+  std::string Parser::itemFramesAsJson() {
+    return _replay.itemFramesAsJson();
+  }
+
+  void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename bool delta) {
     std::cout << "DEBUG 1" << std::endl;
     DOUT1("  Saving JSON");
     std::ofstream ofile2;
@@ -813,6 +817,14 @@ namespace slip {
     ofile3.close();
     DOUT1("  Saved to " << framesfilename);
     std::cout << "DEBUG 3" << std::endl;
+
+    DOUT1("  Saving Item Frames");
+    std::ofstream ofile4;
+    ofile4.open(itemsfilename);
+    ofile4 << itemFramesAsJson() << std::endl;
+    ofile4.close();
+    DOUT1("  Saved to " << itemsfilename);
+    std::cout << "DEBUG 4" << std::endl;
   }
 
 }

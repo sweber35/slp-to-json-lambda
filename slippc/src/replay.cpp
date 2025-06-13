@@ -140,6 +140,62 @@ std::string SlippiReplay::playerFramesAsJson() {
   return ss.str();
 }
 
+std::string SlippiReplay::itemFramesAsJson() {
+  SlippiReplay s = (*this);
+
+  uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
+  uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
+  uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
+
+  std::stringstream ss;
+
+  ss << SPACE[ILEV] << "[\n";
+
+    bool first_item = true;
+    for (unsigned i = 0; i < MAX_ITEMS; ++i) {
+      if (s.item[i].spawn_id > MAX_ITEMS) {
+        break;
+      }
+      for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+        if (!first_item) {
+          ss << ",\n";
+        }
+        first_item = false;
+
+        ss << SPACE[ILEV] << "{";
+        int a = 0;
+
+        ss << JEND(a) << JSTR(1, "match_id", match_id);
+        ss << JEND(a) << JUIN(1, "spawn_id", s.item[i].spawn_id);
+        ss << JEND(a) << JUIN(1, "item_type", s.item[i].type);
+        ss << JEND(a) << JUIN(1, "frame", s.item[i].frame[f].frame);
+        ss << JEND(a) << JUIN(1, "state", s.item[i].frame[f].state);
+        ss << JEND(a) << JFLT(1, "face_dir", s.item[i].frame[f].face_dir);
+        ss << JEND(a) << JFLT(1, "xvel", s.item[i].frame[f].xvel);
+        ss << JEND(a) << JFLT(1, "yvel", s.item[i].frame[f].yvel);
+        ss << JEND(a) << JFLT(1, "xpos", s.item[i].frame[f].xpos);
+        ss << JEND(a) << JFLT(1, "ypos", s.item[i].frame[f].ypos);
+        ss << JEND(a) << JUIN(1, "damage", s.item[i].frame[f].damage);
+        ss << JEND(a) << JFLT(1, "expire", s.item[i].frame[f].expire);
+
+        if (MIN_VERSION(3, 2, 0)) {
+          ss << JEND(a) << JUIN(1, "missile_type", s.item[i].frame[f].flags_1);
+          ss << JEND(a) << JUIN(1, "turnip_face", s.item[i].frame[f].flags_2);
+          ss << JEND(a) << JUIN(1, "is_launched", s.item[i].frame[f].flags_3);
+          ss << JEND(a) << JUIN(1, "charged_power", s.item[i].frame[f].flags_4);
+        if (MIN_VERSION(3, 6, 0)) {
+          ss << JEND(a) << JINT(1, "owner", s.item[i].frame[f].owner);
+        }
+      }
+
+      ss << "\n" << SPACE[ILEV] << "}";
+    }
+  }
+
+  ss << SPACE[ILEV*2] << "]\n" << std::endl;
+  return ss.str();
+}
+
 std::string SlippiReplay::replayAsJson(bool delta) {
   SlippiReplay s = (*this);
   std::string match_id = s.start_time;
