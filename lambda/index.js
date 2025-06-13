@@ -50,7 +50,7 @@ async function sendFilesToS3( startAt, bucket, files ) {
   for await (const file of files) {
 
     let filePath;
-    console.log('FILE:', file.key);
+
     if (file.key.includes('_')) {
       if (file.key.includes('player')) {
         filePath = `${file.key.split('_')[1]}/player=1`;
@@ -91,8 +91,8 @@ function parseWithSlippc(inputPath, outputPath) {
             return reject(new Error(`slippc failed: ${error.message}`));
           }
 
-          console.log('slippc stdout:', stdout);
-          console.log('slippc stderr:', stderr);
+          if (stdout) console.log('slippc stdout:', stdout);
+          if (stderr) console.log('slippc stderr:', stderr);
 
           resolve({
             stdout,  // usually empty if slippc only writes to files
@@ -276,12 +276,15 @@ exports.handler = async (event) => {
         body: items,
         type: 'jsonl'
       },
-      stageId === 2 && {
+    ];
+
+    if (stageId === 2) {
+      puts.push({
         key: 'platforms',
         body: fodPlatforms,
         type: 'jsonl'
-      }
-    ];
+      })
+    }
 
     await sendFilesToS3(startAt, bucket, puts);
 
