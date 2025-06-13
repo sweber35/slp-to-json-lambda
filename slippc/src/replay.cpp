@@ -302,8 +302,8 @@ std::string SlippiReplay::replayAsJson(bool delta) {
       if (s.item[i].spawn_id > MAX_ITEMS) {
         break;
       }
-      ss << SPACE[ILEV] << "{\n";
-      ss << SPACE[ILEV] << "\"frames\" : [\n";
+      // ss << SPACE[ILEV] << "{\n";
+      // ss << SPACE[ILEV] << "\"frames\" : [\n";
 
       for(unsigned f = 0; f < s.item[i].num_frames; ++f) {
         ss << SPACE[ILEV*2] << "{";
@@ -352,11 +352,11 @@ std::string SlippiReplay::replayAsJson(bool delta) {
 
       }
 
-      if (s.item[i+1].spawn_id > MAX_ITEMS) {
-        ss << SPACE[ILEV] << "]}\n";
-      } else {
-        ss << SPACE[ILEV] << "]},\n";
-      }
+      //if (s.item[i+1].spawn_id > MAX_ITEMS) {
+      //  ss << SPACE[ILEV] << "]}\n";
+      //} else {
+      //  ss << SPACE[ILEV] << "]},\n";
+      //}
     }
     ss << "]\n";
   }
