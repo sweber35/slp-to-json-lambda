@@ -804,7 +804,7 @@ namespace slip {
     ofile2 << asJson(delta) << std::endl;
     ofile2.close();
     DOUT1("  Saved to " << outfilename);
-    std::cout << "DEBUG 2" << std::endl;
+    std::cout << "DEBUG 2" << framesfilename << std::endl;
     std::cout << playerFramesAsJson() << std::endl;
 
     DOUT1("  Saving Player Frames");
