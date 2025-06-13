@@ -54,6 +54,7 @@ public:
   std::string asJson(bool delta);        //Convert the parsed replay structure to a JSON
   std::string playerFramesAsJson();
   std::string itemFramesAsJson();
+  std::string fodPlatformChangesAsJson();
   void save(const char* outfilename, const char* framesfilename, const char* itemsfilename, const char* platformsfilename, bool delta); //Save a replay file
 
   //Getter function for exposing read-only access to underlying replay
