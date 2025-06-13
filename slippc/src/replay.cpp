@@ -167,6 +167,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         ss << SPACE[ILEV*2] << "{";
 
         int a = 0; //True for only the first thing output per line
+        ss << JEND(a) << JUIN(2,"match_id"        ,s.start_time);
         if (CHANGED(follower))
           ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
         if (CHANGED(seed))
@@ -301,6 +302,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         break;
       }
       ss << SPACE[ILEV] << "{\n";
+      ss << JUIN(1,"match_id"   ,s.start_time)               << ",\n";
       ss << JUIN(1,"spawn_id" ,s.item[i].spawn_id)           << ",\n";
       ss << JUIN(1,"item_type",s.item[i].type)               << ",\n";
       ss << SPACE[ILEV] << "\"frames\" : [\n";
