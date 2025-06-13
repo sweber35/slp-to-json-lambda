@@ -79,7 +79,7 @@ std::string SlippiReplay::playerFramesAsJson() {
 
       int a = 0; //True for only the first thing output per line
       ss << JEND(a) << JSTR(2,"match_id"      ,s.start_time);
-//        ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
+      ss << JEND(a) << JUIN(2,"follower"      ,s.player[pp].frame[f].follower);
 //        ss << JEND(a) << JUIN(2,"seed"          ,s.player[p].frame[f].seed);
 //        ss << JEND(a) << JUIN(2,"action_pre"    ,s.player[p].frame[f].action_pre);
 //        ss << JEND(a) << JFLT(2,"pos_x_pre"     ,s.player[p].frame[f].pos_x_pre);
@@ -87,7 +87,7 @@ std::string SlippiReplay::playerFramesAsJson() {
 //        ss << JEND(a) << JFLT(2,"face_dir_pre"  ,s.player[p].frame[f].face_dir_pre);
 //        ss << JEND(a) << JFLT(2,"joy_x"         ,s.player[p].frame[f].joy_x);
 //        ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
-       ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
+//        ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
 //        ss << JEND(a) << JFLT(2,"c_y"           ,s.player[p].frame[f].c_y);
 //        ss << JEND(a) << JFLT(2,"trigger"       ,s.player[p].frame[f].trigger);
 //        ss << JEND(a) << JUIN(2,"buttons"       ,s.player[p].frame[f].buttons);
