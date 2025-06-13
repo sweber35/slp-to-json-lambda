@@ -115,7 +115,7 @@ exports.handler = async (event) => {
   let playerFrames, opponentFrames, settings, analysis;
   let playerStats, playerAttacks, playerPunishes;
   let opponentStats, opponentAttacks, opponentPunishes;
-  let items, fodPlatforms;
+  let items, fodPlatforms, stageId;
 
   let playerIndex, opponentIndex;
 
@@ -147,6 +147,7 @@ exports.handler = async (event) => {
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
+    stageId = output.stage;
     startAt = output.metadata.startAt;
     const playersArray = Object.values(output.metadata.players);
     playerIndex = playersArray.findIndex(player => player.names.code === process.env.SLIPPI_CODE);
@@ -214,7 +215,7 @@ exports.handler = async (event) => {
         })).join('\n');
     opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
 
-    if (output.stage === 2) {
+    if (stageId === 2) {
       fodPlatforms = output.platforms.map(platform => JSON.stringify(platform)).join('\n');
     }
   } catch (err) {
@@ -275,7 +276,7 @@ exports.handler = async (event) => {
         body: items,
         type: 'jsonl'
       },
-      output.stage === 2 && {
+      stageId === 2 && {
         key: 'platforms',
         body: fodPlatforms,
         type: 'jsonl'
