@@ -27,6 +27,7 @@ namespace Event {
     GAME_END    = 0x39,
     FRAME_START = 0x3A,
     ITEM_UPDATE = 0x3B,
+    FOD_PLATFORM = 0x3F,
     BOOKEND     = 0x3C,
     GECKO_LIST  = 0x3D,
     SPLIT_MSG   = 0x10,
