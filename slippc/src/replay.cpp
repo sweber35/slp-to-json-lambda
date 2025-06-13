@@ -1,4 +1,5 @@
 #include "replay.h"
+#include <iostream>
 
 //JSON Output shortcuts
 #define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << float(n)
@@ -118,6 +119,9 @@ std::string SlippiReplay::replayAsJson(bool delta) {
   ss << "\"metadata\" : " << s.metadata << "\n},\n";
 
   if (MIN_VERSION(3,18,0) && !s.platform_events.empty()) {
+    std::cout << "DEBUG" << std::endl;
+    std::cout << s.platform_events << std::endl;
+
     ss << ",\n";
     ss << "\"platforms\" : [\n";
 
