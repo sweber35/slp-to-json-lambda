@@ -157,13 +157,13 @@ exports.handler = async (event) => {
     });
     await s3.send(putCommand2);
 
-    const putCommand4 = new PutObjectCommand({
+    const putCommand3 = new PutObjectCommand({
       Bucket: bucket,
       Key: `settings.json`,
       Body: require('fs').readFileSync('/tmp/settings.json', 'utf-8'),
       ContentType: `application/json`
     });
-    await s3.send(putCommand4);
+    await s3.send(putCommand3);
 
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
@@ -172,13 +172,13 @@ exports.handler = async (event) => {
 
     // only for FoD
     if (output.stage === 2) {
-      const putCommand3 = new PutObjectCommand({
+      const putCommand4 = new PutObjectCommand({
         Bucket: bucket,
         Key: `platforms.json`,
         Body: require('fs').readFileSync('/tmp/platforms.json', 'utf-8'),
         ContentType: `application/json`
       });
-      await s3.send(putCommand3);
+      await s3.send(putCommand4);
     }
 
     startAt = output.metadata.startAt;

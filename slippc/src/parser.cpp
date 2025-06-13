@@ -809,7 +809,6 @@ namespace slip {
   }
 
   void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename, const char* platformsfilename, const char* settingsfilename, bool delta) {
-    std::cout << "DEBUG 1" << std::endl;
     DOUT1("  Saving JSON");
     std::ofstream ofile1;
     ofile1.open(outfilename);
@@ -837,6 +836,7 @@ namespace slip {
     ofile4 << settingsAsJson() << std::endl;
     ofile4.close();
     DOUT1("  Saved to " << settingsfilename);
+   std::cout << "Settings:" <<  settingsAsJson() << std::endl;
 
     if (fodPlatformChangesAsJson() != "") {
       DOUT1("  Saving Platform Height Changes");
