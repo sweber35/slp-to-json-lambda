@@ -67,6 +67,7 @@ typedef struct _cmdoptions {
   char* outfile      = nullptr;
   char* framesfile   = nullptr;
   char* itemsfile    = nullptr;
+  char* platformsfile = nullptr;
   char* analysisfile = nullptr;
   bool  nodelta      = false;
   bool  encode       = false;
@@ -170,6 +171,9 @@ inline void cleanupCommandOptions(cmdoptions &c) {
   if(c.itemsfile) {
     delete[] c.itemsfile;
   }
+  if(c.platformsfile) {
+    delete[] c.platformsfile;
+  }
   if(c.analysisfile) {
     delete[] c.analysisfile;
   }
@@ -245,7 +249,7 @@ int handleJson(const cmdoptions &c, const int debug, slip::Parser &p) {
     if (debug) {
       DOUT1("  Saving Slippi JSON data to file");
     }
-    p.save(c.outfile, c.framesfile, c.itemsfile, !c.nodelta);
+    p.save(c.outfile, c.framesfile, c.itemsfile, c.platformsfile, !c.nodelta);
   }
   return 0;
 }

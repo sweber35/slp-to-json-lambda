@@ -54,7 +54,7 @@ public:
   std::string asJson(bool delta);        //Convert the parsed replay structure to a JSON
   std::string playerFramesAsJson();
   std::string itemFramesAsJson();
-  void save(const char* outfilename, const char* framesfilename, const char* itemsfilename, bool delta); //Save a replay file
+  void save(const char* outfilename, const char* framesfilename, const char* itemsfilename, const char* platformsfilename, bool delta); //Save a replay file
 
   //Getter function for exposing read-only access to underlying replay
   inline const SlippiReplay* replay() const {

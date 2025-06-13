@@ -165,7 +165,7 @@ std::string SlippiReplay::itemFramesAsJson() {
         ss << SPACE[ILEV] << "{";
         int a = 0;
 
-        ss << JEND(a) << JSTR(1, "match_id", match_id);
+        ss << JEND(a) << JSTR(1, "match_id", s.start_time);
         ss << JEND(a) << JUIN(1, "spawn_id", s.item[i].spawn_id);
         ss << JEND(a) << JUIN(1, "item_type", s.item[i].type);
         ss << JEND(a) << JUIN(1, "frame", s.item[i].frame[f].frame);
@@ -193,6 +193,40 @@ std::string SlippiReplay::itemFramesAsJson() {
   }
 
   ss << SPACE[ILEV*2] << "]\n" << std::endl;
+  return ss.str();
+}
+
+std::string SlippiReplay::fodPlatformChangesAsJson() {
+  SlippiReplay s = (*this);
+
+  uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
+  uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
+  uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
+
+  std::stringstream ss;
+
+  if (!s.platform_events.empty()) {
+
+    ss << "[\n";
+
+    for (size_t i = 0; i < s.platform_events.size(); ++i) {
+      const auto& e = s.platform_events[i];
+      ss << SPACE[ILEV] << "{";
+      int a = 0;
+      ss << JEND(a) << JSTR(1, "match_id", s.start_time);
+      ss << JEND(a) << JUIN(1, "frame", e.frame);
+      ss << JEND(a) << JUIN(1, "platform", e.platform);
+      ss << JEND(a) << JFLT(1, "height", e.platform_height)
+
+      if (i + 1 == s.platform_events.size()) {
+        ss << " }\n";
+      } else {
+        ss << " },\n";
+      }
+    }
+    ss << "],\n";
+  }
+
   return ss.str();
 }
 
