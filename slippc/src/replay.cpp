@@ -44,7 +44,7 @@ void SlippiReplay::cleanup() {
 
 std::string SlippiReplay::replayAsJson(bool delta) {
   SlippiReplay s = (*this);
-  string match_id = s.start_time;
+  std::string match_id = s.start_time;
 
   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
   uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
