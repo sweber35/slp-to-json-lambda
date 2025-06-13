@@ -131,12 +131,6 @@ std::string SlippiReplay::playerFramesAsJson() {
         } else {
           ss << "\n" << SPACE[ILEV*2] << "}\n";
         }
-
-        if (f < s.frame_count-1) {
-          ss << "\n" << SPACE[ILEV*2] << "},\n";
-        } else {
-          ss << "\n" << SPACE[ILEV*2] << "}\n";
-        }
       }
     }
   }
