@@ -241,7 +241,7 @@ int handleJson(const cmdoptions &c, const int debug, slip::Parser &p) {
     if (debug) {
       DOUT1("  Saving Slippi JSON data to file");
     }
-    p.save(c.outfile, c.framesfile, c.itemsname, !c.nodelta);
+    p.save(c.outfile, c.framesfile, c.itemsfile, !c.nodelta);
   }
   return 0;
 }
