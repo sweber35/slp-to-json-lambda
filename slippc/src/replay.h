@@ -194,6 +194,7 @@ struct SlippiReplay {
   void setFrames(int32_t max_frames);
   void cleanup();
   std::string replayAsJson(bool delta);
+  std::string playerFramesAsJson(bool delta);
 };
 
 
