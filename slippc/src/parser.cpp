@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <iostream>
 
 namespace slip {
 
@@ -796,12 +797,14 @@ namespace slip {
   }
 
   void Parser::save(const char* outfilename,bool delta) {
+    std::cout << "DEBUG 1" << std::endl;
     DOUT1("  Saving JSON");
     std::ofstream ofile2;
     ofile2.open(outfilename);
     ofile2 << asJson(delta) << std::endl;
     ofile2.close();
     DOUT1("  Saved to " << outfilename);
+    std::cout << "DEBUG 2" << std::endl;
 
     DOUT1("  Saving Player Frames");
     std::ofstream ofile3;
@@ -809,6 +812,8 @@ namespace slip {
     ofile3 << playerFramesAsJson() << std::endl;
     ofile3.close();
     DOUT1("  Saved to player_frames.json");
+    std::cout << "DEBUG 3" << std::endl;
+
   }
 
 }
