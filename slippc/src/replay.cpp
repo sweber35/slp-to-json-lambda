@@ -303,6 +303,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         break;
       }
 
+
       for(unsigned f = 0; f < s.item[i].num_frames; ++f) {
         ss << SPACE[ILEV*2] << "{";
         int a = 0; //True for only the first thing output per line
