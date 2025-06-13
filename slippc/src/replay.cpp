@@ -168,7 +168,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         ss << SPACE[ILEV*2] << "{";
 
         int a = 0; //True for only the first thing output per line
-        ss << JSTR(2,"match_id"                   , match_id)          << ",\n";
+        ss << JEND(a) << JSTR(2,"match_id"        , match_id);
         if (CHANGED(follower))
           ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
         if (CHANGED(seed))
@@ -308,9 +308,9 @@ std::string SlippiReplay::replayAsJson(bool delta) {
       for(unsigned f = 0; f < s.item[i].num_frames; ++f) {
         ss << SPACE[ILEV*2] << "{";
         int a = 0; //True for only the first thing output per line
-        ss << JEND(a) << JSTR(2,"match_id" ,match_id)       << ",\n";
-        ss << JEND(a) << JUIN(2,"spawn_id" ,s.item[i].spawn_id) << ",\n";
-        ss << JEND(a) << JUIN(2,"item_type",s.item[i].type)     << ",\n";
+        ss << JEND(a) << JSTR(2,"match_id" ,match_id);
+        ss << JEND(a) << JUIN(2,"spawn_id" ,s.item[i].spawn_id);
+        ss << JEND(a) << JUIN(2,"item_type",s.item[i].type);
         ss << JEND(a) << JUIN(2,"frame"      ,s.item[i].frame[f].frame);
         if (ICHANGED(state))
           ss << JEND(a) << JUIN(2,"state"      ,s.item[i].frame[f].state);
