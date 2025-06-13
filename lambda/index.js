@@ -99,6 +99,7 @@ function parseWithSlippc(inputPath, outputPath) {
             stdout,  // usually empty if slippc only writes to files
             stderr,
             outputJsonPath: outputPath + 'output.json',
+            outputFramesPath: outputPath + 'frames.json',
             analysisJsonPath: outputPath + 'analysis.json'
           });
         }
