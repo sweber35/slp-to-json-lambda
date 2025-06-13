@@ -3,7 +3,7 @@ name: Build Binary and Deploy Lambda
 on:
   push:
     branches:
-      - fix/slippc-with-fod
+      - feature/slippc
 
 jobs:
   build-and-deploy:
