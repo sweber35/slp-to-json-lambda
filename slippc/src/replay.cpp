@@ -65,11 +65,15 @@ std::string SlippiReplay::playerFramesAsJson() {
 //      continue;
 //    }
 
-     for(unsigned f = 0; f < s.frame_count; ++f) {
-       ss << SPACE[ILEV*2] << "{";
+    if(p > 3 && s.player[pp].ext_char_id != CharExt::CLIMBER) { //If we're not Ice climbers
+      continue;
+    }
 
-       int a = 0; //True for only the first thing output per line
-       ss << JEND(a) << JSTR(2,"match_id"      ,s.start_time);
+    for(unsigned f = 0; f < s.frame_count; ++f) {
+      ss << SPACE[ILEV*2] << "{";
+
+      int a = 0; //True for only the first thing output per line
+      ss << JEND(a) << JSTR(2,"match_id"      ,s.start_time);
 //        ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
 //        ss << JEND(a) << JUIN(2,"seed"          ,s.player[p].frame[f].seed);
 //        ss << JEND(a) << JUIN(2,"action_pre"    ,s.player[p].frame[f].action_pre);
