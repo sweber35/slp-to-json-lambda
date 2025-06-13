@@ -161,6 +161,7 @@ exports.handler = async (event) => {
 
     stageId = output.stage;
 
+    // only for FoD
     if (output.stage === 2) {
       const putCommand3 = new PutObjectCommand({
         Bucket: bucket,
@@ -170,7 +171,7 @@ exports.handler = async (event) => {
       });
       await s3.send(putCommand3);
     }
-    
+
     startAt = output.metadata.startAt;
     const playersArray = Object.values(output.metadata.players);
     playerIndex = playersArray.findIndex(player => player.names.code === process.env.SLIPPI_CODE);

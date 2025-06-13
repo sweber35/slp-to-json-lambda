@@ -804,31 +804,39 @@ namespace slip {
     return _replay.fodPlatformChangesAsJson();
   }
 
-  void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename, const char* platformsfilename, bool delta) {
+  std::string Parser::settingsAsJson() {
+    return _replay.settingsAsJson();
+  }
+
+  void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename, const char* platformsfilename, const char* settingsfilename, bool delta) {
     std::cout << "DEBUG 1" << std::endl;
     DOUT1("  Saving JSON");
     std::ofstream ofile2;
-    ofile2.open(outfilename);
-    ofile2 << asJson(delta) << std::endl;
-    ofile2.close();
+    ofile1.open(outfilename);
+    ofile1 << asJson(delta) << std::endl;
+    ofile1.close();
     DOUT1("  Saved to " << outfilename);
-    std::cout << "DEBUG 2" << framesfilename << std::endl;
 
     DOUT1("  Saving Player Frames");
     std::ofstream ofile3;
-    ofile3.open(framesfilename);
-    ofile3 << playerFramesAsJson() << std::endl;
-    ofile3.close();
+    ofile2.open(framesfilename);
+    ofile2 << playerFramesAsJson() << std::endl;
+    ofile2.close();
     DOUT1("  Saved to " << framesfilename);
-    std::cout << "DEBUG 3" << std::endl;
 
     DOUT1("  Saving Item Frames");
     std::ofstream ofile4;
-    ofile4.open(itemsfilename);
-    ofile4 << itemFramesAsJson() << std::endl;
-    ofile4.close();
+    ofile3.open(itemsfilename);
+    ofile3 << itemFramesAsJson() << std::endl;
+    ofile3.close();
     DOUT1("  Saved to " << itemsfilename);
-    std::cout << "DEBUG 4" << std::endl;
+
+    DOUT1("  Saving Settings");
+    std::ofstream ofile5;
+    ofile4.open(settingsfilename);
+    ofile4 << settingsAsJson() << std::endl;
+    ofile4.close();
+    DOUT1("  Saved to " << settingsfilename);
 
     if (fodPlatformChangesAsJson() != "") {
       DOUT1("  Saving Platform Height Changes");
@@ -837,7 +845,6 @@ namespace slip {
       ofile5 << fodPlatformChangesAsJson() << std::endl;
       ofile5.close();
       DOUT1("  Saved to " << platformsfilename);
-      std::cout << "DEBUG 5" << std::endl;
     }
   }
 
