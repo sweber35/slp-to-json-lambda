@@ -50,7 +50,7 @@ async function sendFilesToS3( startAt, bucket, files ) {
   for await (const file of files) {
 
     let filePath;
-
+    console.log('FILE:', file.key);
     if (file.key.includes('_')) {
       if (file.key.includes('player')) {
         filePath = `${file.key.split('_')[1]}/player=1`;
