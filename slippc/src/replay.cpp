@@ -120,7 +120,6 @@ std::string SlippiReplay::replayAsJson(bool delta) {
 
   if (!s.platform_events.empty()) {
 
-    ss << ",\n";
     ss << "\"platforms\" : [\n";
 
     for (size_t i = 0; i < s.platform_events.size(); ++i) {
