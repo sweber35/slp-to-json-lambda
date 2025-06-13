@@ -250,8 +250,8 @@ std::string SlippiReplay::settingsAsJson() {
   ss << JEND(a) << JINT(2,"winner_id"      ,s.winner_id);
   ss << JEND(a) << JUIN(2,"stage"          ,s.stage);
   ss << JEND(a) << JUIN(2,"end_type"       ,s.end_type);
-  for (unsigned i = 0; i < 3; i++) {
-    if (s.player[i].player_type == 3) {
+  for (unsigned i = 0; i < 8; i++) {
+    if (s.player[i].player_type == 3 && s.player[i].tag_code != "") {
        ss << JEND(a) << JSTR(2,("player_" + std::to_string(i) + "_code") ,s.player[i].tag_code);
        ss << JEND(a) << JINT(2,("player_" + std::to_string(i) + "_ext_char") ,s.player[i].ext_char_id);
     }
