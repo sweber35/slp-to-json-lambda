@@ -578,7 +578,7 @@ namespace slip {
     return true;
   }
 
-  bool Parser::_parseFodPlatform() {Add commentMore actions
+  bool Parser::_parseFodPlatform() {
     DOUT2("  Parsing FoD platform event at byte " << +_bp);
     int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
 
