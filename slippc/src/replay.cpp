@@ -216,7 +216,7 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
       ss << JEND(a) << JSTR(1, "match_id", s.start_time);
       ss << JEND(a) << JUIN(1, "frame", e.frame);
       ss << JEND(a) << JUIN(1, "platform", e.platform);
-      ss << JEND(a) << JFLT(1, "height", e.platform_height)
+      ss << JEND(a) << JFLT(1, "height", e.platform_height);
 
       if (i + 1 == s.platform_events.size()) {
         ss << " }\n";
@@ -225,9 +225,10 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
       }
     }
     ss << "],\n";
+    return ss.str();
   }
 
-  return ss.str();
+  return '';
 }
 
 std::string SlippiReplay::replayAsJson(bool delta) {
