@@ -349,12 +349,6 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         }
 
       }
-
-      if (s.item[i+1].spawn_id > MAX_ITEMS) {
-        ss << SPACE[ILEV] << "]}\n";
-      } else {
-        ss << SPACE[ILEV] << "]},\n";
-      }
     }
     ss << "]\n";
   }
