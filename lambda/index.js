@@ -141,11 +141,19 @@ exports.handler = async (event) => {
     await parseWithSlippc(tempPath, '/tmp/');
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `debug.json`,
+      Key: `frames.json`,
       Body: require('fs').readFileSync('/tmp/frames.json', 'utf-8'),
       ContentType: `application/json`
     });
     await s3.send(putCommand);
+
+    const putCommand2 = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `items.json`,
+      Body: require('fs').readFileSync('/tmp/items.json', 'utf-8'),
+      ContentType: `application/json`
+    });
+    await s3.send(putCommand2);
 
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
