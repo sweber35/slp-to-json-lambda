@@ -53,7 +53,7 @@ public:
   Analysis* analyze();                   //Analyze the loaded replay file
   std::string asJson(bool delta);        //Convert the parsed replay structure to a JSON
   std::string playerFramesAsJson();
-  void save(const char* outfilename,bool delta); //Save a replay file
+  void save(const char* outfilename, const char* framesfilename, bool delta); //Save a replay file
 
   //Getter function for exposing read-only access to underlying replay
   inline const SlippiReplay* replay() const {

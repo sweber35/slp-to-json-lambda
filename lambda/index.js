@@ -82,7 +82,8 @@ function parseWithSlippc(inputPath, outputPath) {
           '-i', inputPath,
           '-j', outputPath + 'output.json',
           '-f',
-          '-a', outputPath + 'analysis.json'
+          '-a', outputPath + 'analysis.json',
+          '-w', outputPath + 'frames.json',
         ],
         (error, stdout, stderr) => {
           if (error) {
