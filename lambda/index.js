@@ -156,18 +156,21 @@ exports.handler = async (event) => {
     });
     await s3.send(putCommand2);
 
-    const putCommand3 = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `platforms.json`,
-      Body: require('fs').readFileSync('/tmp/platforms.json', 'utf-8'),
-      ContentType: `application/json`
-    });
-    await s3.send(putCommand3);
-
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
     stageId = output.stage;
+
+    if (output.stage === 2) {
+      const putCommand3 = new PutObjectCommand({
+        Bucket: bucket,
+        Key: `platforms.json`,
+        Body: require('fs').readFileSync('/tmp/platforms.json', 'utf-8'),
+        ContentType: `application/json`
+      });
+      await s3.send(putCommand3);
+    }
+    
     startAt = output.metadata.startAt;
     const playersArray = Object.values(output.metadata.players);
     playerIndex = playersArray.findIndex(player => player.names.code === process.env.SLIPPI_CODE);
