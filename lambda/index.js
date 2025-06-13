@@ -141,7 +141,7 @@ exports.handler = async (event) => {
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `debug.json`,
-      Body: require('fs').readFileSync('/tmp/player_frames.json', 'utf-8'),
+      Body: require('fs').readFileSync('/tmp/frames.json', 'utf-8'),
       ContentType: `application/json`
     });
     await s3.send(putCommand);
