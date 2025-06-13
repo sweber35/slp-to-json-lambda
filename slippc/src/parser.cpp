@@ -809,10 +809,10 @@ namespace slip {
     DOUT1("  Saving Player Frames");
     std::ofstream ofile3;
     ofile3.open(framesfilename);
-  //  ofile3 << playerFramesAsJson() << std::endl;
-  //  ofile3.close();
-  //  DOUT1("  Saved to " << framesfilename);
-  //  std::cout << "DEBUG 3" << std::endl;
+    ofile3 << playerFramesAsJson() << std::endl;
+    ofile3.close();
+    DOUT1("  Saved to " << framesfilename);
+    std::cout << "DEBUG 3" << std::endl;
   }
 
 }

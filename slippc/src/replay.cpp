@@ -140,7 +140,8 @@ std::string SlippiReplay::playerFramesAsJson() {
       }
     }
   }
-  ss << SPACE[ILEV*2] << "]\n";
+  ss << SPACE[ILEV*2] << "]\n" << std::endl;
+  return ss.str();
 }
 
 std::string SlippiReplay::replayAsJson(bool delta) {
