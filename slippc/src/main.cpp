@@ -66,6 +66,7 @@ typedef struct _cmdoptions {
   char* cfile        = nullptr;
   char* outfile      = nullptr;
   char* framesfile   = nullptr;
+  char* itemsfile    = nullptr;
   char* analysisfile = nullptr;
   bool  nodelta      = false;
   bool  encode       = false;
@@ -165,6 +166,9 @@ inline void cleanupCommandOptions(cmdoptions &c) {
   }
   if(c.framesfile) {
     delete[] c.framesfile;
+  }
+  if(c.itemsfile) {
+    delete[] c.itemsfile;
   }
   if(c.analysisfile) {
     delete[] c.analysisfile;
