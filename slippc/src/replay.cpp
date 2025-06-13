@@ -65,9 +65,9 @@ std::string SlippiReplay::playerFramesAsJson() {
       continue;
     }
 
-//     for(unsigned f = 0; f < s.frame_count; ++f) {
-//       ss << SPACE[ILEV*2] << "{";
-//
+     for(unsigned f = 0; f < s.frame_count; ++f) {
+       ss << SPACE[ILEV*2] << "{";
+
 //       int a = 0; //True for only the first thing output per line
 //       ss << JEND(a) << JSTR(2,"match_id"      , s.start_time);
 //       ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
@@ -133,12 +133,12 @@ std::string SlippiReplay::playerFramesAsJson() {
 //         ss << JEND(a) << JUIN(2,"anim_index"    ,s.player[p].frame[f].anim_index);
 //       }
 //
-//       if (f < s.frame_count-1) {
-//         ss << "\n" << SPACE[ILEV*2] << "},\n";
-//       } else {
-//         ss << "\n" << SPACE[ILEV*2] << "}\n";
-//       }
-//     }
+       if (f < s.frame_count-1) {
+         ss << "\n" << SPACE[ILEV*2] << "},\n";
+       } else {
+         ss << "\n" << SPACE[ILEV*2] << "}\n";
+       }
+     }
   }
   ss << SPACE[ILEV*2] << "]\n" << std::endl;
   return ss.str();
