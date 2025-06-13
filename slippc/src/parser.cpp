@@ -813,7 +813,6 @@ namespace slip {
     ofile3.close();
     DOUT1("  Saved to " << framesfilename);
     std::cout << "DEBUG 3" << std::endl;
-
   }
 
 }
