@@ -68,36 +68,36 @@ std::string SlippiReplay::playerFramesAsJson() {
      for(unsigned f = 0; f < s.frame_count; ++f) {
        ss << SPACE[ILEV*2] << "{";
 
-//       int a = 0; //True for only the first thing output per line
-//       ss << JEND(a) << JSTR(2,"match_id"      , s.start_time);
-//       ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
-//       ss << JEND(a) << JUIN(2,"seed"          ,s.player[p].frame[f].seed);
-//       ss << JEND(a) << JUIN(2,"action_pre"    ,s.player[p].frame[f].action_pre);
-//       ss << JEND(a) << JFLT(2,"pos_x_pre"     ,s.player[p].frame[f].pos_x_pre);
-//       ss << JEND(a) << JFLT(2,"pos_y_pre"     ,s.player[p].frame[f].pos_y_pre);
-//       ss << JEND(a) << JFLT(2,"face_dir_pre"  ,s.player[p].frame[f].face_dir_pre);
-//       ss << JEND(a) << JFLT(2,"joy_x"         ,s.player[p].frame[f].joy_x);
-//       ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
-//       ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
-//       ss << JEND(a) << JFLT(2,"c_y"           ,s.player[p].frame[f].c_y);
-//       ss << JEND(a) << JFLT(2,"trigger"       ,s.player[p].frame[f].trigger);
-//       ss << JEND(a) << JUIN(2,"buttons"       ,s.player[p].frame[f].buttons);
-//       ss << JEND(a) << JFLT(2,"phys_l"        ,s.player[p].frame[f].phys_l);
-//       ss << JEND(a) << JFLT(2,"phys_r"        ,s.player[p].frame[f].phys_r);
-//       ss << JEND(a) << JUIN(2,"ucf_x"         ,s.player[p].frame[f].ucf_x);
-//       ss << JEND(a) << JFLT(2,"percent_pre"   ,s.player[p].frame[f].percent_pre);
-//       ss << JEND(a) << JUIN(2,"char_id"       ,s.player[p].frame[f].char_id);
-//       ss << JEND(a) << JUIN(2,"action_post"   ,s.player[p].frame[f].action_post);
-//       ss << JEND(a) << JFLT(2,"pos_x_post"    ,s.player[p].frame[f].pos_x_post);
-//       ss << JEND(a) << JFLT(2,"pos_y_post"    ,s.player[p].frame[f].pos_y_post);
-//       ss << JEND(a) << JFLT(2,"face_dir_post" ,s.player[p].frame[f].face_dir_post);
-//       ss << JEND(a) << JFLT(2,"percent_post"  ,s.player[p].frame[f].percent_post);
-//       ss << JEND(a) << JFLT(2,"shield"        ,s.player[p].frame[f].shield);
-//       ss << JEND(a) << JUIN(2,"hit_with"      ,s.player[p].frame[f].hit_with);
-//       ss << JEND(a) << JUIN(2,"combo"         ,s.player[p].frame[f].combo);
-//       ss << JEND(a) << JUIN(2,"hurt_by"       ,s.player[p].frame[f].hurt_by);
-//       ss << JEND(a) << JUIN(2,"stocks"        ,s.player[p].frame[f].stocks);
-//       ss << JEND(a) << JFLT(2,"action_fc"     ,s.player[p].frame[f].action_fc);
+       int a = 0; //True for only the first thing output per line
+       ss << JEND(a) << JSTR(2,"match_id"      , s.start_time);
+       ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
+       ss << JEND(a) << JUIN(2,"seed"          ,s.player[p].frame[f].seed);
+       ss << JEND(a) << JUIN(2,"action_pre"    ,s.player[p].frame[f].action_pre);
+       ss << JEND(a) << JFLT(2,"pos_x_pre"     ,s.player[p].frame[f].pos_x_pre);
+       ss << JEND(a) << JFLT(2,"pos_y_pre"     ,s.player[p].frame[f].pos_y_pre);
+       ss << JEND(a) << JFLT(2,"face_dir_pre"  ,s.player[p].frame[f].face_dir_pre);
+       ss << JEND(a) << JFLT(2,"joy_x"         ,s.player[p].frame[f].joy_x);
+       ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
+       ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
+       ss << JEND(a) << JFLT(2,"c_y"           ,s.player[p].frame[f].c_y);
+       ss << JEND(a) << JFLT(2,"trigger"       ,s.player[p].frame[f].trigger);
+       ss << JEND(a) << JUIN(2,"buttons"       ,s.player[p].frame[f].buttons);
+       ss << JEND(a) << JFLT(2,"phys_l"        ,s.player[p].frame[f].phys_l);
+       ss << JEND(a) << JFLT(2,"phys_r"        ,s.player[p].frame[f].phys_r);
+       ss << JEND(a) << JUIN(2,"ucf_x"         ,s.player[p].frame[f].ucf_x);
+       ss << JEND(a) << JFLT(2,"percent_pre"   ,s.player[p].frame[f].percent_pre);
+       ss << JEND(a) << JUIN(2,"char_id"       ,s.player[p].frame[f].char_id);
+       ss << JEND(a) << JUIN(2,"action_post"   ,s.player[p].frame[f].action_post);
+       ss << JEND(a) << JFLT(2,"pos_x_post"    ,s.player[p].frame[f].pos_x_post);
+       ss << JEND(a) << JFLT(2,"pos_y_post"    ,s.player[p].frame[f].pos_y_post);
+       ss << JEND(a) << JFLT(2,"face_dir_post" ,s.player[p].frame[f].face_dir_post);
+       ss << JEND(a) << JFLT(2,"percent_post"  ,s.player[p].frame[f].percent_post);
+       ss << JEND(a) << JFLT(2,"shield"        ,s.player[p].frame[f].shield);
+       ss << JEND(a) << JUIN(2,"hit_with"      ,s.player[p].frame[f].hit_with);
+       ss << JEND(a) << JUIN(2,"combo"         ,s.player[p].frame[f].combo);
+       ss << JEND(a) << JUIN(2,"hurt_by"       ,s.player[p].frame[f].hurt_by);
+       ss << JEND(a) << JUIN(2,"stocks"        ,s.player[p].frame[f].stocks);
+       ss << JEND(a) << JFLT(2,"action_fc"     ,s.player[p].frame[f].action_fc);
 //
 //       if(MIN_VERSION(2,0,0)) {
 //         ss << JEND(a) << JUIN(2,"missile_type"       ,s.player[p].frame[f].flags_1);
