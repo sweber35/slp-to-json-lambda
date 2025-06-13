@@ -164,7 +164,6 @@ std::string Analysis::asJson() {
     ss << SPACE[ILEV] << "\"punishes\" : [\n";
     for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
       ss << SPACE[2*ILEV] << "{" << std::endl;
-      ss << JSTR(2,"match_id" ,match_id)                                               << ",\n";
       ss << JUIN(2,"start_frame",     ap[p].punishes[i].start_frame)                   << ",\n";
       ss << JUIN(2,"end_frame",       ap[p].punishes[i].end_frame)                     << ",\n";
       ss << JFLT(2,"start_pct",       ap[p].punishes[i].start_pct)                     << ",\n";
