@@ -56,31 +56,81 @@ std::string SlippiReplay::playerFramesAsJson() {
 
   for(unsigned p = 0; p < 8; ++p) {
     unsigned pp = (p % 4);
-//    if(p > 3 && s.player[pp].ext_char_id != CharExt::CLIMBER) { //If we're not Ice climbers
-//      if (p == 7) {
-//        ss << SPACE[ILEV] << "{}\n";
-//      } else {
-//        ss << SPACE[ILEV] << "{},\n";
-//      }
-//      continue;
-//    }
-
-    if(p > 3 && s.player[pp].ext_char_id != CharExt::CLIMBER) { //If we're not Ice climbers
-      if (p == 7) {
-        ss << SPACE[ILEV] << "{}\n";
-      } else {
-        ss << SPACE[ILEV] << "{},\n";
-      }
-      continue;
-    }
 
     if (s.player[p].player_type != 3) {
       for(unsigned f = 0; f < s.frame_count; ++f) {
         ss << SPACE[ILEV*2] << "{";
 
         int a = 0; //True for only the first thing output per line
-        ss << JEND(a) << JSTR(2,"match_id"      ,s.start_time);
-        ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
+        ss << JEND(a) << JSTR(2,"match_id"        , match_id);
+          ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
+          ss << JEND(a) << JUIN(2,"seed"          ,s.player[p].frame[f].seed);
+          ss << JEND(a) << JUIN(2,"action_pre"    ,s.player[p].frame[f].action_pre);
+          ss << JEND(a) << JFLT(2,"pos_x_pre"     ,s.player[p].frame[f].pos_x_pre);
+          ss << JEND(a) << JFLT(2,"pos_y_pre"     ,s.player[p].frame[f].pos_y_pre);
+          ss << JEND(a) << JFLT(2,"face_dir_pre"  ,s.player[p].frame[f].face_dir_pre);
+          ss << JEND(a) << JFLT(2,"joy_x"         ,s.player[p].frame[f].joy_x);
+          ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
+          ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
+          ss << JEND(a) << JFLT(2,"c_y"           ,s.player[p].frame[f].c_y);
+          ss << JEND(a) << JFLT(2,"trigger"       ,s.player[p].frame[f].trigger);
+          ss << JEND(a) << JUIN(2,"buttons"       ,s.player[p].frame[f].buttons);
+          ss << JEND(a) << JFLT(2,"phys_l"        ,s.player[p].frame[f].phys_l);
+          ss << JEND(a) << JFLT(2,"phys_r"        ,s.player[p].frame[f].phys_r);
+          ss << JEND(a) << JUIN(2,"ucf_x"         ,s.player[p].frame[f].ucf_x);
+          ss << JEND(a) << JFLT(2,"percent_pre"   ,s.player[p].frame[f].percent_pre);
+          ss << JEND(a) << JUIN(2,"char_id"       ,s.player[p].frame[f].char_id);
+          ss << JEND(a) << JUIN(2,"action_post"   ,s.player[p].frame[f].action_post);
+          ss << JEND(a) << JFLT(2,"pos_x_post"    ,s.player[p].frame[f].pos_x_post);
+          ss << JEND(a) << JFLT(2,"pos_y_post"    ,s.player[p].frame[f].pos_y_post);
+          ss << JEND(a) << JFLT(2,"face_dir_post" ,s.player[p].frame[f].face_dir_post);
+          ss << JEND(a) << JFLT(2,"percent_post"  ,s.player[p].frame[f].percent_post);
+          ss << JEND(a) << JFLT(2,"shield"        ,s.player[p].frame[f].shield);
+          ss << JEND(a) << JUIN(2,"hit_with"      ,s.player[p].frame[f].hit_with);
+          ss << JEND(a) << JUIN(2,"combo"         ,s.player[p].frame[f].combo);
+          ss << JEND(a) << JUIN(2,"hurt_by"       ,s.player[p].frame[f].hurt_by);
+          ss << JEND(a) << JUIN(2,"stocks"        ,s.player[p].frame[f].stocks);
+          ss << JEND(a) << JFLT(2,"action_fc"     ,s.player[p].frame[f].action_fc);
+
+        if(MIN_VERSION(2,0,0)) {
+            ss << JEND(a) << JUIN(2,"missile_type"       ,s.player[p].frame[f].flags_1);
+            ss << JEND(a) << JUIN(2,"turnip_face"       ,s.player[p].frame[f].flags_2);
+            ss << JEND(a) << JUIN(2,"is_launched"       ,s.player[p].frame[f].flags_3);
+            ss << JEND(a) << JUIN(2,"charged_power"       ,s.player[p].frame[f].flags_4);
+            ss << JEND(a) << JUIN(2,"flags_5"       ,s.player[p].frame[f].flags_5);
+            ss << JEND(a) << JUIN(2,"hitstun"       ,s.player[p].frame[f].hitstun);
+            ss << JEND(a) << JUIN(2,"airborne"      ,s.player[p].frame[f].airborne);
+            ss << JEND(a) << JUIN(2,"ground_id"     ,s.player[p].frame[f].ground_id);
+            ss << JEND(a) << JUIN(2,"jumps"         ,s.player[p].frame[f].jumps);
+            ss << JEND(a) << JUIN(2,"l_cancel"      ,s.player[p].frame[f].l_cancel);
+            ss << JEND(a) << JINT(2,"alive"         ,s.player[p].frame[f].alive);
+        }
+
+        if(MIN_VERSION(2,1,0)) {
+            ss << JEND(a) << JUIN(2,"hurtbox"       ,s.player[p].frame[f].hurtbox);
+        }
+
+        if(MIN_VERSION(3,5,0)) {
+            ss << JEND(a) << JFLT(2,"self_air_x"    ,s.player[p].frame[f].self_air_x);
+            ss << JEND(a) << JFLT(2,"self_air_y"    ,s.player[p].frame[f].self_air_y);
+            ss << JEND(a) << JFLT(2,"attack_x"      ,s.player[p].frame[f].attack_x);
+            ss << JEND(a) << JFLT(2,"attack_y"      ,s.player[p].frame[f].attack_y);
+            ss << JEND(a) << JFLT(2,"self_grd_x"    ,s.player[p].frame[f].self_grd_x);
+        }
+
+        if(MIN_VERSION(3,8,0)) {
+            ss << JEND(a) << JFLT(2,"hitlag"        ,s.player[p].frame[f].hitlag);
+        }
+
+        if(MIN_VERSION(3,11,0)) {
+            ss << JEND(a) << JUIN(2,"anim_index"    ,s.player[p].frame[f].anim_index);
+        }
+
+        if (f < s.frame_count-1) {
+          ss << "\n" << SPACE[ILEV*2] << "},\n";
+        } else {
+          ss << "\n" << SPACE[ILEV*2] << "}\n";
+        }
 
         if (f < s.frame_count-1) {
           ss << "\n" << SPACE[ILEV*2] << "},\n";
