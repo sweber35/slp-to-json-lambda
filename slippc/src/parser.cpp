@@ -811,7 +811,7 @@ namespace slip {
   void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename, const char* platformsfilename, const char* settingsfilename, bool delta) {
     std::cout << "DEBUG 1" << std::endl;
     DOUT1("  Saving JSON");
-    std::ofstream ofile2;
+    std::ofstream ofile1;
     ofile1.open(outfilename);
     ofile1 << asJson(delta) << std::endl;
     ofile1.close();
