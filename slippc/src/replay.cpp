@@ -54,17 +54,17 @@ std::string SlippiReplay::playerFramesAsJson() {
 
   ss << SPACE[ILEV] << "[\n";
 
-//   for(unsigned p = 0; p < 8; ++p) {
-//     unsigned pp = (p % 4);
-//     if(p > 3 && s.player[pp].ext_char_id != CharExt::CLIMBER) { //If we're not Ice climbers
-//       if (p == 7) {
-//         ss << SPACE[ILEV] << "{}\n";
-//       } else {
-//         ss << SPACE[ILEV] << "{},\n";
-//       }
-//       continue;
-//     }
-//
+  for(unsigned p = 0; p < 8; ++p) {
+    unsigned pp = (p % 4);
+    if(p > 3 && s.player[pp].ext_char_id != CharExt::CLIMBER) { //If we're not Ice climbers
+      if (p == 7) {
+        ss << SPACE[ILEV] << "{}\n";
+      } else {
+        ss << SPACE[ILEV] << "{},\n";
+      }
+      continue;
+    }
+
 //     for(unsigned f = 0; f < s.frame_count; ++f) {
 //       ss << SPACE[ILEV*2] << "{";
 //
@@ -139,7 +139,7 @@ std::string SlippiReplay::playerFramesAsJson() {
 //         ss << "\n" << SPACE[ILEV*2] << "}\n";
 //       }
 //     }
-//   }
+  }
   ss << SPACE[ILEV*2] << "]\n" << std::endl;
   return ss.str();
 }
