@@ -275,7 +275,7 @@ exports.handler = async (event) => {
         body: items,
         type: 'jsonl'
       },
-      fodPlatforms.length && {
+      output.stage === 2 && {
         key: 'platforms',
         body: fodPlatforms,
         type: 'jsonl'
