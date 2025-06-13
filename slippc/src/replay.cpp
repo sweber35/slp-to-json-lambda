@@ -80,7 +80,7 @@ std::string SlippiReplay::playerFramesAsJson() {
       int a = 0; //True for only the first thing output per line
       ss << JEND(a) << JSTR(2,"match_id"      ,s.start_time);
 
-          ss << JEND(a) << JUIN(2,"follower"      ,s.player[2].frame[0].follower);
+          ss << JEND(a) << JUIN(2,"follower"      ,s.player[3].frame[0].follower);
 //        ss << JEND(a) << JUIN(2,"seed"          ,s.player[p].frame[f].seed);
 //        ss << JEND(a) << JUIN(2,"action_pre"    ,s.player[p].frame[f].action_pre);
 //        ss << JEND(a) << JFLT(2,"pos_x_pre"     ,s.player[p].frame[f].pos_x_pre);
