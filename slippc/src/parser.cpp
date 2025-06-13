@@ -800,7 +800,7 @@ namespace slip {
     return _replay.itemFramesAsJson();
   }
 
-  void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename bool delta) {
+  void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename, bool delta) {
     std::cout << "DEBUG 1" << std::endl;
     DOUT1("  Saving JSON");
     std::ofstream ofile2;
