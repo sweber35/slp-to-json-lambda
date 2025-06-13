@@ -130,7 +130,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
 
       ss << JEND(a) << JUIN(1, "frame", e.frame);
       ss << JEND(a) << JUIN(1, "platform", e.platform);
-      ss << JEND(a) << JFLT(1, "height", e.platform_height);
+      ss << JEND(a) << JFLT(1, "height", e.platform_height) << "\n";
 
       if (i + 1 == s.platform_events.size()) {
         ss << "}\n";
