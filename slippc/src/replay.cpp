@@ -228,7 +228,7 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
     return ss.str();
   }
 
-  return '';
+  return "";
 }
 
 std::string SlippiReplay::replayAsJson(bool delta) {
