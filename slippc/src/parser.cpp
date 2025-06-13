@@ -805,7 +805,7 @@ namespace slip {
     ofile2.close();
     DOUT1("  Saved to " << outfilename);
     std::cout << "DEBUG 2" << std::endl;
-    std::cout << asPlayerFramesJson() << std::endl;
+    std::cout << playerFramesAsJson() << std::endl;
 
     //DOUT1("  Saving Player Frames");
     //std::ofstream ofile3;
