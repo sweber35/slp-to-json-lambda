@@ -830,13 +830,15 @@ namespace slip {
     DOUT1("  Saved to " << itemsfilename);
     std::cout << "DEBUG 4" << std::endl;
 
-    DOUT1("  Saving Platform Height Changes");
-    std::ofstream ofile5;
-    ofile5.open(platformsfilename);
-    ofile5 << fodPlatformChangesAsJson() << std::endl;
-    ofile5.close();
-    DOUT1("  Saved to " << platformsfilename);
-    std::cout << "DEBUG 5" << std::endl;
+    if (fodPlatformChangesAsJson() != "") {
+      DOUT1("  Saving Platform Height Changes");
+      std::ofstream ofile5;
+      ofile5.open(platformsfilename);
+      ofile5 << fodPlatformChangesAsJson() << std::endl;
+      ofile5.close();
+      DOUT1("  Saved to " << platformsfilename);
+      std::cout << "DEBUG 5" << std::endl;
+    }
   }
 
 }
