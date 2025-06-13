@@ -44,6 +44,7 @@ void SlippiReplay::cleanup() {
 
 std::string SlippiReplay::replayAsJson(bool delta) {
   SlippiReplay s = (*this);
+  string match_id = s.start_time;
 
   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
   uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
@@ -167,7 +168,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         ss << SPACE[ILEV*2] << "{";
 
         int a = 0; //True for only the first thing output per line
-        ss << JSTR(2,"match_id"                   , s.start_time)          << ",\n";
+        ss << JSTR(2,"match_id"                   , match_id)          << ",\n";
         if (CHANGED(follower))
           ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
         if (CHANGED(seed))
@@ -307,7 +308,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
       for(unsigned f = 0; f < s.item[i].num_frames; ++f) {
         ss << SPACE[ILEV*2] << "{";
         int a = 0; //True for only the first thing output per line
-        ss << JSTR(2,"match_id" ,s.start_time)       << ",\n";
+        ss << JSTR(2,"match_id" ,match_id)       << ",\n";
         ss << JUIN(2,"spawn_id" ,s.item[i].spawn_id) << ",\n";
         ss << JUIN(2,"item_type",s.item[i].type)     << ",\n";
         ss << JEND(a) << JUIN(2,"frame"      ,s.item[i].frame[f].frame);
