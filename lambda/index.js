@@ -115,7 +115,7 @@ exports.handler = async (event) => {
   let playerFrames, opponentFrames, settings, analysis;
   let playerStats, playerAttacks, playerPunishes;
   let opponentStats, opponentAttacks, opponentPunishes;
-  let items;
+  let items, fodPlatforms;
 
   let playerIndex, opponentIndex;
 
@@ -136,16 +136,15 @@ exports.handler = async (event) => {
     console.log('Parsing SLP file into JSON');
 
     await parseWithSlippc(tempPath, '/tmp/');
-    const putCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `debug.json`,
-      Body: require('fs').readFileSync('/tmp/output.json', 'utf-8'),
-      ContentType: `application/json`
-    });
-    await s3.send(putCommand);
-    // const output = JSON.parse(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
-    const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
+    // const putCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `debug.json`,
+    //   Body: require('fs').readFileSync('/tmp/output.json', 'utf-8'),
+    //   ContentType: `application/json`
+    // });
+    // await s3.send(putCommand);
 
+    const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
     startAt = output.metadata.startAt;
@@ -215,6 +214,9 @@ exports.handler = async (event) => {
         })).join('\n');
     opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
 
+    if (output.stage === 2) {
+      fodPlatforms = output.platforms.map(platform => JSON.stringify(platform)).join('\n');
+    }
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }
@@ -271,6 +273,11 @@ exports.handler = async (event) => {
       {
         key: 'items',
         body: items,
+        type: 'jsonl'
+      },
+      fodPlatforms.length && {
+        key: 'platforms',
+        body: fodPlatforms,
         type: 'jsonl'
       }
     ];
