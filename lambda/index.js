@@ -151,13 +151,7 @@ exports.handler = async (event) => {
     opponentFrames = output.players[opponentIndex].frames
         .map(obj => patchFloats(obj)).join('\n');
 
-    items = output.items.map(item => {
-      return {
-        item_type: item.item_type,
-        spawn_id: item.spawn_id,
-        ...item.frames,
-      }
-    }).join('\n');
+    items = output.items.frames.join('\n');
 
     const players = output.metadata.players;
 
