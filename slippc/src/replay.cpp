@@ -298,67 +298,60 @@ std::string SlippiReplay::replayAsJson(bool delta) {
   } else {
     ss << "],\n";
     ss << "\"items\" : [\n";
-    for(unsigned i = 0; i < MAX_ITEMS; ++i) {
+    bool first_item = true;
+    for (unsigned i = 0; i < MAX_ITEMS; ++i) {
       if (s.item[i].spawn_id > MAX_ITEMS) {
         break;
       }
-      // ss << SPACE[ILEV] << "{\n";
-      // ss << SPACE[ILEV] << "\"frames\" : [\n";
+      for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+        if (!first_item) {
+          ss << ",\n";
+        }
+        first_item = false;
 
-      for(unsigned f = 0; f < s.item[i].num_frames; ++f) {
-        ss << SPACE[ILEV*2] << "{";
-        int a = 0; //True for only the first thing output per line
-        ss << JEND(a) << JSTR(2,"match_id" ,match_id);
-        ss << JEND(a) << JUIN(2,"spawn_id" ,s.item[i].spawn_id);
-        ss << JEND(a) << JUIN(2,"item_type",s.item[i].type);
-        ss << JEND(a) << JUIN(2,"frame"      ,s.item[i].frame[f].frame);
+        ss << SPACE[ILEV] << "{";
+        int a = 0;
+
+        ss << JEND(a) << JSTR(1, "match_id", match_id);
+        ss << JEND(a) << JUIN(1, "spawn_id", s.item[i].spawn_id);
+        ss << JEND(a) << JUIN(1, "item_type", s.item[i].type);
+        ss << JEND(a) << JUIN(1, "frame", s.item[i].frame[f].frame);
         if (ICHANGED(state))
-          ss << JEND(a) << JUIN(2,"state"      ,s.item[i].frame[f].state);
+          ss << JEND(a) << JUIN(1, "state", s.item[i].frame[f].state);
         if (ICHANGED(face_dir))
-          ss << JEND(a) << JFLT(2,"face_dir"   ,s.item[i].frame[f].face_dir);
+          ss << JEND(a) << JFLT(1, "face_dir", s.item[i].frame[f].face_dir);
         if (ICHANGED(xvel))
-          ss << JEND(a) << JFLT(2,"xvel"       ,s.item[i].frame[f].xvel);
+          ss << JEND(a) << JFLT(1, "xvel", s.item[i].frame[f].xvel);
         if (ICHANGED(yvel))
-          ss << JEND(a) << JFLT(2,"yvel"       ,s.item[i].frame[f].yvel);
+          ss << JEND(a) << JFLT(1, "yvel", s.item[i].frame[f].yvel);
         if (ICHANGED(xpos))
-          ss << JEND(a) << JFLT(2,"xpos"       ,s.item[i].frame[f].xpos);
+          ss << JEND(a) << JFLT(1, "xpos", s.item[i].frame[f].xpos);
         if (ICHANGED(ypos))
-          ss << JEND(a) << JFLT(2,"ypos"       ,s.item[i].frame[f].ypos);
+          ss << JEND(a) << JFLT(1, "ypos", s.item[i].frame[f].ypos);
         if (ICHANGED(damage))
-          ss << JEND(a) << JUIN(2,"damage"     ,s.item[i].frame[f].damage);
+          ss << JEND(a) << JUIN(1, "damage", s.item[i].frame[f].damage);
         if (ICHANGED(expire))
-          ss << JEND(a) << JFLT(2,"expire"     ,s.item[i].frame[f].expire);
+          ss << JEND(a) << JFLT(1, "expire", s.item[i].frame[f].expire);
 
-        if(MIN_VERSION(3,2,0)) {
+        if (MIN_VERSION(3, 2, 0)) {
           if (ICHANGED(flags_1))
-            ss << JEND(a) << JUIN(2,"flags_1"     ,s.item[i].frame[f].flags_1);
+            ss << JEND(a) << JUIN(1, "flags_1", s.item[i].frame[f].flags_1);
           if (ICHANGED(flags_2))
-            ss << JEND(a) << JUIN(2,"flags_2"     ,s.item[i].frame[f].flags_2);
+            ss << JEND(a) << JUIN(1, "flags_2", s.item[i].frame[f].flags_2);
           if (ICHANGED(flags_3))
-            ss << JEND(a) << JUIN(2,"flags_3"     ,s.item[i].frame[f].flags_3);
+            ss << JEND(a) << JUIN(1, "flags_3", s.item[i].frame[f].flags_3);
           if (ICHANGED(flags_4))
-            ss << JEND(a) << JUIN(2,"flags_4"     ,s.item[i].frame[f].flags_4);
-          if(MIN_VERSION(3,6,0)) {
+            ss << JEND(a) << JUIN(1, "flags_4", s.item[i].frame[f].flags_4);
+          if (MIN_VERSION(3, 6, 0)) {
             if (ICHANGED(owner))
-              ss << JEND(a) << JINT(2,"owner"      ,s.item[i].frame[f].owner);
+              ss << JEND(a) << JINT(1, "owner", s.item[i].frame[f].owner);
           }
         }
 
-        if (f+1 == s.item[i].num_frames) {
-          ss << "\n" << SPACE[ILEV*2] << "}\n";
-        } else {
-          ss << "\n" << SPACE[ILEV*2] << "},\n";
-        }
-
+        ss << "\n" << SPACE[ILEV] << "}";
       }
-
-      //if (s.item[i+1].spawn_id > MAX_ITEMS) {
-      //  ss << SPACE[ILEV] << "]}\n";
-      //} else {
-      //  ss << SPACE[ILEV] << "]},\n";
-      //}
     }
-    ss << "]\n";
+    ss << "\n]\n";
   }
 
   ss << "}" << std::endl;
