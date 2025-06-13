@@ -97,7 +97,7 @@ struct SlippiItem {
 
 struct SlippiFodPlatform {
   int32_t          frame           = 0;
-  uint8_t          platform        = 0; //Which platform has moved. (0 = Right, 1 = Left)Add commentMore actions
+  uint8_t          platform        = 0; //Which platform has moved. (0 = Right, 1 = Left)
   float            platform_height = 0; //The platform's new height
 };
 
