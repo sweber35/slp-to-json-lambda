@@ -128,7 +128,8 @@ namespace slip {
     const unsigned O_ITEM_MISC      = 0x26;
     const unsigned O_ITEM_OWNER     = 0x2A;
     const unsigned O_ITEM_END       = 0x2B;
-
+    const unsigned O_PLATFORM       = 0x05;
+    const unsigned O_PLAT_HEIGHT    = 0x06;
     // Bookend event offsets
     const unsigned O_BOOKEND_FRAME  = 0x01;
     const unsigned O_ROLLBACK_FRAME = 0x05;
