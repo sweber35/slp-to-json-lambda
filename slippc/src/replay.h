@@ -88,11 +88,10 @@ struct SlippiItemFrame {
   int8_t   owner         = 0;  //Port ID of player that owns the item (-1 = unowned)
 };
 
-struct SlippiItem {
-  uint16_t         type       = 0;           //Type of item this is
-  uint32_t         spawn_id   = MAX_ITEMS+1; //ID of this item
-  uint32_t         num_frames = 0;           //Number of frames this item was active
-  SlippiItemFrame* frame      = nullptr;     //Pointer to array of data for item's individual frames
+struct SlippiFodPlatform {
+  int32_t          frame           = 0;
+  uint8_t          platform        = 0; //Which platform has moved. (0 = Right, 1 = Left)Add commentMore actions
+  float            platform_height = 0; //The platform's new height
 };
 
 struct SlippiPlayer {
