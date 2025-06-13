@@ -66,6 +66,11 @@ std::string SlippiReplay::playerFramesAsJson() {
 //    }
 
     if(p > 3 && s.player[pp].ext_char_id != CharExt::CLIMBER) { //If we're not Ice climbers
+      if (p == 7) {
+        ss << SPACE[ILEV] << "{}\n";
+      } else {
+        ss << SPACE[ILEV] << "{},\n";
+      }
       continue;
     }
 
