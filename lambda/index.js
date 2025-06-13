@@ -91,8 +91,8 @@ function parseWithSlippc(inputPath, outputPath) {
             return reject(new Error(`slippc failed: ${error.message}`));
           }
 
-          console.log('slippc stdout:', stdout);
-          console.log('slippc stderr:', stderr);
+          if (stdout) console.log('slippc stdout:', stdout);
+          if (stderr) console.log('slippc stderr:', stderr);
 
           resolve({
             stdout,  // usually empty if slippc only writes to files
@@ -115,7 +115,7 @@ exports.handler = async (event) => {
   let playerFrames, opponentFrames, settings, analysis;
   let playerStats, playerAttacks, playerPunishes;
   let opponentStats, opponentAttacks, opponentPunishes;
-  let items;
+  let items, fodPlatforms, stageId;
 
   let playerIndex, opponentIndex;
 
@@ -136,39 +136,30 @@ exports.handler = async (event) => {
     console.log('Parsing SLP file into JSON');
 
     await parseWithSlippc(tempPath, '/tmp/');
-    // const output = JSON.parse(require('fs').readFileSync('/tmp/output.json', 'utf-8'));
+    // const putCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `debug.json`,
+    //   Body: require('fs').readFileSync('/tmp/output.json', 'utf-8'),
+    //   ContentType: `application/json`
+    // });
+    // await s3.send(putCommand);
+
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
+    stageId = output.stage;
     startAt = output.metadata.startAt;
     const playersArray = Object.values(output.metadata.players);
     playerIndex = playersArray.findIndex(player => player.names.code === process.env.SLIPPI_CODE);
     opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
 
     playerFrames = output.players[playerIndex].frames
-        .map(obj => {
-          return {
-            ...patchFloats(obj),
-            match_id: startAt
-          }
-        }).join('\n');
+        .map(obj => patchFloats(obj)).join('\n');
 
     opponentFrames = output.players[opponentIndex].frames
-        .map(obj => {
-          return {
-            match_id: startAt,
-            ...patchFloats(obj),
-          }
-        }).join('\n');
+        .map(obj => patchFloats(obj)).join('\n');
 
-    items = output.items.map(item => {
-      return {
-        match_id: startAt,
-        item_type: item.item_type,
-        spawn_id: item.spawn_id,
-        ...item.frames,
-      }
-    }).join('\n');
+    items = output.items.map(item => JSON.stringify(item)).join('\n');
 
     const players = output.metadata.players;
 
@@ -194,8 +185,17 @@ exports.handler = async (event) => {
       ...analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE)
     }
 
-    playerAttacks = _playerAttacks.map(obj => JSON.stringify(obj)).join('\n');
-    playerPunishes = _playerPunishes.map(obj => JSON.stringify(obj)).join('\n');
+    playerAttacks = _playerAttacks.map(obj =>
+      JSON.stringify({
+        match_id: startAt,
+        ...obj,
+      })).join('\n');
+
+    playerPunishes = _playerPunishes.map(obj =>
+      JSON.stringify({
+        match_id: startAt,
+        ...obj,
+      })).join('\n');
 
     playerStats = JSON.stringify(roundInteractionDamageValues(_playerStats));
 
@@ -203,10 +203,21 @@ exports.handler = async (event) => {
       match_id: startAt,
       ...analysis.players.find(player => player.tag_code !== process.env.SLIPPI_CODE)
     }
-    opponentAttacks = _opponentAttacks.map(obj => JSON.stringify(obj)).join('\n');
-    opponentPunishes = _opponentPunishes.map(obj => JSON.stringify(obj)).join('\n');
+    opponentAttacks = _opponentAttacks.map(obj =>
+        JSON.stringify({
+          match_id: startAt,
+          ...obj,
+        })).join('\n');
+    opponentPunishes = _opponentPunishes.map(obj =>
+        JSON.stringify({
+          match_id: startAt,
+          ...obj,
+        })).join('\n');
     opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
 
+    if (stageId === 2) {
+      fodPlatforms = output.platforms.map(platform => JSON.stringify(platform)).join('\n');
+    }
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }
@@ -264,8 +275,16 @@ exports.handler = async (event) => {
         key: 'items',
         body: items,
         type: 'jsonl'
-      }
+      },
     ];
+
+    if (stageId === 2) {
+      puts.push({
+        key: 'platforms',
+        body: fodPlatforms,
+        type: 'jsonl'
+      })
+    }
 
     await sendFilesToS3(startAt, bucket, puts);
 

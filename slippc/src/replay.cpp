@@ -1,4 +1,5 @@
 #include "replay.h"
+#include <iostream>
 
 //JSON Output shortcuts
 #define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << float(n)
@@ -44,6 +45,7 @@ void SlippiReplay::cleanup() {
 
 std::string SlippiReplay::replayAsJson(bool delta) {
   SlippiReplay s = (*this);
+  std::string match_id = s.start_time;
 
   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
   uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
@@ -116,27 +118,27 @@ std::string SlippiReplay::replayAsJson(bool delta) {
   ss << JUIN(0,"items5"        , s.items5)        << ",\n";
   ss << "\"metadata\" : " << s.metadata << "\n},\n";
 
-//   if (MIN_VERSION(3,18,0) && !s.platform_events.empty()) {
-//     ss << ",\n";
-//     ss << "\"platforms\" : [\n";
-//
-//     for (size_t i = 0; i < s.platform_events.size(); ++i) {
-//       const auto& e = s.platform_events[i];
-//       ss << SPACE[ILEV] << "{";
-//       int a = 0;
-//
-//       ss << JEND(a) << JUIN(1, "frame", e.frame);
-//       ss << JEND(a) << JUIN(1, "platform", e.platform);
-//       ss << JEND(a) << JFLT(1, "height", e.platform_height);
-//
-//       if (i + 1 == s.platform_events.size()) {
-//         ss << "}\n";
-//       } else {
-//         ss << "},\n";
-//       }
-//     }
-//     ss << "]\n";
-//   }
+  if (!s.platform_events.empty()) {
+
+    ss << "\"platforms\" : [\n";
+
+    for (size_t i = 0; i < s.platform_events.size(); ++i) {
+      const auto& e = s.platform_events[i];
+      ss << SPACE[ILEV] << "{";
+      int a = 0;
+      ss << JEND(a) << JSTR(1, "match_id", s.start_time);
+      ss << JEND(a) << JUIN(1, "frame", e.frame);
+      ss << JEND(a) << JUIN(1, "platform", e.platform);
+      ss << JEND(a) << JFLT(1, "height", e.platform_height) << "\n";
+
+      if (i + 1 == s.platform_events.size()) {
+        ss << " }\n";
+      } else {
+        ss << " },\n";
+      }
+    }
+    ss << "],\n";
+  }
 
   ss << "\"players\" : [\n";
   for(unsigned p = 0; p < 8; ++p) {
@@ -189,8 +191,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
         ss << SPACE[ILEV*2] << "{";
 
         int a = 0; //True for only the first thing output per line
-        ss << JEND(a) << JUIN(2, "frame_number"   ,f);
-        ss << JEND(a) << JUIN(2, "byte_offset"    ,s.player[p].frame[f].byte_offset);
+        ss << JEND(a) << JSTR(2,"match_id"        , match_id);
         if (CHANGED(follower))
           ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
         if (CHANGED(seed))
@@ -256,7 +257,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
           if (CHANGED(flags_3))
             ss << JEND(a) << JUIN(2,"is_launched"       ,s.player[p].frame[f].flags_3);
           if (CHANGED(flags_4))
-            ss << JEND(a) << JUIN(2,"charge_level"       ,s.player[p].frame[f].flags_4);
+            ss << JEND(a) << JUIN(2,"charged_power"       ,s.player[p].frame[f].flags_4);
           if (CHANGED(flags_5))
             ss << JEND(a) << JUIN(2,"flags_5"       ,s.player[p].frame[f].flags_5);
           if (CHANGED(hitstun))
@@ -320,67 +321,60 @@ std::string SlippiReplay::replayAsJson(bool delta) {
   } else {
     ss << "],\n";
     ss << "\"items\" : [\n";
-    for(unsigned i = 0; i < MAX_ITEMS; ++i) {
+    bool first_item = true;
+    for (unsigned i = 0; i < MAX_ITEMS; ++i) {
       if (s.item[i].spawn_id > MAX_ITEMS) {
         break;
       }
-      ss << SPACE[ILEV] << "{\n";
-      ss << JUIN(1,"spawn_id" ,s.item[i].spawn_id)           << ",\n";
-      ss << JUIN(1,"item_type",s.item[i].type)               << ",\n";
-      ss << SPACE[ILEV] << "\"frames\" : [\n";
+      for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+        if (!first_item) {
+          ss << ",\n";
+        }
+        first_item = false;
 
-      for(unsigned f = 0; f < s.item[i].num_frames; ++f) {
-        ss << SPACE[ILEV*2] << "{";
-        int a = 0; //True for only the first thing output per line
+        ss << SPACE[ILEV] << "{";
+        int a = 0;
 
-        ss << JEND(a) << JUIN(2,"frame"      ,s.item[i].frame[f].frame);
+        ss << JEND(a) << JSTR(1, "match_id", match_id);
+        ss << JEND(a) << JUIN(1, "spawn_id", s.item[i].spawn_id);
+        ss << JEND(a) << JUIN(1, "item_type", s.item[i].type);
+        ss << JEND(a) << JUIN(1, "frame", s.item[i].frame[f].frame);
         if (ICHANGED(state))
-          ss << JEND(a) << JUIN(2,"state"      ,s.item[i].frame[f].state);
+          ss << JEND(a) << JUIN(1, "state", s.item[i].frame[f].state);
         if (ICHANGED(face_dir))
-          ss << JEND(a) << JFLT(2,"face_dir"   ,s.item[i].frame[f].face_dir);
+          ss << JEND(a) << JFLT(1, "face_dir", s.item[i].frame[f].face_dir);
         if (ICHANGED(xvel))
-          ss << JEND(a) << JFLT(2,"xvel"       ,s.item[i].frame[f].xvel);
+          ss << JEND(a) << JFLT(1, "xvel", s.item[i].frame[f].xvel);
         if (ICHANGED(yvel))
-          ss << JEND(a) << JFLT(2,"yvel"       ,s.item[i].frame[f].yvel);
+          ss << JEND(a) << JFLT(1, "yvel", s.item[i].frame[f].yvel);
         if (ICHANGED(xpos))
-          ss << JEND(a) << JFLT(2,"xpos"       ,s.item[i].frame[f].xpos);
+          ss << JEND(a) << JFLT(1, "xpos", s.item[i].frame[f].xpos);
         if (ICHANGED(ypos))
-          ss << JEND(a) << JFLT(2,"ypos"       ,s.item[i].frame[f].ypos);
+          ss << JEND(a) << JFLT(1, "ypos", s.item[i].frame[f].ypos);
         if (ICHANGED(damage))
-          ss << JEND(a) << JUIN(2,"damage"     ,s.item[i].frame[f].damage);
+          ss << JEND(a) << JUIN(1, "damage", s.item[i].frame[f].damage);
         if (ICHANGED(expire))
-          ss << JEND(a) << JFLT(2,"expire"     ,s.item[i].frame[f].expire);
+          ss << JEND(a) << JFLT(1, "expire", s.item[i].frame[f].expire);
 
-        if(MIN_VERSION(3,2,0)) {
+        if (MIN_VERSION(3, 2, 0)) {
           if (ICHANGED(flags_1))
-            ss << JEND(a) << JUIN(2,"missile_type"     ,s.item[i].frame[f].flags_1);
+            ss << JEND(a) << JUIN(1, "missile_type", s.item[i].frame[f].flags_1);
           if (ICHANGED(flags_2))
-            ss << JEND(a) << JUIN(2,"turnip_face"     ,s.item[i].frame[f].flags_2);
+            ss << JEND(a) << JUIN(1, "turnip_face", s.item[i].frame[f].flags_2);
           if (ICHANGED(flags_3))
-            ss << JEND(a) << JUIN(2,"is_launched"     ,s.item[i].frame[f].flags_3);
+            ss << JEND(a) << JUIN(1, "is_launched", s.item[i].frame[f].flags_3);
           if (ICHANGED(flags_4))
-            ss << JEND(a) << JUIN(2,"charge_level"     ,s.item[i].frame[f].flags_4);
-          if(MIN_VERSION(3,6,0)) {
+            ss << JEND(a) << JUIN(1, "charged_power", s.item[i].frame[f].flags_4);
+          if (MIN_VERSION(3, 6, 0)) {
             if (ICHANGED(owner))
-              ss << JEND(a) << JINT(2,"owner"      ,s.item[i].frame[f].owner);
+              ss << JEND(a) << JINT(1, "owner", s.item[i].frame[f].owner);
           }
         }
 
-        if (f+1 == s.item[i].num_frames) {
-          ss << "\n" << SPACE[ILEV*2] << "}\n";
-        } else {
-          ss << "\n" << SPACE[ILEV*2] << "},\n";
-        }
-
-      }
-
-      if (s.item[i+1].spawn_id > MAX_ITEMS) {
-        ss << SPACE[ILEV] << "]}\n";
-      } else {
-        ss << SPACE[ILEV] << "]},\n";
+        ss << "\n" << SPACE[ILEV] << "}";
       }
     }
-    ss << "]\n";
+    ss << "\n]\n";
   }
 
   ss << "}" << std::endl;

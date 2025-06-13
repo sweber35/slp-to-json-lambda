@@ -19,7 +19,6 @@ struct SlippiFrame {
   bool     alive         = false;  //For checking if this frame was actually set
 
   //Pre-frame stuff
-  uint32_t byte_offset   = 0;
   int32_t  frame         = 0;      //In-game frame number corresponding to this SlippiFrame (starts at -123)
   uint8_t  player        = 0;      //Port id of the player (0 = Port 1, 1 = Port 2, etc.)
   bool     follower      = false;  //Whether this player is a follower (e.g., 2nd climber)
@@ -134,64 +133,64 @@ struct SlippiPlayer {
 };
 
 struct SlippiReplay {
-  unsigned          errors              = 0;          //Number of errors that occurred during parsing
-  uint32_t          slippi_version_raw  = 0;          //Raw Slippi version number
-  std::string       slippi_version      = "";         //String representation of Slippi version number
-  std::string       parser_version      = "";         //SlippC parser version number
-  std::string       original_file       = "";         //Name of the input file used to generate this replay
-  std::string       game_start_raw      = "";         //Base64-encoded game start block data
-  std::string       metadata            = "";         //JSON metadata stored in the Slippi Replay
-  std::string       played_on           = "";         //Platform this replay was played on (dolphin, console, or network)
-  std::string       start_time          = "";         //Timestamp for when this game was played
-  std::string       match_id            = "";         //An ID consisting of the mode and time the match started (e.g. mode.unranked-2022-12-20T06:52:39.18-0). Max 50 characters + null terminator
-  int8_t            winner_id           = -1;         //Port ID of the game's winner
-  bool              teams               = false;      //Whether this was a teams match
-  uint16_t          stage               = 0;          //Stage ID for this game
-  uint32_t          seed                = 0;          //Starting RNG seed
-  uint32_t          game_number         = 0;          //For the given Match ID, starts at 1
-  uint32_t          tiebreaker_number   = 0;          //For the given Game Number, will be 0 if not a tiebreak game
-  bool              pal                 = false;      //Whether this was played on the PAL version of Melee
-  bool              frozen_stadium      = false;      //Whether Pokemon Stadium is frozen or not
-  uint8_t           scene_min           = 0;          //Minor scene number
-  uint8_t           scene_maj           = 0;          //Major scene number
-  uint8_t           end_type            = 0;          //Game end type (1 = TIME!, 2 = GAME!, 7 = No Contest)
-  int8_t            lras                = -1;         //Port ID of player who initiated LRAStart
-  int32_t           first_frame         = LOAD_FRAME; //Index of first frame of the game (always -123)
-  int32_t           last_frame          = 0;          //Index of the last frame of the game
-  uint32_t          frame_count         = 0;          //Total number of frames the game lasted (always == last_frame+123)
-  uint8_t           timer               = 0;          //Number of minutes the timer started at
-  int8_t            items_on            = 0;          //Item spawn rate (-1 = disabled, 0 = very low, 1 = low, etc.)
-  int8_t            sd_score            = 0;          //How many points a player loses for SDing
-  uint8_t           timer_behav         = 0;          //Timer behavior (0 =  off, 2 = count down, 3 = count up)
-  uint8_t           ui_chars            = 0;          //Number of UI slots for characters on the in-game HUD (usually 4)
-  uint8_t           game_mode           = 0;          //Game mode (0 = time, 1 = stock, 2 = coin, 3 = bonus)
-  bool              friendly_fire       = false;      //Whether friendly fire is enabled
-  bool              demo_mode           = false;      //Whether we are in the title screen or BTT dmeo
-  bool              classic_adv         = false;      //Whether we are in classic or adventure mode
-  bool              hrc_event           = false;      //Whether we are in HRC or some other event
-  bool              allstar_wait1       = false;      //Whether we are in the all-star wait area
-  bool              allstar_game1       = false;      //Same as above???
-  bool              allstar_wait2       = false;      //Whether we are in an all-star game
-  bool              allstar_game2       = false;      //Same as above???
-  bool              single_button       = false;      //Whether we are in single button mode
-  bool              pause_timer         = false;      //Whether the timer continues to count down when game is paused
-  bool              pause_nohud         = false;      //Whether the HUD is shown when game is paused
-  bool              pause_lras          = false;      //Whether LRAS is enabled when game is paused
-  bool              pause_off           = false;      //Whether pause is disabld
-  bool              pause_zretry        = false;      //Whether we can press Z to retry when game is paused
-  bool              pause_analog        = false;      //Whether the analog stick is shown when game is paused
-  bool              pause_score         = false;      //Whether the score is shown when game is paused
-  uint8_t           items1              = 0;          //Item enabled / disabled bitfield 1
-  uint8_t           items2              = 0;          //Item enabled / disabled bitfield 2
-  uint8_t           items3              = 0;          //Item enabled / disabled bitfield 3
-  uint8_t           items4              = 0;          //Item enabled / disabled bitfield 4
-  uint8_t           items5              = 0;          //Item enabled / disabled bitfield 5
-  bool              sudden_death        = false;      //Whether bombs start dropping after 20 seconds
-  uint32_t          num_items           = 0;          //Number of distinct item IDs encountered during the game
-  uint8_t           language            = 0;          //Language option (0 = Japanese, 1 = English)
-  SlippiPlayer      player[8]           = {};         //Array of SlippiPlayers (1 main + follower for each port)
-  SlippiItem        item[MAX_ITEMS]     = {};         //Array of SlippiItems (can track up to MAX_ITEMS per game)
-//   std::vector<SlippiFodPlatform> platform_events = {};//Array of SlippiFodPlatform events which represents every time either FoD platform changes height
+  unsigned        errors              = 0;          //Number of errors that occurred during parsing
+  uint32_t        slippi_version_raw  = 0;          //Raw Slippi version number
+  std::string     slippi_version      = "";         //String representation of Slippi version number
+  std::string     parser_version      = "";         //SlippC parser version number
+  std::string     original_file       = "";         //Name of the input file used to generate this replay
+  std::string     game_start_raw      = "";         //Base64-encoded game start block data
+  std::string     metadata            = "";         //JSON metadata stored in the Slippi Replay
+  std::string     played_on           = "";         //Platform this replay was played on (dolphin, console, or network)
+  std::string     start_time          = "";         //Timestamp for when this game was played
+  std::string     match_id            = "";         //An ID consisting of the mode and time the match started (e.g. mode.unranked-2022-12-20T06:52:39.18-0). Max 50 characters + null terminator
+  int8_t          winner_id           = -1;         //Port ID of the game's winner
+  bool            teams               = false;      //Whether this was a teams match
+  uint16_t        stage               = 0;          //Stage ID for this game
+  uint32_t        seed                = 0;          //Starting RNG seed
+  uint32_t        game_number         = 0;          //For the given Match ID, starts at 1
+  uint32_t        tiebreaker_number   = 0;          //For the given Game Number, will be 0 if not a tiebreak game
+  bool            pal                 = false;      //Whether this was played on the PAL version of Melee
+  bool            frozen_stadium      = false;      //Whether Pokemon Stadium is frozen or not
+  uint8_t         scene_min           = 0;          //Minor scene number
+  uint8_t         scene_maj           = 0;          //Major scene number
+  uint8_t         end_type            = 0;          //Game end type (1 = TIME!, 2 = GAME!, 7 = No Contest)
+  int8_t          lras                = -1;         //Port ID of player who initiated LRAStart
+  int32_t         first_frame         = LOAD_FRAME; //Index of first frame of the game (always -123)
+  int32_t         last_frame          = 0;          //Index of the last frame of the game
+  uint32_t        frame_count         = 0;          //Total number of frames the game lasted (always == last_frame+123)
+  uint8_t         timer               = 0;          //Number of minutes the timer started at
+  int8_t          items_on            = 0;          //Item spawn rate (-1 = disabled, 0 = very low, 1 = low, etc.)
+  int8_t          sd_score            = 0;          //How many points a player loses for SDing
+  uint8_t         timer_behav         = 0;          //Timer behavior (0 =  off, 2 = count down, 3 = count up)
+  uint8_t         ui_chars            = 0;          //Number of UI slots for characters on the in-game HUD (usually 4)
+  uint8_t         game_mode           = 0;          //Game mode (0 = time, 1 = stock, 2 = coin, 3 = bonus)
+  bool            friendly_fire       = false;      //Whether friendly fire is enabled
+  bool            demo_mode           = false;      //Whether we are in the title screen or BTT dmeo
+  bool            classic_adv         = false;      //Whether we are in classic or adventure mode
+  bool            hrc_event           = false;      //Whether we are in HRC or some other event
+  bool            allstar_wait1       = false;      //Whether we are in the all-star wait area
+  bool            allstar_game1       = false;      //Same as above???
+  bool            allstar_wait2       = false;      //Whether we are in an all-star game
+  bool            allstar_game2       = false;      //Same as above???
+  bool            single_button       = false;      //Whether we are in single button mode
+  bool            pause_timer         = false;      //Whether the timer continues to count down when game is paused
+  bool            pause_nohud         = false;      //Whether the HUD is shown when game is paused
+  bool            pause_lras          = false;      //Whether LRAS is enabled when game is paused
+  bool            pause_off           = false;      //Whether pause is disabld
+  bool            pause_zretry        = false;      //Whether we can press Z to retry when game is paused
+  bool            pause_analog        = false;      //Whether the analog stick is shown when game is paused
+  bool            pause_score         = false;      //Whether the score is shown when game is paused
+  uint8_t         items1              = 0;          //Item enabled / disabled bitfield 1
+  uint8_t         items2              = 0;          //Item enabled / disabled bitfield 2
+  uint8_t         items3              = 0;          //Item enabled / disabled bitfield 3
+  uint8_t         items4              = 0;          //Item enabled / disabled bitfield 4
+  uint8_t         items5              = 0;          //Item enabled / disabled bitfield 5
+  bool            sudden_death        = false;      //Whether bombs start dropping after 20 seconds
+  uint32_t        num_items           = 0;          //Number of distinct item IDs encountered during the game
+  uint8_t         language            = 0;          //Language option (0 = Japanese, 1 = English)
+  SlippiPlayer    player[8]           = {};         //Array of SlippiPlayers (1 main + follower for each port)
+  SlippiItem      item[MAX_ITEMS]     = {};         //Array of SlippiItems (can track up to MAX_ITEMS per game)
+  std::vector<SlippiFodPlatform> platform_events = {};//Array of SlippiFodPlatform events which represents every time either FoD platform changes height
   void setFrames(int32_t max_frames);
   void cleanup();
   std::string replayAsJson(bool delta);

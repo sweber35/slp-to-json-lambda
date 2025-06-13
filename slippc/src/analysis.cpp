@@ -134,21 +134,11 @@ std::string Analysis::asJson() {
 
     ss << SPACE[ILEV] << "\"moves_landed\" : {\n";
     unsigned _total_moves = 0;
-    for (unsigned d = 0; d < Move::BUBBLE; ++d) {
-      std::string moveName = Move::name[d];
-
-      // Check if move name is purely numeric
-      bool isNumber = !moveName.empty() && std::all_of(moveName.begin(), moveName.end(), ::isdigit);
-      if (isNumber) continue;
-
-      // Remove all spaces from the move name
-      moveName.erase(std::remove(moveName.begin(), moveName.end(), ' '), moveName.end());
-
-      // Print move
-      ss << JUIN(2, moveName, ap[p].move_counts[d]) << ",\n";
-
-      // Accumulate total moves
-      _total_moves += ap[p].move_counts[d];
+    for(unsigned d = 0; d < Move::BUBBLE; ++d) {
+      if ((ap[p].move_counts[d]) > 0) {
+        ss << JUIN(2,Move::name[d], ap[p].move_counts[d]) << ",\n";
+        _total_moves += ap[p].move_counts[d];
+      }
     }
     ss << JUIN(2,"_total", _total_moves) << "\n";
     ss << SPACE[ILEV] << "},\n";
@@ -178,7 +168,7 @@ std::string Analysis::asJson() {
       ss << JUIN(2,"end_frame",       ap[p].punishes[i].end_frame)                     << ",\n";
       ss << JFLT(2,"start_pct",       ap[p].punishes[i].start_pct)                     << ",\n";
       ss << JFLT(2,"end_pct",         ap[p].punishes[i].end_pct)                       << ",\n";
-      ss << JUIN(2,"stocks",          ap[p].punishes[i].stocks)                       << ",\n";
+      ss << JUIN(2,"stocks",          ap[p].punishes[i].stocks)                        << ",\n";
       ss << JUIN(2,"num_moves",       ap[p].punishes[i].num_moves)                     << ",\n";
       ss << JUIN(2,"last_move_id",    ap[p].punishes[i].last_move_id)                  << ",\n";
       ss << JSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id]) << ",\n";
