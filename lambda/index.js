@@ -136,13 +136,13 @@ exports.handler = async (event) => {
     console.log('Parsing SLP file into JSON');
 
     await parseWithSlippc(tempPath, '/tmp/');
-    const putCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `debug.json`,
-      Body: require('fs').readFileSync('/tmp/output.json', 'utf-8'),
-      ContentType: `application/json`
-    });
-    await s3.send(putCommand);
+    // const putCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `debug.json`,
+    //   Body: require('fs').readFileSync('/tmp/output.json', 'utf-8'),
+    //   ContentType: `application/json`
+    // });
+    // await s3.send(putCommand);
 
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
