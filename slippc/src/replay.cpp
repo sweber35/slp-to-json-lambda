@@ -127,7 +127,7 @@ std::string SlippiReplay::replayAsJson(bool delta) {
       const auto& e = s.platform_events[i];
       ss << SPACE[ILEV] << "{";
       int a = 0;
-
+      ss << JEND(a) << JSTR(1, "match_id", s.start_time);
       ss << JEND(a) << JUIN(1, "frame", e.frame);
       ss << JEND(a) << JUIN(1, "platform", e.platform);
       ss << JEND(a) << JFLT(1, "height", e.platform_height) << "\n";
