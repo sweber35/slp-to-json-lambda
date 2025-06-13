@@ -179,14 +179,14 @@ exports.handler = async (event) => {
 
     playerAttacks = _playerAttacks.map(obj =>
       JSON.stringify({
-        ...obj,
         match_id: startAt,
+        ...obj,
       })).join('\n');
 
     playerPunishes = _playerPunishes.map(obj =>
       JSON.stringify({
-        ...obj,
         match_id: startAt,
+        ...obj,
       })).join('\n');
 
     playerStats = JSON.stringify(roundInteractionDamageValues(_playerStats));
@@ -195,8 +195,16 @@ exports.handler = async (event) => {
       match_id: startAt,
       ...analysis.players.find(player => player.tag_code !== process.env.SLIPPI_CODE)
     }
-    opponentAttacks = _opponentAttacks.map(obj => JSON.stringify(obj)).join('\n');
-    opponentPunishes = _opponentPunishes.map(obj => JSON.stringify(obj)).join('\n');
+    opponentAttacks = _opponentAttacks.map(obj =>
+        JSON.stringify({
+          match_id: startAt,
+          ...obj,
+        })).join('\n');
+    opponentPunishes = _opponentPunishes.map(obj =>
+        JSON.stringify({
+          match_id: startAt,
+          ...obj,
+        })).join('\n');
     opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
 
   } catch (err) {
