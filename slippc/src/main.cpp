@@ -250,7 +250,7 @@ int handleJson(const cmdoptions &c, const int debug, slip::Parser &p) {
     if (debug) {
       DOUT1("  Writing Slippi JSON data to stdout");
     }
-    std::cout << p.asJson(!c.nodelta) << std::endl;
+//     std::cout << p.asJson(!c.nodelta) << std::endl;
   } else {
     if (debug) {
       DOUT1("  Saving Slippi JSON data to file");
