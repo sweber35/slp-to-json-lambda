@@ -151,7 +151,6 @@ std::string SlippiReplay::itemFramesAsJson() {
         break;
       }
       for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
-
         ss << "{ ";
         int a = 0;
 
@@ -181,7 +180,6 @@ std::string SlippiReplay::itemFramesAsJson() {
 
       ss << " }\n";
     }
-  }
   return ss.str();
 }
 
