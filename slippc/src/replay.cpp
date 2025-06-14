@@ -242,15 +242,15 @@ std::string SlippiReplay::settingsAsJson() {
   return ss.str();
 }
 
-// std::string SlippiReplay::replayAsJson(bool delta) {
-//   SlippiReplay s = (*this);
+std::string SlippiReplay::replayAsJson(bool delta) {
+  SlippiReplay s = (*this);
 //   std::string match_id = s.start_time;
 //
 //   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
 //   uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
 //   uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
 //
-//   std::stringstream ss;
+  std::stringstream ss;
 //   ss << "{" << std::endl;
 //
 //   ss << JSTR(0,"original_file" , escape_json(s.original_file))  << ",\n";
@@ -577,7 +577,7 @@ std::string SlippiReplay::settingsAsJson() {
 //   }
 //
 //   ss << "}" << std::endl;
-//   return ss.str();
+  return ss.str();
 // }
 //
-// }
+}
