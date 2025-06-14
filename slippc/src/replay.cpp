@@ -2,6 +2,10 @@
 #include <iostream>
 
 //JSON Output shortcuts
+#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << float(n)
+#define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << int32_t(n)
+#define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << uint32_t(n)
+#define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\" : \"" << (s) << "\""
 #define JFLT(k,n) " " << "\"" << (k) << "\": " << float(n)
 #define JINT(k,n) " " << "\"" << (k) << "\": " << int32_t(n)
 #define JUIN(k,n) " " << "\"" << (k) << "\": " << uint32_t(n)
