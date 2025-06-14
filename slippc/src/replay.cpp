@@ -211,7 +211,6 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
 }
 
 std::string SlippiReplay::settingsAsJson() {
-
   SlippiReplay s = (*this);
 
   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
@@ -579,3 +578,4 @@ std::string SlippiReplay::settingsAsJson() {
 // }
 //
 // }
+}
