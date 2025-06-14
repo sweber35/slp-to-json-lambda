@@ -10,7 +10,7 @@
 #define CHANGED(field) (not delta) || (f == 0) || (s.player[p].frame[f].field != s.player[p].frame[f-1].field)
 #define ICHANGED(field) (not delta) || (f == 0) || (s.item[i].frame[f].field != s.item[i].frame[f-1].field)
 //Logic for outputting a comma or not depending on whether we're the first element in a JSON object
-#define JEND(a) ((a++ == 0) ? "\n" : ",\n")
+#define JEND(a) ((a++ == 0) ? " " : ", ")
 
 namespace slip {
 
