@@ -2,10 +2,10 @@
 #include <iostream>
 
 //JSON Output shortcuts
-#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << float(n)
-#define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << int32_t(n)
-#define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << uint32_t(n)
-#define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\" : \"" << (s) << "\""
+#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << float(n)
+#define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << int32_t(n)
+#define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << uint32_t(n)
+#define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\": \"" << (s) << "\""
 //Logic for outputting a line only if it changed since last frame (or if we're in full output mode)
 #define CHANGED(field) (not delta) || (f == 0) || (s.player[p].frame[f].field != s.player[p].frame[f-1].field)
 #define ICHANGED(field) (not delta) || (f == 0) || (s.item[i].frame[f].field != s.item[i].frame[f-1].field)
@@ -149,20 +149,14 @@ std::string SlippiReplay::itemFramesAsJson() {
 
   std::stringstream ss;
 
-  ss << SPACE[ILEV] << "[\n";
-
     bool first_item = true;
     for (unsigned i = 0; i < MAX_ITEMS; ++i) {
       if (s.item[i].spawn_id > MAX_ITEMS) {
         break;
       }
       for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
-        if (!first_item) {
-          ss << ",\n";
-        }
-        first_item = false;
 
-        ss << SPACE[ILEV] << "{";
+        ss << "{ ";
         int a = 0;
 
         ss << JEND(a) << JSTR(1, "match_id", s.start_time);
@@ -188,11 +182,9 @@ std::string SlippiReplay::itemFramesAsJson() {
         }
       }
 
-      ss << "\n" << SPACE[ILEV] << "}";
+      ss << " }";
     }
   }
-
-  ss << SPACE[ILEV*2] << "]\n" << std::endl;
   return ss.str();
 }
 
@@ -207,24 +199,16 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
 
   if (!s.platform_events.empty()) {
 
-    ss << "[\n";
-
     for (size_t i = 0; i < s.platform_events.size(); ++i) {
       const auto& e = s.platform_events[i];
-      ss << SPACE[ILEV] << "{";
+      ss << "{ ";
       int a = 0;
       ss << JEND(a) << JSTR(1, "match_id", s.start_time);
       ss << JEND(a) << JUIN(1, "frame", e.frame);
       ss << JEND(a) << JUIN(1, "platform", e.platform);
       ss << JEND(a) << JFLT(1, "height", e.platform_height);
-
-      if (i + 1 == s.platform_events.size()) {
-        ss << " \n}\n";
-      } else {
-        ss << " \n},\n";
-      }
+      ss << " }\n";
     }
-    ss << "],\n";
     return ss.str();
   }
 
@@ -232,7 +216,7 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
 }
 
 std::string SlippiReplay::settingsAsJson() {
-//
+
   SlippiReplay s = (*this);
 
   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
@@ -242,7 +226,7 @@ std::string SlippiReplay::settingsAsJson() {
   std::stringstream ss;
   int a = 0;
 
-  ss << "{";
+  ss << "{ ";
   ss << JEND(a) << JSTR(2,"match_id"       ,s.start_time);
   ss << JEND(a) << JSTR(2,"slippi_version" ,s.slippi_version);
   ss << JEND(a) << JUIN(2,"timer"          ,s.timer);
@@ -250,13 +234,13 @@ std::string SlippiReplay::settingsAsJson() {
   ss << JEND(a) << JINT(2,"winner_id"      ,s.winner_id);
   ss << JEND(a) << JUIN(2,"stage"          ,s.stage);
   ss << JEND(a) << JUIN(2,"end_type"       ,s.end_type);
-  for (unsigned i = 0; i < 3; i++) {
+  for (unsigned i = 0; i < 4; ++i) {
     if (s.player[i].player_type != 3) {
        ss << JEND(a) << JSTR(2, ("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code);
        ss << JEND(a) << JINT(2, ("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id);
     }
   }
-  ss << " \n}" << std::endl;
+  ss << " }\n" << std::endl;
   // player indexes
 
   // player codes
