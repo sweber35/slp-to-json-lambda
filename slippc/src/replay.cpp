@@ -251,8 +251,8 @@ std::string SlippiReplay::settingsAsJson() {
   ss << JEND(a) << JUIN(2,"stage"          ,s.stage);
   ss << JEND(a) << JUIN(2,"end_type"       ,s.end_type);
   for (unsigned i = 0; i < 3; i++) {
-    std::cout << "DEBUG " << std::to_string(i) << ": " << s.player[i].tag_code;
-    std::cout << "DEBUG " << std::to_string(i) << ": " << std::to_string(s.player[i].ext_char_id);
+    std::cout << "DEBUG " << std::to_string(i) << ": " << s.player[i].tag_code << "\n";
+    std::cout << "DEBUG " << std::to_string(i) << ": " << std::to_string(s.player[i].ext_char_id) << "\n";
 
     if (s.player[i].player_type == 3) {
        ss << JEND(a) << JSTR(2,("player_" + std::to_string(i) + "_code") ,s.player[i].tag_code);
