@@ -219,9 +219,9 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
       ss << JEND(a) << JFLT(1, "height", e.platform_height);
 
       if (i + 1 == s.platform_events.size()) {
-        ss << " }\n";
+        ss << " \n}\n";
       } else {
-        ss << " },\n";
+        ss << " \n},\n";
       }
     }
     ss << "],\n";
