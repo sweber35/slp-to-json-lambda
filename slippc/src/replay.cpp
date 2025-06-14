@@ -2,10 +2,10 @@
 #include <iostream>
 
 //JSON Output shortcuts
-#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << float(n)
-#define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << int32_t(n)
-#define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << uint32_t(n)
-#define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\": \"" << (s) << "\""
+#define JFLT(k,n) " " << "\"" << (k) << "\": " << float(n)
+#define JINT(k,n) " " << "\"" << (k) << "\": " << int32_t(n)
+#define JUIN(k,n) " " << "\"" << (k) << "\": " << uint32_t(n)
+#define JSTR(k,s) " " << "\"" << (k) << "\": \"" << (s) << "\""
 //Logic for outputting a line only if it changed since last frame (or if we're in full output mode)
 #define CHANGED(field) (not delta) || (f == 0) || (s.player[p].frame[f].field != s.player[p].frame[f-1].field)
 #define ICHANGED(field) (not delta) || (f == 0) || (s.item[i].frame[f].field != s.item[i].frame[f-1].field)
@@ -60,69 +60,69 @@ std::string SlippiReplay::playerFramesAsJson() {
         ss << "{ ";
 
         int a = 0; //True for only the first thing output per line
-        ss << JEND(a) << JSTR(2,"match_id"      ,match_id);
-        ss << JEND(a) << JSTR(2,"player_id"     ,s.player[pp].tag_code);
-        ss << JEND(a) << JUIN(2,"follower"      ,s.player[p].frame[f].follower);
-        ss << JEND(a) << JUIN(2,"seed"          ,s.player[p].frame[f].seed);
-        ss << JEND(a) << JUIN(2,"action_pre"    ,s.player[p].frame[f].action_pre);
-        ss << JEND(a) << JFLT(2,"pos_x_pre"     ,s.player[p].frame[f].pos_x_pre);
-        ss << JEND(a) << JFLT(2,"pos_y_pre"     ,s.player[p].frame[f].pos_y_pre);
-        ss << JEND(a) << JFLT(2,"face_dir_pre"  ,s.player[p].frame[f].face_dir_pre);
-        ss << JEND(a) << JFLT(2,"joy_x"         ,s.player[p].frame[f].joy_x);
-        ss << JEND(a) << JFLT(2,"joy_y"         ,s.player[p].frame[f].joy_y);
-        ss << JEND(a) << JFLT(2,"c_x"           ,s.player[p].frame[f].c_x);
-        ss << JEND(a) << JFLT(2,"c_y"           ,s.player[p].frame[f].c_y);
-        ss << JEND(a) << JFLT(2,"trigger"       ,s.player[p].frame[f].trigger);
-        ss << JEND(a) << JUIN(2,"buttons"       ,s.player[p].frame[f].buttons);
-        ss << JEND(a) << JFLT(2,"phys_l"        ,s.player[p].frame[f].phys_l);
-        ss << JEND(a) << JFLT(2,"phys_r"        ,s.player[p].frame[f].phys_r);
-        ss << JEND(a) << JUIN(2,"ucf_x"         ,s.player[p].frame[f].ucf_x);
-        ss << JEND(a) << JFLT(2,"percent_pre"   ,s.player[p].frame[f].percent_pre);
-        ss << JEND(a) << JUIN(2,"char_id"       ,s.player[p].frame[f].char_id);
-        ss << JEND(a) << JUIN(2,"action_post"   ,s.player[p].frame[f].action_post);
-        ss << JEND(a) << JFLT(2,"pos_x_post"    ,s.player[p].frame[f].pos_x_post);
-        ss << JEND(a) << JFLT(2,"pos_y_post"    ,s.player[p].frame[f].pos_y_post);
-        ss << JEND(a) << JFLT(2,"face_dir_post" ,s.player[p].frame[f].face_dir_post);
-        ss << JEND(a) << JFLT(2,"percent_post"  ,s.player[p].frame[f].percent_post);
-        ss << JEND(a) << JFLT(2,"shield"        ,s.player[p].frame[f].shield);
-        ss << JEND(a) << JUIN(2,"hit_with"      ,s.player[p].frame[f].hit_with);
-        ss << JEND(a) << JUIN(2,"combo"         ,s.player[p].frame[f].combo);
-        ss << JEND(a) << JUIN(2,"hurt_by"       ,s.player[p].frame[f].hurt_by);
-        ss << JEND(a) << JUIN(2,"stocks"        ,s.player[p].frame[f].stocks);
-        ss << JEND(a) << JFLT(2,"action_fc"     ,s.player[p].frame[f].action_fc);
+        ss << JEND(a) << JSTR("match_id"      ,s.start_time);
+        ss << JEND(a) << JSTR("player_id"     ,s.player[pp].tag_code);
+        ss << JEND(a) << JUIN("follower"      ,s.player[p].frame[f].follower);
+        ss << JEND(a) << JUIN("seed"          ,s.player[p].frame[f].seed);
+        ss << JEND(a) << JUIN("action_pre"    ,s.player[p].frame[f].action_pre);
+        ss << JEND(a) << JFLT("pos_x_pre"     ,s.player[p].frame[f].pos_x_pre);
+        ss << JEND(a) << JFLT("pos_y_pre"     ,s.player[p].frame[f].pos_y_pre);
+        ss << JEND(a) << JFLT("face_dir_pre"  ,s.player[p].frame[f].face_dir_pre);
+        ss << JEND(a) << JFLT("joy_x"         ,s.player[p].frame[f].joy_x);
+        ss << JEND(a) << JFLT("joy_y"         ,s.player[p].frame[f].joy_y);
+        ss << JEND(a) << JFLT("c_x"           ,s.player[p].frame[f].c_x);
+        ss << JEND(a) << JFLT("c_y"           ,s.player[p].frame[f].c_y);
+        ss << JEND(a) << JFLT("trigger"       ,s.player[p].frame[f].trigger);
+        ss << JEND(a) << JUIN("buttons"       ,s.player[p].frame[f].buttons);
+        ss << JEND(a) << JFLT("phys_l"        ,s.player[p].frame[f].phys_l);
+        ss << JEND(a) << JFLT("phys_r"        ,s.player[p].frame[f].phys_r);
+        ss << JEND(a) << JUIN("ucf_x"         ,s.player[p].frame[f].ucf_x);
+        ss << JEND(a) << JFLT("percent_pre"   ,s.player[p].frame[f].percent_pre);
+        ss << JEND(a) << JUIN("char_id"       ,s.player[p].frame[f].char_id);
+        ss << JEND(a) << JUIN("action_post"   ,s.player[p].frame[f].action_post);
+        ss << JEND(a) << JFLT("pos_x_post"    ,s.player[p].frame[f].pos_x_post);
+        ss << JEND(a) << JFLT("pos_y_post"    ,s.player[p].frame[f].pos_y_post);
+        ss << JEND(a) << JFLT("face_dir_post" ,s.player[p].frame[f].face_dir_post);
+        ss << JEND(a) << JFLT("percent_post"  ,s.player[p].frame[f].percent_post);
+        ss << JEND(a) << JFLT("shield"        ,s.player[p].frame[f].shield);
+        ss << JEND(a) << JUIN("hit_with"      ,s.player[p].frame[f].hit_with);
+        ss << JEND(a) << JUIN("combo"         ,s.player[p].frame[f].combo);
+        ss << JEND(a) << JUIN("hurt_by"       ,s.player[p].frame[f].hurt_by);
+        ss << JEND(a) << JUIN("stocks"        ,s.player[p].frame[f].stocks);
+        ss << JEND(a) << JFLT("action_fc"     ,s.player[p].frame[f].action_fc);
 
         if(MIN_VERSION(2,0,0)) {
-          ss << JEND(a) << JUIN(2,"missile_type"  ,s.player[p].frame[f].flags_1);
-          ss << JEND(a) << JUIN(2,"turnip_face"   ,s.player[p].frame[f].flags_2);
-          ss << JEND(a) << JUIN(2,"is_launched"   ,s.player[p].frame[f].flags_3);
-          ss << JEND(a) << JUIN(2,"charged_power" ,s.player[p].frame[f].flags_4);
-          ss << JEND(a) << JUIN(2,"flags_5"       ,s.player[p].frame[f].flags_5);
-          ss << JEND(a) << JUIN(2,"hitstun"       ,s.player[p].frame[f].hitstun);
-          ss << JEND(a) << JUIN(2,"airborne"      ,s.player[p].frame[f].airborne);
-          ss << JEND(a) << JUIN(2,"ground_id"     ,s.player[p].frame[f].ground_id);
-          ss << JEND(a) << JUIN(2,"jumps"         ,s.player[p].frame[f].jumps);
-          ss << JEND(a) << JUIN(2,"l_cancel"      ,s.player[p].frame[f].l_cancel);
-          ss << JEND(a) << JINT(2,"alive"         ,s.player[p].frame[f].alive);
+          ss << JEND(a) << JUIN("missile_type"  ,s.player[p].frame[f].flags_1);
+          ss << JEND(a) << JUIN("turnip_face"   ,s.player[p].frame[f].flags_2);
+          ss << JEND(a) << JUIN("is_launched"   ,s.player[p].frame[f].flags_3);
+          ss << JEND(a) << JUIN("charged_power" ,s.player[p].frame[f].flags_4);
+          ss << JEND(a) << JUIN("flags_5"       ,s.player[p].frame[f].flags_5);
+          ss << JEND(a) << JUIN("hitstun"       ,s.player[p].frame[f].hitstun);
+          ss << JEND(a) << JUIN("airborne"      ,s.player[p].frame[f].airborne);
+          ss << JEND(a) << JUIN("ground_id"     ,s.player[p].frame[f].ground_id);
+          ss << JEND(a) << JUIN("jumps"         ,s.player[p].frame[f].jumps);
+          ss << JEND(a) << JUIN("l_cancel"      ,s.player[p].frame[f].l_cancel);
+          ss << JEND(a) << JINT("alive"         ,s.player[p].frame[f].alive);
         }
 
         if(MIN_VERSION(2,1,0)) {
-          ss << JEND(a) << JUIN(2,"hurtbox"       ,s.player[p].frame[f].hurtbox);
+          ss << JEND(a) << JUIN("hurtbox"       ,s.player[p].frame[f].hurtbox);
         }
 
         if(MIN_VERSION(3,5,0)) {
-          ss << JEND(a) << JFLT(2,"self_air_x"    ,s.player[p].frame[f].self_air_x);
-          ss << JEND(a) << JFLT(2,"self_air_y"    ,s.player[p].frame[f].self_air_y);
-          ss << JEND(a) << JFLT(2,"attack_x"      ,s.player[p].frame[f].attack_x);
-          ss << JEND(a) << JFLT(2,"attack_y"      ,s.player[p].frame[f].attack_y);
-          ss << JEND(a) << JFLT(2,"self_grd_x"    ,s.player[p].frame[f].self_grd_x);
+          ss << JEND(a) << JFLT("self_air_x"    ,s.player[p].frame[f].self_air_x);
+          ss << JEND(a) << JFLT("self_air_y"    ,s.player[p].frame[f].self_air_y);
+          ss << JEND(a) << JFLT("attack_x"      ,s.player[p].frame[f].attack_x);
+          ss << JEND(a) << JFLT("attack_y"      ,s.player[p].frame[f].attack_y);
+          ss << JEND(a) << JFLT("self_grd_x"    ,s.player[p].frame[f].self_grd_x);
         }
 
         if(MIN_VERSION(3,8,0)) {
-          ss << JEND(a) << JFLT(2,"hitlag"        ,s.player[p].frame[f].hitlag);
+          ss << JEND(a) << JFLT("hitlag"        ,s.player[p].frame[f].hitlag);
         }
 
         if(MIN_VERSION(3,11,0)) {
-          ss << JEND(a) << JUIN(2,"anim_index"    ,s.player[p].frame[f].anim_index);
+          ss << JEND(a) << JUIN("anim_index"    ,s.player[p].frame[f].anim_index);
         }
 
         ss << " }\n";
@@ -142,7 +142,6 @@ std::string SlippiReplay::itemFramesAsJson() {
 
   std::stringstream ss;
 
-    bool first_item = true;
     for (unsigned i = 0; i < MAX_ITEMS; ++i) {
       if (s.item[i].spawn_id > MAX_ITEMS) {
         break;
@@ -152,26 +151,27 @@ std::string SlippiReplay::itemFramesAsJson() {
         ss << "{ ";
         int a = 0;
 
-        ss << JEND(a) << JSTR(1, "match_id", s.start_time);
-        ss << JEND(a) << JUIN(1, "spawn_id", s.item[i].spawn_id);
-        ss << JEND(a) << JUIN(1, "item_type", s.item[i].type);
-        ss << JEND(a) << JUIN(1, "frame", s.item[i].frame[f].frame);
-        ss << JEND(a) << JUIN(1, "state", s.item[i].frame[f].state);
-        ss << JEND(a) << JFLT(1, "face_dir", s.item[i].frame[f].face_dir);
-        ss << JEND(a) << JFLT(1, "xvel", s.item[i].frame[f].xvel);
-        ss << JEND(a) << JFLT(1, "yvel", s.item[i].frame[f].yvel);
-        ss << JEND(a) << JFLT(1, "xpos", s.item[i].frame[f].xpos);
-        ss << JEND(a) << JFLT(1, "ypos", s.item[i].frame[f].ypos);
-        ss << JEND(a) << JUIN(1, "damage", s.item[i].frame[f].damage);
-        ss << JEND(a) << JFLT(1, "expire", s.item[i].frame[f].expire);
+        ss << JEND(a) << JSTR("match_id", s.start_time);
+        ss << JEND(a) << JUIN("spawn_id", s.item[i].spawn_id);
+        ss << JEND(a) << JUIN("item_type", s.item[i].type);
+        ss << JEND(a) << JUIN("frame", s.item[i].frame[f].frame);
+        ss << JEND(a) << JUIN("state", s.item[i].frame[f].state);
+        ss << JEND(a) << JFLT("face_dir", s.item[i].frame[f].face_dir);
+        ss << JEND(a) << JFLT("xvel", s.item[i].frame[f].xvel);
+        ss << JEND(a) << JFLT("yvel", s.item[i].frame[f].yvel);
+        ss << JEND(a) << JFLT("xpos", s.item[i].frame[f].xpos);
+        ss << JEND(a) << JFLT("ypos", s.item[i].frame[f].ypos);
+        ss << JEND(a) << JUIN("damage", s.item[i].frame[f].damage);
+        ss << JEND(a) << JFLT("expire", s.item[i].frame[f].expire);
 
         if (MIN_VERSION(3, 2, 0)) {
-          ss << JEND(a) << JUIN(1, "missile_type", s.item[i].frame[f].flags_1);
-          ss << JEND(a) << JUIN(1, "turnip_face", s.item[i].frame[f].flags_2);
-          ss << JEND(a) << JUIN(1, "is_launched", s.item[i].frame[f].flags_3);
-          ss << JEND(a) << JUIN(1, "charged_power", s.item[i].frame[f].flags_4);
+          ss << JEND(a) << JUIN("missile_type", s.item[i].frame[f].flags_1);
+          ss << JEND(a) << JUIN("turnip_face", s.item[i].frame[f].flags_2);
+          ss << JEND(a) << JUIN("is_launched", s.item[i].frame[f].flags_3);
+          ss << JEND(a) << JUIN("charged_power", s.item[i].frame[f].flags_4);
+        }
         if (MIN_VERSION(3, 6, 0)) {
-          ss << JEND(a) << JINT(1, "owner", s.item[i].frame[f].owner);
+          ss << JEND(a) << JINT("owner", s.item[i].frame[f].owner);
         }
       }
 
@@ -196,10 +196,10 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
       const auto& e = s.platform_events[i];
       ss << "{ ";
       int a = 0;
-      ss << JEND(a) << JSTR(1, "match_id", s.start_time);
-      ss << JEND(a) << JUIN(1, "frame", e.frame);
-      ss << JEND(a) << JUIN(1, "platform", e.platform);
-      ss << JEND(a) << JFLT(1, "height", e.platform_height);
+      ss << JEND(a) << JSTR("match_id", s.start_time);
+      ss << JEND(a) << JUIN("frame", e.frame);
+      ss << JEND(a) << JUIN("platform", e.platform);
+      ss << JEND(a) << JFLT("height", e.platform_height);
       ss << " }\n";
     }
     return ss.str();
@@ -220,23 +220,20 @@ std::string SlippiReplay::settingsAsJson() {
   int a = 0;
 
   ss << "{ ";
-  ss << JEND(a) << JSTR(2,"match_id"       ,s.start_time);
-  ss << JEND(a) << JSTR(2,"slippi_version" ,s.slippi_version);
-  ss << JEND(a) << JUIN(2,"timer"          ,s.timer);
-  ss << JEND(a) << JINT(2,"frame_count"    ,s.frame_count);
-  ss << JEND(a) << JINT(2,"winner_id"      ,s.winner_id);
-  ss << JEND(a) << JUIN(2,"stage"          ,s.stage);
-  ss << JEND(a) << JUIN(2,"end_type"       ,s.end_type);
+  ss << JEND(a) << JSTR("match_id"       ,s.start_time);
+  ss << JEND(a) << JSTR("slippi_version" ,s.slippi_version);
+  ss << JEND(a) << JUIN("timer"          ,s.timer);
+  ss << JEND(a) << JINT("frame_count"    ,s.frame_count);
+  ss << JEND(a) << JINT("winner_id"      ,s.winner_id);
+  ss << JEND(a) << JUIN("stage"          ,s.stage);
+  ss << JEND(a) << JUIN("end_type"       ,s.end_type);
   for (unsigned i = 0; i < 4; ++i) {
     if (s.player[i].player_type != 3) {
-       ss << JEND(a) << JSTR(2, ("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code);
-       ss << JEND(a) << JINT(2, ("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id);
+       ss << JEND(a) << JSTR(("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code);
+       ss << JEND(a) << JINT(("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id);
     }
   }
   ss << " }\n" << std::endl;
-  // player indexes
-
-  // player codes
 
   return ss.str();
 }

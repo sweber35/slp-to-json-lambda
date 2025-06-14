@@ -836,7 +836,6 @@ namespace slip {
     ofile4 << settingsAsJson() << std::endl;
     ofile4.close();
     DOUT1("  Saved to " << settingsfilename);
-   std::cout << "Settings:" <<  settingsAsJson() << std::endl;
 
     if (fodPlatformChangesAsJson() != "") {
       DOUT1("  Saving Platform Height Changes");
