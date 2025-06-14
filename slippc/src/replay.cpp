@@ -258,7 +258,7 @@ std::string SlippiReplay::settingsAsJson() {
       std::stringstream key;
       key << "player_" << i << "_ext_char";
        std::cout << "DEBUGGG " << std::to_string(i) << ": " << escape_json(s.player[i].tag_code) << "\n";
-       ss << JEND(a) << JSTR(2, key ,escape_json(s.player[i].tag_code));
+       ss << JEND(a) << JSTR(2, key ,escape_json(s.player[i].tag_code).str();
        ss << JEND(a) << JINT(2, ("player_" + std::to_string(i) + "_ext_char") ,s.player[i].ext_char_id);
     }
   }
