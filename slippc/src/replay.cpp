@@ -256,7 +256,7 @@ std::string SlippiReplay::settingsAsJson() {
        ss << JEND(a) << JINT(2, ("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id);
     }
   }
-  ss << "\n}" << std::endl;
+  ss << " \n}" << std::endl;
   // player indexes
 
   // player codes
