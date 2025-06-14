@@ -242,7 +242,7 @@ std::string SlippiReplay::settingsAsJson() {
   std::stringstream ss;
   int a = 0;
 
-  ss << "{\n";
+  ss << "{";
   ss << JEND(a) << JSTR(2,"match_id"       ,s.start_time);
   ss << JEND(a) << JSTR(2,"slippi_version" ,s.slippi_version);
   ss << JEND(a) << JUIN(2,"timer"          ,s.timer);
