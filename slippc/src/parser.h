@@ -51,7 +51,7 @@ public:
   ~Parser();                             //Destroy the parser
   bool load(const char* replayfilename); //Load a replay file
   Analysis* analyze();                   //Analyze the loaded replay file
-  std::string asJson(bool delta);        //Convert the parsed replay structure to a JSON
+//   std::string asJson(bool delta);        //Convert the parsed replay structure to a JSON
   std::string playerFramesAsJson();
   std::string itemFramesAsJson();
   std::string fodPlatformChangesAsJson();
