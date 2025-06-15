@@ -82,10 +82,6 @@ function parseWithSlippc(inputPath, outputPath) {
           '-i', inputPath,
           '-j', outputPath,
           '-a', outputPath + '/analysis.json',
-          // '-w', outputPath + 'frames.json',
-          // '-l', outputPath + 'items.json',
-          // '-m', outputPath + 'platforms.json',
-          // '-n', outputPath + 'settings.json',
           '-f',
         ],
         (error, stdout, stderr) => {
@@ -144,6 +140,7 @@ exports.handler = async (event) => {
 
     const settings = JSON.parse((require('fs').readFileSync('/tmp/settings.json', 'utf-8')));
     startAt = settings.match_id;
+    const stageIsFod = settings.stage === 2;
 
     const putFramesCommand = new PutObjectCommand({
       Bucket: bucket,
