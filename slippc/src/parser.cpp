@@ -808,42 +808,36 @@ namespace slip {
     return _replay.settingsAsJson();
   }
 
-  void Parser::save(const char* outfilename, const char* framesfilename, const char* itemsfilename, const char* platformsfilename, const char* settingsfilename, bool delta) {
-//     DOUT1("  Saving JSON");
-//     std::ofstream ofile1;
-//     ofile1.open(outfilename);
-//     ofile1 << asJson(delta) << std::endl;
-//     ofile1.close();
-//     DOUT1("  Saved to " << outfilename);
+  void Parser::save(const char* outfilename, bool delta) {
 
     DOUT1("  Saving Player Frames");
-    std::ofstream ofile2;
-    ofile2.open(framesfilename);
-    ofile2 << playerFramesAsJson() << std::endl;
-    ofile2.close();
-    DOUT1("  Saved to " << framesfilename);
+    std::ofstream ofile1;
+    ofile1.open(outfilename << "-frames.jsonl");
+    ofile1 << playerFramesAsJson() << std::endl;
+    ofile1.close();
+    DOUT1("  Saved to " << outfilename << "-frames.jsonl");
 
     DOUT1("  Saving Item Frames");
-    std::ofstream ofile3;
-    ofile3.open(itemsfilename);
-    ofile3 << itemFramesAsJson() << std::endl;
-    ofile3.close();
-    DOUT1("  Saved to " << itemsfilename);
+    std::ofstream ofile2;
+    ofile2.open(outfilename << "-items.jsonl");
+    ofile2 << itemFramesAsJson() << std::endl;
+    ofile2.close();
+    DOUT1("  Saved to " << outfilename << "-items.jsonl");
 
     DOUT1("  Saving Settings");
-    std::ofstream ofile4;
-    ofile4.open(settingsfilename);
-    ofile4 << settingsAsJson() << std::endl;
-    ofile4.close();
-    DOUT1("  Saved to " << settingsfilename);
+    std::ofstream ofile3;
+    ofile3.open(outfilename << "-settings.json");
+    ofile3 << settingsAsJson() << std::endl;
+    ofile3.close();
+    DOUT1("  Saved to " << outfilename << "-settings.json");
 
     if (fodPlatformChangesAsJson() != "") {
-      DOUT1("  Saving Platform Height Changes");
-      std::ofstream ofile5;
-      ofile5.open(platformsfilename);
-      ofile5 << fodPlatformChangesAsJson() << std::endl;
-      ofile5.close();
-      DOUT1("  Saved to " << platformsfilename);
+      DOUT1("  Saving FoD Platform Height Changes");
+      std::ofstream ofile4;
+      ofile4.open(outfilename << "-platforms.jsonl");
+      ofile4 << fodPlatformChangesAsJson() << std::endl;
+      ofile4.close();
+      DOUT1("  Saved to " << outfilename << "-platforms.jsonl");
     }
   }
 

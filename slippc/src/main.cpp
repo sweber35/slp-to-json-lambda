@@ -65,11 +65,6 @@ typedef struct _cmdoptions {
   char* infile       = nullptr;
   char* cfile        = nullptr;
   char* outfile      = nullptr;
-  char* framesfile   = nullptr;
-  char* itemsfile    = nullptr;
-  char* platformsfile = nullptr;
-  char* settingsfile = nullptr;
-  char* analysisfile = nullptr;
   bool  nodelta      = false;
   bool  encode       = false;
   bool  rawencode    = false;
@@ -85,10 +80,6 @@ cmdoptions getCommandLineOptions(int argc, char** argv) {
   c.infile       = getCmdOption(   argv, argv+argc, "-i");
   c.cfile        = getCmdOption(   argv, argv+argc, "-X");
   c.outfile      = getCmdOption(   argv, argv+argc, "-j");
-  c.framesfile   = getCmdOption(   argv, argv+argc, "-w");
-  c.itemsfile    = getCmdOption(   argv, argv+argc, "-l");
-  c.platformsfile = getCmdOption(   argv, argv+argc, "-m");
-  c.settingsfile = getCmdOption(   argv, argv+argc, "-n");
   c.analysisfile = getCmdOption(   argv, argv+argc, "-a");
   c.nodelta      = cmdOptionExists(argv, argv+argc, "-f");
   c.encode       = cmdOptionExists(argv, argv+argc, "-x");
@@ -168,21 +159,6 @@ inline void cleanupCommandOptions(cmdoptions &c) {
   if(c.outfile) {
     delete[] c.outfile;
   }
-  if(c.framesfile) {
-    delete[] c.framesfile;
-  }
-  if(c.itemsfile) {
-    delete[] c.itemsfile;
-  }
-  if(c.platformsfile) {
-    delete[] c.platformsfile;
-  }
-  if(c.settingsfile) {
-    delete[] c.settingsfile;
-  }
-  if(c.analysisfile) {
-    delete[] c.analysisfile;
-  }
 }
 
 int handleCompression(const cmdoptions &c, const int debug) {
@@ -255,7 +231,7 @@ int handleJson(const cmdoptions &c, const int debug, slip::Parser &p) {
     if (debug) {
       DOUT1("  Saving Slippi JSON data to file");
     }
-    p.save(c.outfile, c.framesfile, c.itemsfile, c.platformsfile, c.settingsfile, !c.nodelta);
+    p.save(c.outfile, !c.nodelta);
   }
   return 0;
 }

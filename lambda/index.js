@@ -80,12 +80,12 @@ function parseWithSlippc(inputPath, outputPath) {
         slippcPath,
         [
           '-i', inputPath,
-          '-j', outputPath + 'output.json',
+          '-j', outputPath,
           '-a', outputPath + 'analysis.json',
-          '-w', outputPath + 'frames.json',
-          '-l', outputPath + 'items.json',
-          '-m', outputPath + 'platforms.json',
-          '-n', outputPath + 'settings.json',
+          // '-w', outputPath + 'frames.json',
+          // '-l', outputPath + 'items.json',
+          // '-m', outputPath + 'platforms.json',
+          // '-n', outputPath + 'settings.json',
           '-f',
         ],
         (error, stdout, stderr) => {
@@ -141,9 +141,13 @@ exports.handler = async (event) => {
     console.log('Parsing SLP file into JSON');
 
     await parseWithSlippc(tempPath, '/tmp/');
+    const settings = JSON.parse((require('fs').readFileSync('/tmp/settings.json', 'utf-8')));
+    startAt = settings.match_id;
+    const stageIsFod = settings.stage === 2;
+
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `frames.json`,
+      Key: `frames/frames.json`,
       Body: require('fs').readFileSync('/tmp/frames.json', 'utf-8'),
       ContentType: `application/json`
     });
@@ -168,10 +172,8 @@ exports.handler = async (event) => {
     const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
-    stageId = output.stage;
-
     // only for FoD
-    if (output.stage === 2) {
+    if (stageIsFod) {
       const putCommand4 = new PutObjectCommand({
         Bucket: bucket,
         Key: `platforms.json`,
@@ -181,7 +183,6 @@ exports.handler = async (event) => {
       await s3.send(putCommand4);
     }
 
-    startAt = output.metadata.startAt;
     const playersArray = Object.values(output.metadata.players);
     playerIndex = playersArray.findIndex(player => player.names.code === process.env.SLIPPI_CODE);
     opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
