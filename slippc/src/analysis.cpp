@@ -391,15 +391,15 @@ void Analysis::save(const char* outfilename) {
   std::string attacksFileName = std::string(outfilename) + "/attacks.jsonl";
   std::ofstream fout3;
   fout3.open(attacksFileName.c_str());
-  std::string j = attacksAsJson();
-  fout3 << j << std::endl;
+  std::string k = attacksAsJson();
+  fout3 << k << std::endl;
   fout3.close();
 
   std::string punishesFileName = std::string(outfilename) + "/punishes.jsonl";
   std::ofstream fout4;
   fout4.open(punishesFileName.c_str());
-  std::string j = punishesAsJson();
-  fout4 << j << std::endl;
+  std::string l = punishesAsJson();
+  fout4 << l << std::endl;
   fout4.close();
 }
 
