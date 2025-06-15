@@ -140,79 +140,47 @@ exports.handler = async (event) => {
   try {
     console.log('Parsing SLP file into JSON');
 
-    await parseWithSlippc(tempPath, '/tmp/');
+    await parseWithSlippc(tempPath, '/tmp');
+
     const settings = JSON.parse((require('fs').readFileSync('/tmp/settings.json', 'utf-8')));
     startAt = settings.match_id;
-    const stageIsFod = settings.stage === 2;
 
-    const putCommand = new PutObjectCommand({
+    const putFramesCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `frames/frames.json`,
-      Body: require('fs').readFileSync('/tmp/frames.json', 'utf-8'),
-      ContentType: `application/json`
+      Key: `frames/${startAt}-frames.jsonl`,
+      Body: require('fs').readFileSync('/tmp/frames.jsonl', 'utf-8'),
+      ContentType: `application/jsonl`
     });
-    await s3.send(putCommand);
+    await s3.send(putFramesCommand);
 
-    const putCommand2 = new PutObjectCommand({
+    const putItemsCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `items.json`,
-      Body: require('fs').readFileSync('/tmp/items.json', 'utf-8'),
-      ContentType: `application/json`
+      Key: `items/${startAt}-items.jsonl`,
+      Body: require('fs').readFileSync('/tmp/items.jsonl', 'utf-8'),
+      ContentType: `application/jsonl`
     });
-    await s3.send(putCommand2);
+    await s3.send(putItemsCommand);
 
-    const putCommand3 = new PutObjectCommand({
+    const putSettingsCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `settings.json`,
+      Key: `settings/${startAt}-settings.json`,
       Body: require('fs').readFileSync('/tmp/settings.json', 'utf-8'),
       ContentType: `application/json`
     });
-    await s3.send(putCommand3);
+    await s3.send(putSettingsCommand);
 
-    const output = JSON.parse((require('fs').readFileSync('/tmp/output.json', 'utf-8')));
     analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
     // only for FoD
     if (stageIsFod) {
-      const putCommand4 = new PutObjectCommand({
+      const putPlatformsCommand = new PutObjectCommand({
         Bucket: bucket,
-        Key: `platforms.json`,
-        Body: require('fs').readFileSync('/tmp/platforms.json', 'utf-8'),
-        ContentType: `application/json`
+        Key: `platforms/${startAt}-platforms.jsonl`,
+        Body: require('fs').readFileSync('/tmp/platforms.jsonl', 'utf-8'),
+        ContentType: `application/jsonl`
       });
-      await s3.send(putCommand4);
+      await s3.send(putPlatformsCommand);
     }
-
-    const playersArray = Object.values(output.metadata.players);
-    playerIndex = playersArray.findIndex(player => player.names.code === process.env.SLIPPI_CODE);
-    opponentIndex = playersArray.findIndex((player, index) => index !== playerIndex);
-
-    playerFrames = output.players[playerIndex].frames
-        .map(obj => patchFloats(obj)).join('\n');
-
-    opponentFrames = output.players[opponentIndex].frames
-        .map(obj => patchFloats(obj)).join('\n');
-
-    items = output.items.map(item => JSON.stringify(item)).join('\n');
-
-    const players = output.metadata.players;
-
-    settings = JSON.stringify({
-      match_id: startAt,
-      slippi_version: output.slippi_version,
-      start_time: output.start_time,
-      timer_start: output.timer,
-      frame_count: output.frame_count,
-      winner_id: output.winner_id,
-      stage: output.stage,
-      end_type: output.end_type,
-      player_index: playerIndex,
-      internal_character_id: Object.keys(players[playerIndex].characters)[0],
-      player_code: players[playerIndex].names.code,
-      opponent_index: opponentIndex,
-      opponent_character: Object.keys(players[opponentIndex].characters)[0],
-      opponent_code: players[opponentIndex].names.code,
-    });
 
     let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats } = {
       match_id: startAt,
@@ -249,9 +217,6 @@ exports.handler = async (event) => {
         })).join('\n');
     opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
 
-    if (stageId === 2) {
-      fodPlatforms = output.platforms.map(platform => JSON.stringify(platform)).join('\n');
-    }
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }
@@ -260,16 +225,6 @@ exports.handler = async (event) => {
     console.log('Writing JSON to S3');
 
     const puts = [
-      {
-        key: 'settings',
-        body: settings,
-        type: 'json'
-      },
-      {
-        key: 'player_frames',
-        body: playerFrames,
-        type: 'jsonl'
-      },
       {
         key: 'player_attacks',
         body: playerAttacks,
@@ -286,11 +241,6 @@ exports.handler = async (event) => {
         type: 'json'
       },
       {
-        key: 'opponent_frames',
-        body: opponentFrames,
-        type: 'jsonl'
-      },
-      {
         key: 'opponent_attacks',
         body: opponentAttacks,
         type: 'jsonl'
@@ -305,20 +255,7 @@ exports.handler = async (event) => {
         body: opponentStats,
         type: 'json'
       },
-      {
-        key: 'items',
-        body: items,
-        type: 'jsonl'
-      },
     ];
-
-    if (stageId === 2) {
-      puts.push({
-        key: 'platforms',
-        body: fodPlatforms,
-        type: 'jsonl'
-      })
-    }
 
     await sendFilesToS3(startAt, bucket, puts);
 

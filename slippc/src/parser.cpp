@@ -811,37 +811,37 @@ namespace slip {
   void Parser::save(const char* outfilename, bool delta) {
 
     DOUT1("  Saving Player Frames");
-    std::string framesFileName = std::string(outfilename) + "-frames.jsonl";
+    std::string framesFileName = std::string(outfilename) + "/frames.jsonl";
     std::ofstream ofile1;
     ofile1.open(framesFileName.c_str());
     ofile1 << playerFramesAsJson() << std::endl;
     ofile1.close();
-    DOUT1("  Saved to " << outfilename << "-frames.jsonl");
+    DOUT1("  Saved to " << outfilename << "/frames.jsonl");
 
     DOUT1("  Saving Item Frames");
-    std::string itemsFileName = std::string(outfilename) + "-items.jsonl";
+    std::string itemsFileName = std::string(outfilename) + "/items.jsonl";
     std::ofstream ofile2;
     ofile2.open(itemsFileName.c_str());
     ofile2 << itemFramesAsJson() << std::endl;
     ofile2.close();
-    DOUT1("  Saved to " << outfilename << "-items.jsonl");
+    DOUT1("  Saved to " << outfilename << "/items.jsonl");
 
     DOUT1("  Saving Settings");
-    std::string settingsFileName = std::string(outfilename) + "-settings.json";
+    std::string settingsFileName = std::string(outfilename) + "/settings.json";
     std::ofstream ofile3;
     ofile3.open(settingsFileName.c_str());
     ofile3 << settingsAsJson() << std::endl;
     ofile3.close();
-    DOUT1("  Saved to " << outfilename << "-settings.json");
+    DOUT1("  Saved to " << outfilename << "/settings.json");
 
     if (fodPlatformChangesAsJson() != "") {
       DOUT1("  Saving FoD Platform Height Changes");
-      std::string platformsFileName = std::string(outfilename) + "-platforms.json";
+      std::string platformsFileName = std::string(outfilename) + "/platforms.jsonl";
       std::ofstream ofile4;
       ofile4.open(platformsFileName.c_str());
       ofile4 << fodPlatformChangesAsJson() << std::endl;
       ofile4.close();
-      DOUT1("  Saved to " << outfilename << "-platforms.jsonl");
+      DOUT1("  Saved to " << outfilename << "/platforms.jsonl");
     }
   }
 
