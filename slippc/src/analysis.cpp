@@ -7,6 +7,12 @@
 #define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\" : \"" << (s) << "\""
 #define JEND(a) ((a++ == 0) ? "\n" : ",\n")
 
+#define JLFLT(k,n) " " << "\"" << (k) << "\": " << float(n)
+#define JLINT(k,n) " " << "\"" << (k) << "\": " << int32_t(n)
+#define JLUIN(k,n) " " << "\"" << (k) << "\": " << uint32_t(n)
+#define JLSTR(k,s) " " << "\"" << (k) << "\": \"" << (s) << "\""
+#define JLEND(a) ((a++ == 0) ? " " : ", ")
+
 namespace slip {
 
 std::string Analysis::statsAsJson() {
@@ -156,20 +162,20 @@ std::string Analysis::attacksAsJson() {
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
       ss << "{ ";
-      ss << JSTR(2,"match_id",        game_time)                                       << ", ";
-      ss << JSTR(2,"player_id",       ap[p].tag_code)                                  << ", ";
-      ss << JUIN(2,"attack_id",       i)                                               << ", ";
-      ss << JUIN(2,"move_id",         ap[p].attacks[i].move_id)                        << ", ";
-      ss << JSTR(2,"move_name",       Move::shortname[ap[p].attacks[i].move_id])       << ", ";
-      ss << JUIN(2,"cancel_type",     ap[p].attacks[i].cancel_type)                    << ", ";
-      ss << JSTR(2,"cancel_name",     Cancel::shortname[ap[p].attacks[i].cancel_type]) << ", ";
-      ss << JUIN(2,"punish_id",       ap[p].attacks[i].punish_id)                      << ", ";
-      ss << JUIN(2,"hit_id",          ap[p].attacks[i].hit_id)                         << ", ";
-      ss << JUIN(2,"game_frame",      ap[p].attacks[i].frame)                          << ", ";
-      ss << JUIN(2,"anim_frame",      ap[p].attacks[i].anim_frame)                     << ", ";
-      ss << JFLT(2,"damage",          ap[p].attacks[i].damage)                         << ", ";
-      ss << JSTR(2,"opening",         Dynamic::name[ap[p].attacks[i].opening])         << ", ";
-      ss << JSTR(2,"kill_dir",        Dir::name[ap[p].attacks[i].kill_dir]);
+      ss << JLSTR("match_id",        game_time);
+      ss << JLSTR("player_id",       ap[p].tag_code);
+      ss << JLUIN("attack_id",       i);
+      ss << JLUIN("move_id",         ap[p].attacks[i].move_id);
+      ss << JLSTR("move_name",       Move::shortname[ap[p].attacks[i].move_id]);
+      ss << JLUIN("cancel_type",     ap[p].attacks[i].cancel_type);
+      ss << JLSTR("cancel_name",     Cancel::shortname[ap[p].attacks[i].cancel_type]);
+      ss << JLUIN("punish_id",       ap[p].attacks[i].punish_id);
+      ss << JLUIN("hit_id",          ap[p].attacks[i].hit_id);
+      ss << JLUIN("game_frame",      ap[p].attacks[i].frame);
+      ss << JLUIN("anim_frame",      ap[p].attacks[i].anim_frame);
+      ss << JLFLT("damage",          ap[p].attacks[i].damage);
+      ss << JLSTR("opening",         Dynamic::name[ap[p].attacks[i].opening]);
+      ss << JLSTR("kill_dir",        Dir::name[ap[p].attacks[i].kill_dir]);
       ss << " }\n";
     }
   }
