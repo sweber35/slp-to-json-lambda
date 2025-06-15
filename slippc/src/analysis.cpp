@@ -10,6 +10,7 @@
 namespace slip {
 
 std::string Analysis::statsAsJson() {
+  int a = 0;
   std::stringstream ss;
   ss << "{" << std::endl;
   ss << JEND(a) << JSTR(0,"original_file",    escape_json(original_file));
@@ -25,7 +26,7 @@ std::string Analysis::statsAsJson() {
   ss << JEND(a) << JUIN(0,"start_minutes",    timer);
   ss << JEND(a) << JUIN(0,"end_type",         end_type);
   ss << JEND(a) << JINT(0,"lras",             lras_player);
-
+  a = 0;
   ss << "\"players\" : [\n";
   for(unsigned p = 0; p < 2; ++p) {
     ss << SPACE[ILEV] << "{\n";
