@@ -47,24 +47,15 @@ async function streamToBuffer(stream) {
 }
 
 async function sendFilesToS3( startAt, bucket, files ) {
+  const fs = require('fs');
   for await (const file of files) {
 
-    let filePath;
-
-    if (file.key.includes('_')) {
-      if (file.key.includes('player')) {
-        filePath = `${file.key.split('_')[1]}/player=1`;
-      }
-      else if (file.key.includes('opponent')) {
-        filePath = `${file.key.split('_')[1]}/player=2`;
-      }
-    }
-    else filePath = `${file.key}`;
+    const { key } = file;
 
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `${filePath}/${startAt}_${file.key}.${file.type}`,
-      Body: file.body,
+      Key: `${key}/${startAt}_${key}.${file.type}`,
+      Body: fs.createReadStream(`/tmp/${key}.${file.type}`, 'utf-8'),
       ContentType: `application/${file.type}`
     });
     await s3.send(putCommand);
@@ -112,14 +103,6 @@ exports.handler = async (event) => {
   const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
   const tempPath = '/tmp/game.slp';
 
-  let startAt;
-  let playerFrames, opponentFrames, settings, analysis;
-  let playerStats, playerAttacks, playerPunishes;
-  let opponentStats, opponentAttacks, opponentPunishes;
-  let items, fodPlatforms, stageId;
-
-  let playerIndex, opponentIndex;
-
   try {
     console.log('Retrieving SLP file from S3:', key);
     const command = new GetObjectCommand({ Bucket: bucket, Key: key });
@@ -137,6 +120,7 @@ exports.handler = async (event) => {
     console.log('Parsing SLP file into JSON');
 
     await parseWithSlippc(tempPath, '/tmp');
+    console.log('Slippc Done!');
 
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
@@ -146,72 +130,84 @@ exports.handler = async (event) => {
     console.log('Writing JSON to S3');
 
     const settings = JSON.parse((require('fs').readFileSync('/tmp/settings.json', 'utf-8')));
-    startAt = settings.match_id;
+    const startAt = settings.match_id;
     const stageIsFod = settings.stage === 2;
 
-    // TODO: This can all be turned back into an iterative function now
-    const rawFrames = require('fs').readFileSync('/tmp/frames.jsonl', 'utf-8');
+    const puts = [
+      { key: 'frames', type: 'jsonl' },
+      { key: 'items', type: 'jsonl' },
+      { key: 'attacks', type: 'jsonl' },
+      { key: 'punishes', type: 'jsonl' },
+      { key: 'stats', type: 'json' },
+      { key: 'settings', type: 'json' },
+    ];
 
-    const fs = require('fs');
-
-    const putFramesCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `frames/${startAt}-frames.jsonl`,
-      Body: fs.createReadStream('/tmp/frames.jsonl', 'utf-8'),
-      ContentType: `application/jsonl`
-    });
-    await s3.send(putFramesCommand);
-
-    const putItemsCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `items/${startAt}-items.jsonl`,
-      Body: fs.createReadStream('/tmp/items.jsonl', 'utf-8'),
-      ContentType: `application/jsonl`
-    });
-    await s3.send(putItemsCommand);
-
-    const putSettingsCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `settings/${startAt}-settings.json`,
-      Body: fs.createReadStream('/tmp/settings.json', 'utf-8'),
-      ContentType: `application/json`
-    });
-    await s3.send(putSettingsCommand);
-
-    // only for FoD
     if (stageIsFod) {
-      const putPlatformsCommand = new PutObjectCommand({
-        Bucket: bucket,
-        Key: `platforms/${startAt}-platforms.jsonl`,
-        Body: fs.createReadStream('/tmp/platforms.jsonl', 'utf-8'),
-        ContentType: `application/jsonl`
-      });
-      await s3.send(putPlatformsCommand);
+      puts.push({ key: 'platforms', type: 'jsonl' });
     }
 
-    const putStatsCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `stats/${startAt}-stats.json`,
-      Body: fs.createReadStream('/tmp/stats.json', 'utf-8'),
-      ContentType: `application/json`
-    });
-    await s3.send(putStatsCommand);
+    await sendFilesToS3(startAt, bucket, puts);
 
-    const putAttacksCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `attacks/${startAt}-attacks.jsonl`,
-      Body: fs.createReadStream('/tmp/attacks.jsonl', 'utf-8'),
-      ContentType: `application/jsonl`
-    });
-    await s3.send(putAttacksCommand);
-
-    const putPunishesCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `punishes/${startAt}-punishes.jsonl`,
-      Body: fs.createReadStream('/tmp/punishes.jsonl', 'utf-8'),
-      ContentType: `application/jsonl`
-    });
-    await s3.send(putPunishesCommand);
+    // const fs = require('fs');
+    //
+    // const putFramesCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `frames/${startAt}-frames.jsonl`,
+    //   Body: fs.createReadStream('/tmp/frames.jsonl', 'utf-8'),
+    //   ContentType: `application/jsonl`
+    // });
+    // await s3.send(putFramesCommand);
+    //
+    // const putItemsCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `items/${startAt}-items.jsonl`,
+    //   Body: fs.createReadStream('/tmp/items.jsonl', 'utf-8'),
+    //   ContentType: `application/jsonl`
+    // });
+    // await s3.send(putItemsCommand);
+    //
+    // const putSettingsCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `settings/${startAt}-settings.json`,
+    //   Body: fs.createReadStream('/tmp/settings.json', 'utf-8'),
+    //   ContentType: `application/json`
+    // });
+    // await s3.send(putSettingsCommand);
+    //
+    // // only for FoD
+    // if (stageIsFod) {
+    //   const putPlatformsCommand = new PutObjectCommand({
+    //     Bucket: bucket,
+    //     Key: `platforms/${startAt}-platforms.jsonl`,
+    //     Body: fs.createReadStream('/tmp/platforms.jsonl', 'utf-8'),
+    //     ContentType: `application/jsonl`
+    //   });
+    //   await s3.send(putPlatformsCommand);
+    // }
+    //
+    // const putStatsCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `stats/${startAt}-stats.json`,
+    //   Body: fs.createReadStream('/tmp/stats.json', 'utf-8'),
+    //   ContentType: `application/json`
+    // });
+    // await s3.send(putStatsCommand);
+    //
+    // const putAttacksCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `attacks/${startAt}-attacks.jsonl`,
+    //   Body: fs.createReadStream('/tmp/attacks.jsonl', 'utf-8'),
+    //   ContentType: `application/jsonl`
+    // });
+    // await s3.send(putAttacksCommand);
+    //
+    // const putPunishesCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `punishes/${startAt}-punishes.jsonl`,
+    //   Body: fs.createReadStream('/tmp/punishes.jsonl', 'utf-8'),
+    //   ContentType: `application/jsonl`
+    // });
+    // await s3.send(putPunishesCommand);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
