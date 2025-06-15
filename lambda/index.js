@@ -177,42 +177,66 @@ exports.handler = async (event) => {
       await s3.send(putPlatformsCommand);
     }
 
-    analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
+    const putStatsCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `stats/${startAt}-stats.json`,
+      Body: require('fs').readFileSync('/tmp/stats.json', 'utf-8'),
+      ContentType: `application/json`
+    });
+    await s3.send(putStatsCommand);
 
-    let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats } = {
-      match_id: startAt,
-      ...analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE)
-    }
+    const putAttacksCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `attacks/${startAt}-attacks.jsonl`,
+      Body: require('fs').readFileSync('/tmp/attacks.jsonl', 'utf-8'),
+      ContentType: `application/jsonl`
+    });
+    await s3.send(putAttacksCommand);
 
-    playerAttacks = _playerAttacks.map(obj =>
-      JSON.stringify({
-        match_id: startAt,
-        ...obj,
-      })).join('\n');
+    const putPunishesCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `punishes/${startAt}-punishes.jsonl`,
+      Body: require('fs').readFileSync('/tmp/punishes.jsonl', 'utf-8'),
+      ContentType: `application/jsonl`
+    });
+    await s3.send(putPunishesCommand);
 
-    playerPunishes = _playerPunishes.map(obj =>
-      JSON.stringify({
-        match_id: startAt,
-        ...obj,
-      })).join('\n');
-
-    playerStats = JSON.stringify(roundInteractionDamageValues(_playerStats));
-
-    let { attacks: _opponentAttacks, punishes: _opponentPunishes, ..._opponentStats } = {
-      match_id: startAt,
-      ...analysis.players.find(player => player.tag_code !== process.env.SLIPPI_CODE)
-    }
-    opponentAttacks = _opponentAttacks.map(obj =>
-        JSON.stringify({
-          match_id: startAt,
-          ...obj,
-        })).join('\n');
-    opponentPunishes = _opponentPunishes.map(obj =>
-        JSON.stringify({
-          match_id: startAt,
-          ...obj,
-        })).join('\n');
-    opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
+    // analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
+    //
+    // let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats } = {
+    //   match_id: startAt,
+    //   ...analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE)
+    // }
+    //
+    // playerAttacks = _playerAttacks.map(obj =>
+    //   JSON.stringify({
+    //     match_id: startAt,
+    //     ...obj,
+    //   })).join('\n');
+    //
+    // playerPunishes = _playerPunishes.map(obj =>
+    //   JSON.stringify({
+    //     match_id: startAt,
+    //     ...obj,
+    //   })).join('\n');
+    //
+    // playerStats = JSON.stringify(roundInteractionDamageValues(_playerStats));
+    //
+    // let { attacks: _opponentAttacks, punishes: _opponentPunishes, ..._opponentStats } = {
+    //   match_id: startAt,
+    //   ...analysis.players.find(player => player.tag_code !== process.env.SLIPPI_CODE)
+    // }
+    // opponentAttacks = _opponentAttacks.map(obj =>
+    //     JSON.stringify({
+    //       match_id: startAt,
+    //       ...obj,
+    //     })).join('\n');
+    // opponentPunishes = _opponentPunishes.map(obj =>
+    //     JSON.stringify({
+    //       match_id: startAt,
+    //       ...obj,
+    //     })).join('\n');
+    // opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
 
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
