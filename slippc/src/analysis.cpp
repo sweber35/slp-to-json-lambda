@@ -158,24 +158,25 @@ std::string Analysis::statsAsJson() {
 
 std::string Analysis::attacksAsJson() {
   std::stringstream ss;
+  int a = 0;
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
       ss << "{ ";
-      ss << JLSTR("match_id",        game_time);
-      ss << JLSTR("player_id",       ap[p].tag_code);
-      ss << JLUIN("attack_id",       i);
-      ss << JLUIN("move_id",         ap[p].attacks[i].move_id);
-      ss << JLSTR("move_name",       Move::shortname[ap[p].attacks[i].move_id]);
-      ss << JLUIN("cancel_type",     ap[p].attacks[i].cancel_type);
-      ss << JLSTR("cancel_name",     Cancel::shortname[ap[p].attacks[i].cancel_type]);
-      ss << JLUIN("punish_id",       ap[p].attacks[i].punish_id);
-      ss << JLUIN("hit_id",          ap[p].attacks[i].hit_id);
-      ss << JLUIN("game_frame",      ap[p].attacks[i].frame);
-      ss << JLUIN("anim_frame",      ap[p].attacks[i].anim_frame);
-      ss << JLFLT("damage",          ap[p].attacks[i].damage);
-      ss << JLSTR("opening",         Dynamic::name[ap[p].attacks[i].opening]);
-      ss << JLSTR("kill_dir",        Dir::name[ap[p].attacks[i].kill_dir]);
+      ss << JLEND(a) << JLSTR("match_id",        game_time);
+      ss << JLEND(a) << JLSTR("player_id",       ap[p].tag_code);
+      ss << JLEND(a) << JLUIN("attack_id",       i);
+      ss << JLEND(a) << JLUIN("move_id",         ap[p].attacks[i].move_id);
+      ss << JLEND(a) << JLSTR("move_name",       Move::shortname[ap[p].attacks[i].move_id]);
+      ss << JLEND(a) << JLUIN("cancel_type",     ap[p].attacks[i].cancel_type);
+      ss << JLEND(a) << JLSTR("cancel_name",     Cancel::shortname[ap[p].attacks[i].cancel_type]);
+      ss << JLEND(a) << JLUIN("punish_id",       ap[p].attacks[i].punish_id);
+      ss << JLEND(a) << JLUIN("hit_id",          ap[p].attacks[i].hit_id);
+      ss << JLEND(a) << JLUIN("game_frame",      ap[p].attacks[i].frame);
+      ss << JLEND(a) << JLUIN("anim_frame",      ap[p].attacks[i].anim_frame);
+      ss << JLEND(a) << JLFLT("damage",          ap[p].attacks[i].damage);
+      ss << JLEND(a) << JLSTR("opening",         Dynamic::name[ap[p].attacks[i].opening]);
+      ss << JLEND(a) << JLSTR("kill_dir",        Dir::name[ap[p].attacks[i].kill_dir]);
       ss << " }\n";
     }
   }
@@ -184,21 +185,22 @@ std::string Analysis::attacksAsJson() {
 
 std::string Analysis::punishesAsJson() {
   std::stringstream ss;
+  int a = 0;
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
       ss << "{ " << std::endl;
-      ss << JSTR(2,"match_id",        game_time)                                        << ", ";
-      ss << JSTR(2,"player_id",       ap[p].tag_code)                                   << ", ";
-      ss << JUIN(2,"start_frame",     ap[p].punishes[i].start_frame)                    << ", ";
-      ss << JUIN(2,"end_frame",       ap[p].punishes[i].end_frame)                      << ", ";
-      ss << JFLT(2,"start_pct",       ap[p].punishes[i].start_pct)                      << ", ";
-      ss << JFLT(2,"end_pct",         ap[p].punishes[i].end_pct)                        << ", ";
-      ss << JUIN(2,"stocks",          ap[p].punishes[i].stocks)                         << ", ";
-      ss << JUIN(2,"num_moves",       ap[p].punishes[i].num_moves)                      << ", ";
-      ss << JUIN(2,"last_move_id",    ap[p].punishes[i].last_move_id)                   << ", ";
-      ss << JSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id])  << ", ";
-      ss << JSTR(2,"kill_dir",        Dir::name[ap[p].punishes[i].kill_dir])            << ", ";
+      ss << JLEND(a) << JSTR(2,"match_id",        game_time)                                        << ", ";
+      ss << JLEND(a) << JSTR(2,"player_id",       ap[p].tag_code)                                   << ", ";
+      ss << JLEND(a) << JUIN(2,"start_frame",     ap[p].punishes[i].start_frame)                    << ", ";
+      ss << JLEND(a) << JUIN(2,"end_frame",       ap[p].punishes[i].end_frame)                      << ", ";
+      ss << JLEND(a) << JFLT(2,"start_pct",       ap[p].punishes[i].start_pct)                      << ", ";
+      ss << JLEND(a) << JFLT(2,"end_pct",         ap[p].punishes[i].end_pct)                        << ", ";
+      ss << JLEND(a) << JUIN(2,"stocks",          ap[p].punishes[i].stocks)                         << ", ";
+      ss << JLEND(a) << JUIN(2,"num_moves",       ap[p].punishes[i].num_moves)                      << ", ";
+      ss << JLEND(a) << JUIN(2,"last_move_id",    ap[p].punishes[i].last_move_id)                   << ", ";
+      ss << JLEND(a) << JSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id])  << ", ";
+      ss << JLEND(a) << JSTR(2,"kill_dir",        Dir::name[ap[p].punishes[i].kill_dir])            << ", ";
       //     ss << JSTR(2,"opening",         "UNUSED");
       ss << " }\n";
     }
