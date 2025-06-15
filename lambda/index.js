@@ -81,7 +81,7 @@ function parseWithSlippc(inputPath, outputPath) {
         [
           '-i', inputPath,
           '-j', outputPath,
-          '-a', outputPath + 'analysis.json',
+          '-a', outputPath + '/analysis.json',
           // '-w', outputPath + 'frames.json',
           // '-l', outputPath + 'items.json',
           // '-m', outputPath + 'platforms.json',
@@ -169,8 +169,6 @@ exports.handler = async (event) => {
     });
     await s3.send(putSettingsCommand);
 
-    analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
-
     // only for FoD
     if (stageIsFod) {
       const putPlatformsCommand = new PutObjectCommand({
@@ -181,6 +179,8 @@ exports.handler = async (event) => {
       });
       await s3.send(putPlatformsCommand);
     }
+
+    analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
 
     let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats } = {
       match_id: startAt,
