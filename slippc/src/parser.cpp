@@ -809,8 +809,7 @@ namespace slip {
   }
 
   void Parser::save(const char* outfilename, bool delta) {
-    std::string full_filename = std::string(outfilename) + "-platforms.jsonl";
-    ofile4.open(full_filename.c_str());  // Pass the full filename to open()
+
     DOUT1("  Saving Player Frames");
     std::string framesFileName = std::string(outfilename) + "-frames.jsonl";
     std::ofstream ofile1;
@@ -822,7 +821,7 @@ namespace slip {
     DOUT1("  Saving Item Frames");
     std::string itemsFileName = std::string(outfilename) + "-items.jsonl";
     std::ofstream ofile2;
-    ofile1.open(itemsFileName.c_str());
+    ofile2.open(itemsFileName.c_str());
     ofile2 << itemFramesAsJson() << std::endl;
     ofile2.close();
     DOUT1("  Saved to " << outfilename << "-items.jsonl");
@@ -830,7 +829,7 @@ namespace slip {
     DOUT1("  Saving Settings");
     std::string settingsFileName = std::string(outfilename) + "-settings.json";
     std::ofstream ofile3;
-    ofile1.open(settingsFileName.c_str());
+    ofile3.open(settingsFileName.c_str());
     ofile3 << settingsAsJson() << std::endl;
     ofile3.close();
     DOUT1("  Saved to " << outfilename << "-settings.json");
