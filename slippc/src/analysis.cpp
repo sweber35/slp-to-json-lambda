@@ -194,7 +194,7 @@ std::string Analysis::punishesAsJson() {
       ss << JSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id])  << ", ";
       ss << JSTR(2,"kill_dir",        Dir::name[ap[p].punishes[i].kill_dir])            << ", ";
       //     ss << JSTR(2,"opening",         "UNUSED");
-      ss << " }"
+      ss << " }\n"
     }
   }
   return ss.str();
