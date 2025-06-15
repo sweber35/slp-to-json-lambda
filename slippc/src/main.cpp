@@ -213,7 +213,7 @@ int handleAnalysis(const cmdoptions &c, const int debug, slip::Parser &p) {
       if (debug) {
         DOUT1("  Saving analysis to file");
       }
-      a->save(c.analysisfile);
+      a->save(c.outfile);
     }
   }
 
@@ -252,9 +252,6 @@ int handleSingleFile(const cmdoptions &c, const int debug) {
 
     if (c.outfile) {
       retj = handleJson(c,debug,p);
-    }
-
-    if (c.analysisfile) {
       reta = handleAnalysis(c,debug,p);
     }
   }
