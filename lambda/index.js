@@ -138,14 +138,24 @@ exports.handler = async (event) => {
 
     await parseWithSlippc(tempPath, '/tmp');
 
+  } catch (err) {
+    console.log('Error parsing SLP file into JSON:', err);
+  }
+
+  try {
+    console.log('Writing JSON to S3');
+
     const settings = JSON.parse((require('fs').readFileSync('/tmp/settings.json', 'utf-8')));
     startAt = settings.match_id;
     const stageIsFod = settings.stage === 2;
 
+    // TODO: This can all be turned back into an iterative function now
+    const rawFrames = require('fs').readFileSync('/tmp/frames.jsonl', 'utf-8');
+    const framesBuffer = streamToBuffer(rawFrames);
     const putFramesCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `frames/${startAt}-frames.jsonl`,
-      Body: require('fs').readFileSync('/tmp/frames.jsonl', 'utf-8'),
+      Body: framesBuffer,
       ContentType: `application/jsonl`
     });
     await s3.send(putFramesCommand);
@@ -200,85 +210,6 @@ exports.handler = async (event) => {
       ContentType: `application/jsonl`
     });
     await s3.send(putPunishesCommand);
-
-    // analysis = JSON.parse(require('fs').readFileSync('/tmp/analysis.json', 'utf-8'));
-    //
-    // let { attacks: _playerAttacks, punishes: _playerPunishes, ..._playerStats } = {
-    //   match_id: startAt,
-    //   ...analysis.players.find( player => player.tag_code === process.env.SLIPPI_CODE)
-    // }
-    //
-    // playerAttacks = _playerAttacks.map(obj =>
-    //   JSON.stringify({
-    //     match_id: startAt,
-    //     ...obj,
-    //   })).join('\n');
-    //
-    // playerPunishes = _playerPunishes.map(obj =>
-    //   JSON.stringify({
-    //     match_id: startAt,
-    //     ...obj,
-    //   })).join('\n');
-    //
-    // playerStats = JSON.stringify(roundInteractionDamageValues(_playerStats));
-    //
-    // let { attacks: _opponentAttacks, punishes: _opponentPunishes, ..._opponentStats } = {
-    //   match_id: startAt,
-    //   ...analysis.players.find(player => player.tag_code !== process.env.SLIPPI_CODE)
-    // }
-    // opponentAttacks = _opponentAttacks.map(obj =>
-    //     JSON.stringify({
-    //       match_id: startAt,
-    //       ...obj,
-    //     })).join('\n');
-    // opponentPunishes = _opponentPunishes.map(obj =>
-    //     JSON.stringify({
-    //       match_id: startAt,
-    //       ...obj,
-    //     })).join('\n');
-    // opponentStats = JSON.stringify(roundInteractionDamageValues(_opponentStats));
-
-  } catch (err) {
-    console.log('Error parsing SLP file into JSON:', err);
-  }
-
-  try {
-    console.log('Writing JSON to S3');
-
-    const puts = [
-      {
-        key: 'player_attacks',
-        body: playerAttacks,
-        type: 'jsonl'
-      },
-      {
-        key: 'player_punishes',
-        body: playerPunishes,
-        type: 'jsonl'
-      },
-      {
-        key: 'player_stats',
-        body: playerStats,
-        type: 'json'
-      },
-      {
-        key: 'opponent_attacks',
-        body: opponentAttacks,
-        type: 'jsonl'
-      },
-      {
-        key: 'opponent_punishes',
-        body: opponentPunishes,
-        type: 'jsonl'
-      },
-      {
-        key: 'opponent_stats',
-        body: opponentStats,
-        type: 'json'
-      },
-    ];
-
-    await sendFilesToS3(startAt, bucket, puts);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
