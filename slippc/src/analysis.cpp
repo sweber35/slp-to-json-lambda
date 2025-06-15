@@ -203,7 +203,7 @@ std::string Analysis::punishesAsJson() {
 std::string Analysis::asJson() {
   std::stringstream ss;
   ss << "{" << std::endl;
-  int i = 0;
+  int a = 0;
   ss << JEND(a) << JSTR(0,"original_file",    escape_json(original_file));
   ss << JEND(a) << JSTR(0,"slippi_version",   slippi_version);
   ss << JEND(a) << JSTR(0,"parser_version",   parser_version);
