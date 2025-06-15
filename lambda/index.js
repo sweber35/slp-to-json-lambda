@@ -151,11 +151,13 @@ exports.handler = async (event) => {
 
     // TODO: This can all be turned back into an iterative function now
     const rawFrames = require('fs').readFileSync('/tmp/frames.jsonl', 'utf-8');
-    const framesBuffer = streamToBuffer(rawFrames);
+
+    const fs = require('fs');
+
     const putFramesCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `frames/${startAt}-frames.jsonl`,
-      Body: framesBuffer,
+      Body: fs.createReadStream('/tmp/frames.jsonl', 'utf-8'),
       ContentType: `application/jsonl`
     });
     await s3.send(putFramesCommand);
@@ -163,7 +165,7 @@ exports.handler = async (event) => {
     const putItemsCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `items/${startAt}-items.jsonl`,
-      Body: require('fs').readFileSync('/tmp/items.jsonl', 'utf-8'),
+      Body: fs.createReadStream('/tmp/items.jsonl', 'utf-8'),
       ContentType: `application/jsonl`
     });
     await s3.send(putItemsCommand);
@@ -171,7 +173,7 @@ exports.handler = async (event) => {
     const putSettingsCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `settings/${startAt}-settings.json`,
-      Body: require('fs').readFileSync('/tmp/settings.json', 'utf-8'),
+      Body: fs.createReadStream('/tmp/settings.json', 'utf-8'),
       ContentType: `application/json`
     });
     await s3.send(putSettingsCommand);
@@ -181,7 +183,7 @@ exports.handler = async (event) => {
       const putPlatformsCommand = new PutObjectCommand({
         Bucket: bucket,
         Key: `platforms/${startAt}-platforms.jsonl`,
-        Body: require('fs').readFileSync('/tmp/platforms.jsonl', 'utf-8'),
+        Body: fs.createReadStream('/tmp/platforms.jsonl', 'utf-8'),
         ContentType: `application/jsonl`
       });
       await s3.send(putPlatformsCommand);
@@ -190,7 +192,7 @@ exports.handler = async (event) => {
     const putStatsCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `stats/${startAt}-stats.json`,
-      Body: require('fs').readFileSync('/tmp/stats.json', 'utf-8'),
+      Body: fs.createReadStream('/tmp/stats.json', 'utf-8'),
       ContentType: `application/json`
     });
     await s3.send(putStatsCommand);
@@ -198,7 +200,7 @@ exports.handler = async (event) => {
     const putAttacksCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `attacks/${startAt}-attacks.jsonl`,
-      Body: require('fs').readFileSync('/tmp/attacks.jsonl', 'utf-8'),
+      Body: fs.createReadStream('/tmp/attacks.jsonl', 'utf-8'),
       ContentType: `application/jsonl`
     });
     await s3.send(putAttacksCommand);
@@ -206,7 +208,7 @@ exports.handler = async (event) => {
     const putPunishesCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: `punishes/${startAt}-punishes.jsonl`,
-      Body: require('fs').readFileSync('/tmp/punishes.jsonl', 'utf-8'),
+      Body: fs.createReadStream('/tmp/punishes.jsonl', 'utf-8'),
       ContentType: `application/jsonl`
     });
     await s3.send(putPunishesCommand);
