@@ -179,21 +179,23 @@ std::string Analysis::attacksAsJson() {
 std::string Analysis::punishesAsJson() {
   std::stringstream ss;
 
-  for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
-    ss << "{ " << std::endl;
-    ss << JSTR(2,"match_id",        game_time)                                        << ", ";
-    ss << JSTR(2,"player_id",       ap[p].tag_code)                                   << ", ";
-    ss << JUIN(2,"start_frame",     ap[p].punishes[i].start_frame)                    << ", ";
-    ss << JUIN(2,"end_frame",       ap[p].punishes[i].end_frame)                      << ", ";
-    ss << JFLT(2,"start_pct",       ap[p].punishes[i].start_pct)                      << ", ";
-    ss << JFLT(2,"end_pct",         ap[p].punishes[i].end_pct)                        << ", ";
-    ss << JUIN(2,"stocks",          ap[p].punishes[i].stocks)                         << ", ";
-    ss << JUIN(2,"num_moves",       ap[p].punishes[i].num_moves)                      << ", ";
-    ss << JUIN(2,"last_move_id",    ap[p].punishes[i].last_move_id)                   << ", ";
-    ss << JSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id])  << ", ";
-    ss << JSTR(2,"kill_dir",        Dir::name[ap[p].punishes[i].kill_dir])            << ", ";
-    //     ss << JSTR(2,"opening",         "UNUSED");
-    ss << " }"
+  for(unsigned p = 0; p < 2; ++p) {
+    for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
+      ss << "{ " << std::endl;
+      ss << JSTR(2,"match_id",        game_time)                                        << ", ";
+      ss << JSTR(2,"player_id",       ap[p].tag_code)                                   << ", ";
+      ss << JUIN(2,"start_frame",     ap[p].punishes[i].start_frame)                    << ", ";
+      ss << JUIN(2,"end_frame",       ap[p].punishes[i].end_frame)                      << ", ";
+      ss << JFLT(2,"start_pct",       ap[p].punishes[i].start_pct)                      << ", ";
+      ss << JFLT(2,"end_pct",         ap[p].punishes[i].end_pct)                        << ", ";
+      ss << JUIN(2,"stocks",          ap[p].punishes[i].stocks)                         << ", ";
+      ss << JUIN(2,"num_moves",       ap[p].punishes[i].num_moves)                      << ", ";
+      ss << JUIN(2,"last_move_id",    ap[p].punishes[i].last_move_id)                   << ", ";
+      ss << JSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id])  << ", ";
+      ss << JSTR(2,"kill_dir",        Dir::name[ap[p].punishes[i].kill_dir])            << ", ";
+      //     ss << JSTR(2,"opening",         "UNUSED");
+      ss << " }"
+    }
   }
   return ss.str();
 }
