@@ -65,6 +65,7 @@ typedef struct _cmdoptions {
   char* infile       = nullptr;
   char* cfile        = nullptr;
   char* outfile      = nullptr;
+  char* analysisfile = nullptr;
   bool  nodelta      = false;
   bool  encode       = false;
   bool  rawencode    = false;
