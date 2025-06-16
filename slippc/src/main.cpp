@@ -2,6 +2,9 @@
 #include <sys/stat.h>
 #include <filesystem>
 
+#include <arrow/api.h>
+#include <parquet/arrow/writer.h>
+
 #include "util.h"
 #include "parser.h"
 #include "analyzer.h"
@@ -348,8 +351,29 @@ int run(int argc, char** argv) {
   return handleSingleFile(c,c.debug);
 }
 
+void write_parquet_test() {
+  arrow::Int32Builder builder;
+  builder.Append(10);
+  builder.Append(20);
+  builder.Append(30);
+  std::shared_ptr<arrow::Array> array;
+  builder.Finish(&array);
+
+  auto schema = arrow::schema({arrow::field("example", arrow::int32())});
+  auto table = arrow::Table::Make(schema, {array});
+
+  std::shared_ptr<arrow::io::FileOutputStream> outfile;
+  PARQUET_ASSIGN_OR_THROW(
+      outfile,
+      arrow::io::FileOutputStream::Open("example.parquet")
+  );
+
+  PARQUET_THROW_NOT_OK(parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile, 1024));
+}
+
 }
 
 int main(int argc, char** argv) {
+  write_parquet_test()
   return slip::run(argc,argv);
 }

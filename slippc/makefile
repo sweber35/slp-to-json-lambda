@@ -48,8 +48,9 @@ OLEVEL := -O3
 
 all: directories base
 
-base: INCLUDES += -I/usr/include/lzma
-base: LIBS += -llzma
+ARROW_HOME = /usr/local
+base: INCLUDES += -I$(ARROW_HOME)/include
+base: LIBS += -L$(ARROW_HOME)/lib -larrow -lparquet -llzma
 base: slippc
 
 test: INCLUDES += -I/usr/include/lzma
