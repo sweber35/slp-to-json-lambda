@@ -17,6 +17,16 @@
 #include "analyzer.h"
 #include "compressor.h"
 
+#ifndef ARROW_THROW_NOT_OK
+#define ARROW_THROW_NOT_OK(expr)             \
+  do {                                       \
+    ::arrow::Status _s = (expr);             \
+    if (!_s.ok()) {                          \
+      throw std::runtime_error(_s.ToString()); \
+    }                                        \
+  } while (0)
+#endif
+
 // #define GUI_ENABLED 1  //debug, normally enable this from the makefile
 
 #if GUI_ENABLED == 1
