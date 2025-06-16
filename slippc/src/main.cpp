@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <sys/stat.h>
 #include <filesystem>
+#include <iostream>
 
 #include <arrow/api.h>
 #include <parquet/arrow/writer.h>
@@ -11,6 +12,7 @@
 #include <parquet/exception.h>
 #include <arrow/util/config.h>
 std::cout << ARROW_VERSION_STRING << std::endl;
+
 #include "util.h"
 #include "parser.h"
 #include "analyzer.h"
