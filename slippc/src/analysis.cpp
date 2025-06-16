@@ -185,12 +185,12 @@ std::string Analysis::attacksAsJson() {
 
 std::string Analysis::punishesAsJson() {
   std::stringstream ss;
-  int a = 0;
+  int a = 1;
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
       ss << "{ ";
-      ss << JLEND(a) << JLSTR("match_id",        game_time);
+      ss << JLSTR("match_id",        game_time);
       ss << JLEND(a) << JLSTR("player_id",       ap[p].tag_code);
       ss << JLEND(a) << JLUIN("start_frame",     ap[p].punishes[i].start_frame);
       ss << JLEND(a) << JLUIN("end_frame",       ap[p].punishes[i].end_frame);
