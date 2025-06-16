@@ -8,6 +8,7 @@
 #include <arrow/status.h>
 #include <arrow/result.h>
 #include <arrow/io/file.h>
+#include <parquet/exception.h>
 
 #include "util.h"
 #include "parser.h"
