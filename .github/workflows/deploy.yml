@@ -20,6 +20,7 @@ jobs:
           file: ./Dockerfile
           tags: slippc-builder
           load: true
+          platforms: linux/amd64
 
       - name: Copy binary out of container
         run: |
