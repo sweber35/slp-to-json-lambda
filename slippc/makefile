@@ -64,7 +64,6 @@ static: LIBS += -L/usr/local/lib -static \
   -lparquet \
   -larrow \
   -larrow_bundled_dependencies \
-  -larrow_util \
   -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldl
 static: slippc
 
