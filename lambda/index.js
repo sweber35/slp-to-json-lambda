@@ -72,7 +72,6 @@ function parseWithSlippc(inputPath, outputPath) {
         [
           '-i', inputPath,
           '-j', outputPath,
-          '-a', outputPath + '/analysis.json',
           '-f',
         ],
         (error, stdout, stderr) => {
@@ -141,73 +140,11 @@ exports.handler = async (event) => {
       { key: 'stats', type: 'json' },
       { key: 'settings', type: 'json' },
     ];
-
     if (stageIsFod) {
       puts.push({ key: 'platforms', type: 'jsonl' });
     }
 
     await sendFilesToS3(startAt, bucket, puts);
-
-    // const fs = require('fs');
-    //
-    // const putFramesCommand = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: `frames/${startAt}-frames.jsonl`,
-    //   Body: fs.createReadStream('/tmp/frames.jsonl', 'utf-8'),
-    //   ContentType: `application/jsonl`
-    // });
-    // await s3.send(putFramesCommand);
-    //
-    // const putItemsCommand = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: `items/${startAt}-items.jsonl`,
-    //   Body: fs.createReadStream('/tmp/items.jsonl', 'utf-8'),
-    //   ContentType: `application/jsonl`
-    // });
-    // await s3.send(putItemsCommand);
-    //
-    // const putSettingsCommand = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: `settings/${startAt}-settings.json`,
-    //   Body: fs.createReadStream('/tmp/settings.json', 'utf-8'),
-    //   ContentType: `application/json`
-    // });
-    // await s3.send(putSettingsCommand);
-    //
-    // // only for FoD
-    // if (stageIsFod) {
-    //   const putPlatformsCommand = new PutObjectCommand({
-    //     Bucket: bucket,
-    //     Key: `platforms/${startAt}-platforms.jsonl`,
-    //     Body: fs.createReadStream('/tmp/platforms.jsonl', 'utf-8'),
-    //     ContentType: `application/jsonl`
-    //   });
-    //   await s3.send(putPlatformsCommand);
-    // }
-    //
-    // const putStatsCommand = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: `stats/${startAt}-stats.json`,
-    //   Body: fs.createReadStream('/tmp/stats.json', 'utf-8'),
-    //   ContentType: `application/json`
-    // });
-    // await s3.send(putStatsCommand);
-    //
-    // const putAttacksCommand = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: `attacks/${startAt}-attacks.jsonl`,
-    //   Body: fs.createReadStream('/tmp/attacks.jsonl', 'utf-8'),
-    //   ContentType: `application/jsonl`
-    // });
-    // await s3.send(putAttacksCommand);
-    //
-    // const putPunishesCommand = new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: `punishes/${startAt}-punishes.jsonl`,
-    //   Body: fs.createReadStream('/tmp/punishes.jsonl', 'utf-8'),
-    //   ContentType: `application/jsonl`
-    // });
-    // await s3.send(putPunishesCommand);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
