@@ -1,8 +1,9 @@
 #include "replay.h"
 #include <iostream>
+#include <iomanip>
 
 //JSON Output shortcuts
-#define JFLT(k,n) " " << "\"" << (k) << "\": " << float(n)
+#define JFLT(k,n) " \"" << (k) << "\": " << std::fixed << std::setprecision(2) << float(n)
 #define JINT(k,n) " " << "\"" << (k) << "\": " << int32_t(n)
 #define JUIN(k,n) " " << "\"" << (k) << "\": " << uint32_t(n)
 #define JSTR(k,s) " " << "\"" << (k) << "\": \"" << (s) << "\""
