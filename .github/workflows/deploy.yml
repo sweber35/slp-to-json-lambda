@@ -3,7 +3,7 @@ name: Build Binary and Deploy Lambda
 on:
   push:
     branches:
-      - feature/slippc-parquet
+      - feature/slippc-parquet-again
 
 jobs:
   build-and-deploy:
