@@ -141,39 +141,38 @@ std::string SlippiReplay::itemFramesAsJson() {
   uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
 
   std::stringstream ss;
-    for (unsigned i = 0; i < MAX_ITEMS; ++i) {
-      if (s.item[i].spawn_id > MAX_ITEMS) {
-        break;
-      }
-      for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
-        int a = 1;
-        ss << "{";
-        ss << JSTR("match_id", s.start_time);
-        ss << JEND(a) << JUIN("spawn_id", s.item[i].spawn_id);
-        ss << JEND(a) << JUIN("item_type", s.item[i].type);
-        ss << JEND(a) << JUIN("frame", s.item[i].frame[f].frame);
-        ss << JEND(a) << JUIN("state", s.item[i].frame[f].state);
-        ss << JEND(a) << JFLT("face_dir", s.item[i].frame[f].face_dir);
-        ss << JEND(a) << JFLT("xvel", s.item[i].frame[f].xvel);
-        ss << JEND(a) << JFLT("yvel", s.item[i].frame[f].yvel);
-        ss << JEND(a) << JFLT("xpos", s.item[i].frame[f].xpos);
-        ss << JEND(a) << JFLT("ypos", s.item[i].frame[f].ypos);
-        ss << JEND(a) << JUIN("damage", s.item[i].frame[f].damage);
-        ss << JEND(a) << JFLT("expire", s.item[i].frame[f].expire);
+  for (unsigned i = 0; i < MAX_ITEMS; ++i) {
+    if (s.item[i].spawn_id > MAX_ITEMS) {
+      break;
+    }
+    for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+      int a = 1;
+      ss << "{";
+      ss << JSTR("match_id", s.start_time);
+      ss << JEND(a) << JUIN("spawn_id", s.item[i].spawn_id);
+      ss << JEND(a) << JUIN("item_type", s.item[i].type);
+      ss << JEND(a) << JUIN("frame", s.item[i].frame[f].frame);
+      ss << JEND(a) << JUIN("state", s.item[i].frame[f].state);
+      ss << JEND(a) << JFLT("face_dir", s.item[i].frame[f].face_dir);
+      ss << JEND(a) << JFLT("xvel", s.item[i].frame[f].xvel);
+      ss << JEND(a) << JFLT("yvel", s.item[i].frame[f].yvel);
+      ss << JEND(a) << JFLT("xpos", s.item[i].frame[f].xpos);
+      ss << JEND(a) << JFLT("ypos", s.item[i].frame[f].ypos);
+      ss << JEND(a) << JUIN("damage", s.item[i].frame[f].damage);
+      ss << JEND(a) << JFLT("expire", s.item[i].frame[f].expire);
 
-        if (MIN_VERSION(3, 2, 0)) {
-          ss << JEND(a) << JUIN("missile_type", s.item[i].frame[f].flags_1);
-          ss << JEND(a) << JUIN("turnip_face", s.item[i].frame[f].flags_2);
-          ss << JEND(a) << JUIN("is_launched", s.item[i].frame[f].flags_3);
-          ss << JEND(a) << JUIN("charged_power", s.item[i].frame[f].flags_4);
-        }
-        if (MIN_VERSION(3, 6, 0)) {
-          ss << JEND(a) << JINT("owner", s.item[i].frame[f].owner);
-        }
+      if (MIN_VERSION(3, 2, 0)) {
+        ss << JEND(a) << JUIN("missile_type", s.item[i].frame[f].flags_1);
+        ss << JEND(a) << JUIN("turnip_face", s.item[i].frame[f].flags_2);
+        ss << JEND(a) << JUIN("is_launched", s.item[i].frame[f].flags_3);
+        ss << JEND(a) << JUIN("charged_power", s.item[i].frame[f].flags_4);
       }
-
+      if (MIN_VERSION(3, 6, 0)) {
+        ss << JEND(a) << JINT("owner", s.item[i].frame[f].owner);
+      }
       ss << " }\n";
     }
+  }
   return ss.str();
 }
 

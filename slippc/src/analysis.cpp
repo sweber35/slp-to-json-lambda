@@ -158,7 +158,7 @@ std::string Analysis::statsAsJson() {
 
 std::string Analysis::attacksAsJson() {
   std::stringstream ss;
-  int a = 0;
+  int a = 1;
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
