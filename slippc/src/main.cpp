@@ -1,11 +1,31 @@
 #include <algorithm>
 #include <sys/stat.h>
 #include <filesystem>
+#include <iostream>
+
+#include <arrow/api.h>
+#include <parquet/arrow/writer.h>
+#include <arrow/util/logging.h>
+#include <arrow/status.h>
+#include <arrow/result.h>
+#include <arrow/io/file.h>
+#include <parquet/exception.h>
+#include <arrow/util/config.h>
 
 #include "util.h"
 #include "parser.h"
 #include "analyzer.h"
 #include "compressor.h"
+
+#ifndef ARROW_THROW_NOT_OK
+#define ARROW_THROW_NOT_OK(expr)             \
+  do {                                       \
+    ::arrow::Status _s = (expr);             \
+    if (!_s.ok()) {                          \
+      throw std::runtime_error(_s.ToString()); \
+    }                                        \
+  } while (0)
+#endif
 
 // #define GUI_ENABLED 1  //debug, normally enable this from the makefile
 
@@ -348,8 +368,32 @@ int run(int argc, char** argv) {
   return handleSingleFile(c,c.debug);
 }
 
+void write_parquet_test() {
+  arrow::Int32Builder builder;
+
+  ARROW_THROW_NOT_OK(builder.Append(10));
+  ARROW_THROW_NOT_OK(builder.Append(20));
+  ARROW_THROW_NOT_OK(builder.Append(30));
+
+  std::shared_ptr<arrow::Array> array;
+  ARROW_THROW_NOT_OK(builder.Finish(&array));
+
+  auto schema = arrow::schema({arrow::field("example", arrow::int32())});
+  auto table = arrow::Table::Make(schema, {array});
+
+  std::shared_ptr<arrow::io::FileOutputStream> outfile;
+  PARQUET_ASSIGN_OR_THROW(
+      outfile,
+      arrow::io::FileOutputStream::Open("example.parquet")
+  );
+
+  PARQUET_THROW_NOT_OK(parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile, 1024));
+}
+
 }
 
 int main(int argc, char** argv) {
+  std::cout << "Arrow version: " << ARROW_VERSION_STRING << std::endl;
+  // slip::write_parquet_test();
   return slip::run(argc,argv);
 }

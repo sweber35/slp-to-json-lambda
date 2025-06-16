@@ -1,4 +1,4 @@
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+FROM ghcr.io/sweber35/slippc-arrow-base:latest
 
 RUN yum install -y gcc gcc-c++ make glibc-static libstdc++-static xz-devel
 
