@@ -65,7 +65,8 @@ static: LIBS += -L/usr/local/lib -static \
   -larrow \
   -larrow_bundled_dependencies \
   -larrow_util \
-  -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldlstatic: slippc
+  -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldl
+static: slippc
 
 statictest: LIBS += -L ./lib-lin -static -llzma
 statictest: slippc-tests
