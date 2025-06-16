@@ -57,10 +57,10 @@ std::string SlippiReplay::playerFramesAsJson() {
 
     if (s.player[p].player_type != 3) {
       for(unsigned f = 0; f < s.frame_count; ++f) {
-        ss << "{ ";
+        ss << "{";
 
-        int a = 0; //True for only the first thing output per line
-        ss << JEND(a) << JSTR("match_id"      ,s.start_time);
+        int a = 1; //True for only the first thing output per line
+        ss << JSTR("match_id"      ,s.start_time);
         ss << JEND(a) << JSTR("player_id"     ,s.player[pp].tag_code);
         ss << JEND(a) << JUIN("follower"      ,s.player[p].frame[f].follower);
         ss << JEND(a) << JUIN("seed"          ,s.player[p].frame[f].seed);
@@ -141,14 +141,14 @@ std::string SlippiReplay::itemFramesAsJson() {
   uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
 
   std::stringstream ss;
-    int a = 0;
+    int a = 1;
     for (unsigned i = 0; i < MAX_ITEMS; ++i) {
       if (s.item[i].spawn_id > MAX_ITEMS) {
         break;
       }
       for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
-        ss << "{ ";
-        ss << JEND(a) << JSTR("match_id", s.start_time);
+        ss << "{";
+        ss << JSTR("match_id", s.start_time);
         ss << JEND(a) << JUIN("spawn_id", s.item[i].spawn_id);
         ss << JEND(a) << JUIN("item_type", s.item[i].type);
         ss << JEND(a) << JUIN("frame", s.item[i].frame[f].frame);
