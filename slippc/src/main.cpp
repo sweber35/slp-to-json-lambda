@@ -4,6 +4,10 @@
 
 #include <arrow/api.h>
 #include <parquet/arrow/writer.h>
+#include <arrow/util/logging.h>
+#include <arrow/status.h>
+#include <arrow/result.h>
+#include <arrow/io/file.h>
 
 #include "util.h"
 #include "parser.h"
@@ -353,11 +357,13 @@ int run(int argc, char** argv) {
 
 void write_parquet_test() {
   arrow::Int32Builder builder;
-  builder.Append(10);
-  builder.Append(20);
-  builder.Append(30);
+
+  ARROW_THROW_NOT_OK(builder.Append(10));
+  ARROW_THROW_NOT_OK(builder.Append(20));
+  ARROW_THROW_NOT_OK(builder.Append(30));
+
   std::shared_ptr<arrow::Array> array;
-  builder.Finish(&array);
+  ARROW_THROW_NOT_OK(builder.Finish(&array));
 
   auto schema = arrow::schema({arrow::field("example", arrow::int32())});
   auto table = arrow::Table::Make(schema, {array});
