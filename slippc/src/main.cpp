@@ -384,6 +384,7 @@ void write_parquet_test() {
 }
 
 int main(int argc, char** argv) {
+  std::cout << "Arrow version: " << ARROW_VERSION_STRING << std::endl;
   slip::write_parquet_test();
   return slip::run(argc,argv);
 }
