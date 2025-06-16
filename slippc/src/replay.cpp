@@ -141,12 +141,12 @@ std::string SlippiReplay::itemFramesAsJson() {
   uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
 
   std::stringstream ss;
-    int a = 1;
     for (unsigned i = 0; i < MAX_ITEMS; ++i) {
       if (s.item[i].spawn_id > MAX_ITEMS) {
         break;
       }
       for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+        int a = 1;
         ss << "{";
         ss << JSTR("match_id", s.start_time);
         ss << JEND(a) << JUIN("spawn_id", s.item[i].spawn_id);
@@ -190,8 +190,8 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
 
     for (size_t i = 0; i < s.platform_events.size(); ++i) {
       const auto& e = s.platform_events[i];
-      ss << "{ ";
       int a = 0;
+      ss << "{ ";
       ss << JEND(a) << JSTR("match_id", s.start_time);
       ss << JEND(a) << JUIN("frame", e.frame);
       ss << JEND(a) << JUIN("platform", e.platform);
