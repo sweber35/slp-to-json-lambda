@@ -9,7 +9,8 @@
 #include <arrow/result.h>
 #include <arrow/io/file.h>
 #include <parquet/exception.h>
-
+#include <arrow/util/config.h>
+std::cout << ARROW_VERSION_STRING << std::endl;
 #include "util.h"
 #include "parser.h"
 #include "analyzer.h"
