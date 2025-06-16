@@ -30,13 +30,19 @@ async function sendFilesToS3( startAt, bucket, files ) {
   }
 }
 
+
 function parseWithSlippc(inputPath, outputPath) {
   const slippcPath = path.join(__dirname, 'slippc');
 
   return new Promise((resolve, reject) => {
     execFile(
         slippcPath,
-        [ '-i', inputPath, '-j', outputPath, '-f', ],
+        [
+          '-i', inputPath,
+          '-j', outputPath,
+          '-a', outputPath + '/analysis.json',
+          '-f',
+        ],
         (error, stdout, stderr) => {
           if (error) {
             console.error('Error running slippc:', error);
@@ -93,11 +99,11 @@ exports.handler = async (event) => {
     const stageIsFod = settings.stage === 2;
 
     const puts = [
-      { key: 'frames', type: 'jsonl' },
-      { key: 'items', type: 'jsonl' },
-      { key: 'attacks', type: 'jsonl' },
+      { key: 'frames',   type: 'jsonl' },
+      { key: 'items',    type: 'jsonl' },
+      { key: 'attacks',  type: 'jsonl' },
       { key: 'punishes', type: 'jsonl' },
-      { key: 'stats', type: 'json' },
+      { key: 'stats',    type: 'json' },
       { key: 'settings', type: 'json' },
     ];
     if (stageIsFod) {
