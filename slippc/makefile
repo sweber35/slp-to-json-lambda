@@ -50,12 +50,14 @@ all: directories base
 
 ARROW_HOME = /usr/local
 base: INCLUDES += -I$(ARROW_HOME)/include
-base: LIBS += -L/usr/local/lib \
+# shared linking
+LIBS += -L$(ARROW_HOME)/lib \
         -larrow \
-        -lparquet \
         -larrow_io \
+        -larrow_dataset \
+        -lparquet \
         -lparquet_arrow \
-        -lz -lzstd -llzma -lbz2 -llz4 -lpthread
+        -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldl
 base: slippc
 
 test: INCLUDES += -I/usr/include/lzma
@@ -73,8 +75,6 @@ ARROW_STATIC_LIBS := \
   $(ARROW_HOME)/lib/libparquet_arrow.a \
   -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldl
 
-static: INCLUDES += -I$(ARROW_HOME)/include
-static: LIBS := -static $(ARROW_STATIC_LIBS)
 static: slippc
 
 statictest: LIBS += -L ./lib-lin -static -llzma
