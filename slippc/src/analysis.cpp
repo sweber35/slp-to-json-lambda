@@ -162,8 +162,8 @@ std::string Analysis::attacksAsJson() {
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
-      ss << "{ ";
-      ss << JLEND(a) << JLSTR("match_id",        game_time);
+      ss << "{";
+      ss << JLSTR("match_id",        game_time);
       ss << JLEND(a) << JLSTR("player_id",       ap[p].tag_code);
       ss << JLEND(a) << JLUIN("attack_id",       i);
       ss << JLEND(a) << JLUIN("move_id",         ap[p].attacks[i].move_id);
@@ -189,7 +189,7 @@ std::string Analysis::punishesAsJson() {
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
-      ss << "{ ";
+      ss << "{";
       ss << JLSTR("match_id",        game_time);
       ss << JLEND(a) << JLSTR("player_id",       ap[p].tag_code);
       ss << JLEND(a) << JLUIN("start_frame",     ap[p].punishes[i].start_frame);
