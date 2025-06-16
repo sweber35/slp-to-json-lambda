@@ -11,7 +11,7 @@
 #define JLINT(k,n) " " << "\"" << (k) << "\": " << int32_t(n)
 #define JLUIN(k,n) " " << "\"" << (k) << "\": " << uint32_t(n)
 #define JLSTR(k,s) " " << "\"" << (k) << "\": \"" << (s) << "\""
-#define JLEND(a) ((a++ == 0) ? " " : ", ")
+#define JLEND(a) ((a++ == 0) ? "" : ",")
 
 namespace slip {
 
@@ -189,7 +189,7 @@ std::string Analysis::punishesAsJson() {
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
-      ss << "{ " << std::endl;
+      ss << "{ ";
       ss << JLEND(a) << JLSTR("match_id",        game_time);
       ss << JLEND(a) << JLSTR("player_id",       ap[p].tag_code);
       ss << JLEND(a) << JLUIN("start_frame",     ap[p].punishes[i].start_frame);
