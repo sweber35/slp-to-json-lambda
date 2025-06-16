@@ -20,9 +20,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build binary in Docker
-        run: |
-          docker build -t slippc-builder -f ./Dockerfile .
+      - name: Build binary using Buildx (with auth)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: slippc-builder
+          load: true
 
       - name: Copy binary out of container
         run: |
