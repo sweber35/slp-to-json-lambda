@@ -65,7 +65,16 @@ test: slippc-tests
 gui: GUI = -DGUI_ENABLED=1
 gui: base
 
-static: LIBS += -L ./lib-lin -static -llzma
+ARROW_STATIC_LIBS := \
+  $(ARROW_HOME)/lib/libarrow.a \
+  $(ARROW_HOME)/lib/libarrow_io.a \
+  $(ARROW_HOME)/lib/libarrow_dataset.a \
+  $(ARROW_HOME)/lib/libparquet.a \
+  $(ARROW_HOME)/lib/libparquet_arrow.a \
+  -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldl
+
+static: INCLUDES += -I$(ARROW_HOME)/include
+static: LIBS := -static $(ARROW_STATIC_LIBS)
 static: slippc
 
 statictest: LIBS += -L ./lib-lin -static -llzma
