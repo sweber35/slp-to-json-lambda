@@ -190,17 +190,17 @@ std::string Analysis::punishesAsJson() {
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].punishes[i].num_moves > 0; ++i) {
       ss << "{ " << std::endl;
-      ss << JLEND(a) << JSTR(2,"match_id",        game_time)                                        << ", ";
-      ss << JLEND(a) << JSTR(2,"player_id",       ap[p].tag_code)                                   << ", ";
-      ss << JLEND(a) << JUIN(2,"start_frame",     ap[p].punishes[i].start_frame)                    << ", ";
-      ss << JLEND(a) << JUIN(2,"end_frame",       ap[p].punishes[i].end_frame)                      << ", ";
-      ss << JLEND(a) << JFLT(2,"start_pct",       ap[p].punishes[i].start_pct)                      << ", ";
-      ss << JLEND(a) << JFLT(2,"end_pct",         ap[p].punishes[i].end_pct)                        << ", ";
-      ss << JLEND(a) << JUIN(2,"stocks",          ap[p].punishes[i].stocks)                         << ", ";
-      ss << JLEND(a) << JUIN(2,"num_moves",       ap[p].punishes[i].num_moves)                      << ", ";
-      ss << JLEND(a) << JUIN(2,"last_move_id",    ap[p].punishes[i].last_move_id)                   << ", ";
-      ss << JLEND(a) << JSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id])  << ", ";
-      ss << JLEND(a) << JSTR(2,"kill_dir",        Dir::name[ap[p].punishes[i].kill_dir])            << ", ";
+      ss << JLEND(a) << JLSTR(2,"match_id",        game_time);
+      ss << JLEND(a) << JLSTR(2,"player_id",       ap[p].tag_code);
+      ss << JLEND(a) << JLUIN(2,"start_frame",     ap[p].punishes[i].start_frame);
+      ss << JLEND(a) << JLUIN(2,"end_frame",       ap[p].punishes[i].end_frame);
+      ss << JLEND(a) << JLFLT(2,"start_pct",       ap[p].punishes[i].start_pct);
+      ss << JLEND(a) << JLFLT(2,"end_pct",         ap[p].punishes[i].end_pct);
+      ss << JLEND(a) << JLUIN(2,"stocks",          ap[p].punishes[i].stocks);
+      ss << JLEND(a) << JLUIN(2,"num_moves",       ap[p].punishes[i].num_moves);
+      ss << JLEND(a) << JLUIN(2,"last_move_id",    ap[p].punishes[i].last_move_id);
+      ss << JLEND(a) << JLSTR(2,"last_move_name",  Move::shortname[ap[p].punishes[i].last_move_id]);
+      ss << JLEND(a) << JLSTR(2,"kill_dir",        Dir::name[ap[p].punishes[i].kill_dir]);
       //     ss << JSTR(2,"opening",         "UNUSED");
       ss << " }\n";
     }
