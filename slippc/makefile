@@ -50,7 +50,12 @@ all: directories base
 
 ARROW_HOME = /usr/local
 base: INCLUDES += -I$(ARROW_HOME)/include
-base: LIBS += -L$(ARROW_HOME)/lib -larrow -lparquet -llzma
+base: LIBS += -L/usr/local/lib \
+        -larrow \
+        -lparquet \
+        -larrow_io \
+        -lparquet_arrow \
+        -lz -lzstd -llzma -lbz2 -llz4 -lpthread
 base: slippc
 
 test: INCLUDES += -I/usr/include/lzma
