@@ -384,7 +384,7 @@ void write_parquet_test() {
   std::shared_ptr<arrow::io::FileOutputStream> outfile;
   PARQUET_ASSIGN_OR_THROW(
       outfile,
-      arrow::io::FileOutputStream::Open("example.parquet")
+      arrow::io::FileOutputStream::Open("/tmp/example.parquet")
   );
 
   PARQUET_THROW_NOT_OK(parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile, 1024));
