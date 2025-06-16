@@ -374,6 +374,6 @@ void write_parquet_test() {
 }
 
 int main(int argc, char** argv) {
-  slip::write_parquet_test()
+  slip::write_parquet_test();
   return slip::run(argc,argv);
 }
