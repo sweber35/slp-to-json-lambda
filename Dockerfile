@@ -4,8 +4,8 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023
 RUN yum install -y \
   gcc gcc-c++ make cmake ninja-build git \
   glibc-static libstdc++-static \
-  xz-devel zlib-devel bzip2-devel zstd-devel \
-  lz4-devel boost-devel
+  xz-devel zlib-devel bzip2-devel \
+  lz4-devel boost-devel libzstd
 
 # Build and install Apache Arrow C++ with Parquet support
 RUN git clone --depth=1 --branch apache-arrow-14.0.1 https://github.com/apache/arrow.git && \
