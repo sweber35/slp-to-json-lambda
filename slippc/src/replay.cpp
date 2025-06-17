@@ -300,7 +300,8 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
       self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
     });
   } catch (const parquet::ParquetException& e) {
-    std::cout << "[ParquetException] " << e.what() << std::endl;
+    std::cerr << "[ParquetException] " << e.what() << std::endl;
+    logError("Error in Table::Make");
     return arrow::Status::ExecutionError("ParquetException: ", e.what());
   }
 
