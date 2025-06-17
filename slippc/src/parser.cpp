@@ -796,7 +796,7 @@ namespace slip {
     return _replay.playerFramesAsJson();
   }
 
-  std::string Parser::playerFramesAsParquet() {
+  void Parser::playerFramesAsParquet() {
     return _replay.playerFramesAsParquet();
   }
 
