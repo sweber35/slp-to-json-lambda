@@ -195,6 +195,7 @@ struct SlippiReplay {
   void cleanup();
 //   std::string replayAsJson(bool delta);
   std::string playerFramesAsJson();
+  std::string playerFramesAsParquet();
   std::string itemFramesAsJson();
   std::string fodPlatformChangesAsJson();
   std::string settingsAsJson();

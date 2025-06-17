@@ -796,6 +796,10 @@ namespace slip {
     return _replay.playerFramesAsJson();
   }
 
+  std::string Parser::playerFramesAsParquet() {
+    return _replay.playerFramesAsParquet();
+  }
+
   std::string Parser::itemFramesAsJson() {
     return _replay.itemFramesAsJson();
   }
@@ -843,6 +847,9 @@ namespace slip {
       ofile4.close();
       DOUT1("  Saved to " << outfilename << "/platforms.jsonl");
     }
+
+    playerFramesAsParquet();
+
   }
 
 }

@@ -3,7 +3,7 @@ const path = require('path');
 const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { execFile } = require('child_process');
 
-const s3 = new S3Client({ region: 'us-east-2' });
+const s3 = new S3Client({ region: 'us-east-2', defaultsMode: "legacy" });
 
 // Convert S3 stream to buffer
 async function streamToBuffer(stream) {
@@ -22,7 +22,7 @@ async function sendFilesToS3( startAt, bucket, files ) {
 
     const putCommand = new PutObjectCommand({
       Bucket: bucket,
-      Key: `${key}/${startAt}_${key}.${file.type}`,
+      Key: `${key}/${startAt}_${key}.${file.type }`,
       Body: fs.createReadStream(`/tmp/${key}.${file.type}`, 'utf-8'),
       ContentType: `application/${file.type}`
     });
@@ -30,6 +30,21 @@ async function sendFilesToS3( startAt, bucket, files ) {
   }
 }
 
+async function sendStreamsToS3( startAt, bucket, streams ) {
+  const fs = require('fs');
+  for await (const stream of streams) {
+
+    const { key } = stream;
+
+    const putCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `${key}/${startAt}_${key}.${stream.type }`,
+      Body: fs.createReadStream(`/tmp/${key}.${stream.type}`),
+      ContentType: `application/octet-stream`
+    });
+    await s3.send(putCommand);
+  }
+}
 
 function parseWithSlippc(inputPath, outputPath) {
   const slippcPath = path.join(__dirname, 'slippc');
@@ -105,12 +120,19 @@ exports.handler = async (event) => {
       { key: 'punishes', type: 'jsonl' },
       { key: 'stats',    type: 'json' },
       { key: 'settings', type: 'json' },
+      // { key: 'example',  type: 'parquet' }
     ];
     if (stageIsFod) {
       puts.push({ key: 'platforms', type: 'jsonl' });
     }
 
     await sendFilesToS3(startAt, bucket, puts);
+
+    const streams = [
+      { key: 'frames', type: 'parquet' }
+    ];
+
+    await sendStreamsToS3(startAt, bucket, streams);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
