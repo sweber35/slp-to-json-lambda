@@ -55,6 +55,10 @@ std::string SlippiReplay::playerFramesAsParquet() {
 
   SlippiReplay s = (*this);
 
+  uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
+  uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
+  uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
+
   using arrow::FloatBuilder;
   using arrow::UInt8Builder;
   using arrow::UInt16Builder;
