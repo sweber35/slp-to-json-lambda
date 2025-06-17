@@ -246,7 +246,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   pos_x_post_b.Finish(&pos_x_post_a);
   pos_y_post_b.Finish(&pos_y_post_a);
   joy_x_b.Finish(&joy_x_a);
-  joy_y_b.Finish(&job_y_a);
+  joy_y_b.Finish(&joy_y_a);
   c_x_b.Finish(&c_x_a);
   c_y_b.Finish(&c_y_a);
   trigger_b.Finish(&trigger_a);
