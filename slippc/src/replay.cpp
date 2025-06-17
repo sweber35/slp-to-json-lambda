@@ -298,7 +298,7 @@ std::string SlippiReplay::playerFramesAsParquet() {
   std::shared_ptr<parquet::WriterProperties> writer_properties =
     parquet::WriterProperties::Builder()
       .compression(parquet::Compression::SNAPPY)
-      .build();
+      ->build();
 
   PARQUET_THROW_NOT_OK(
     parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
