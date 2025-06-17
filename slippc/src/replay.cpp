@@ -292,20 +292,20 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   });
 
   try {
-    std::cerr << "Opening Parquet output stream...\n";
+    std::cerr << "Opening Parquet output stream...\n"  << std::flush;;
     std::shared_ptr<arrow::io::FileOutputStream> outfile;
     PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/frames.parquet"));
 
     std::shared_ptr<arrow::io::OutputStream> outstream =
       std::static_pointer_cast<arrow::io::OutputStream>(outfile);
 
-    std::cerr << "Setting writer properties...\n";
+    std::cerr << "Setting writer properties...\n"  << std::flush;;
     std::shared_ptr<parquet::WriterProperties> writer_properties =
       parquet::WriterProperties::Builder()
         .compression(parquet::Compression::SNAPPY)
         ->build();
 
-    std::cerr << "Calling WriteTable...\n";
+    std::cerr << "Calling WriteTable...\n"  << std::flush;;
     PARQUET_THROW_NOT_OK(
       parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
     );
