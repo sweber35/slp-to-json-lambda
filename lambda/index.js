@@ -59,13 +59,21 @@ function parseWithSlippc(inputPath, outputPath) {
           '-f',
         ],
         (error, stdout, stderr) => {
-          console.log("slippc stdout:", stdout);
-          console.error("slippc stderr:", stderr);
-
           if (error) {
-            console.error("Error running slippc:", error);
-            // optionally inspect `error.signal === 'SIGSEGV'`
+            console.error('Error running slippc:', error);
+            console.error('stderr:', stderr);
+            return reject(new Error(`slippc failed: ${error.message}`));
           }
+
+          if (stdout) console.log('slippc stdout:', stdout);
+          if (stderr) console.log('slippc stderr:', stderr);
+
+          resolve({
+            stdout,  // usually empty if slippc only writes to files
+            stderr,
+            outputJsonPath: outputPath + 'output.json',
+            analysisJsonPath: outputPath + 'analysis.json'
+          });
         }
     );
   });
