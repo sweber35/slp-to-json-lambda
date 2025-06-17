@@ -233,71 +233,71 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     }
   }
 
-  std::shared_ptr<arrow::Array> match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a;
-  std::shared_ptr<arrow::Array> pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a;
-  std::shared_ptr<arrow::Array> c_x_a, c_y_a, trigger_a, buttons_a, phys_l_a, phys_r_a, shield_a;
-  std::shared_ptr<arrow::Array> hit_with_a, combo_a, hurt_by_a, percent_pre_a, percent_post_a;
-  std::shared_ptr<arrow::Array> action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a;
-  std::shared_ptr<arrow::Array> missile_type_a, turnip_face_a, is_launched_a, charged_power_a;
-  std::shared_ptr<arrow::Array> hitstun_a, airborne_a, ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a;
-  std::shared_ptr<arrow::Array> self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a;
+//   std::shared_ptr<arrow::Array> match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a;
+//   std::shared_ptr<arrow::Array> pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a;
+//   std::shared_ptr<arrow::Array> c_x_a, c_y_a, trigger_a, buttons_a, phys_l_a, phys_r_a, shield_a;
+//   std::shared_ptr<arrow::Array> hit_with_a, combo_a, hurt_by_a, percent_pre_a, percent_post_a;
+//   std::shared_ptr<arrow::Array> action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a;
+//   std::shared_ptr<arrow::Array> missile_type_a, turnip_face_a, is_launched_a, charged_power_a;
+//   std::shared_ptr<arrow::Array> hitstun_a, airborne_a, ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a;
+//   std::shared_ptr<arrow::Array> self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a;
 
-  match_id_b.Finish(&match_id_a);
-  player_id_b.Finish(&player_id_a);
-  char_id_b.Finish(&char_id_a);
-  follower_b.Finish(&follower_a);
-  seed_b.Finish(&seed_a);
-  alive_b.Finish(&alive_a);
-  anim_index_b.Finish(&anim_index_a);
-  pos_x_pre_b.Finish(&pos_x_pre_a);
-  pos_y_pre_b.Finish(&pos_y_pre_a);
-  pos_x_post_b.Finish(&pos_x_post_a);
-  pos_y_post_b.Finish(&pos_y_post_a);
-  joy_x_b.Finish(&joy_x_a);
-  joy_y_b.Finish(&joy_y_a);
-  c_x_b.Finish(&c_x_a);
-  c_y_b.Finish(&c_y_a);
-  trigger_b.Finish(&trigger_a);
-  buttons_b.Finish(&buttons_a);
-  phys_l_b.Finish(&phys_l_a);
-  phys_r_b.Finish(&phys_r_a);
-  shield_b.Finish(&shield_a);
-  hit_with_b.Finish(&hit_with_a);
-  combo_b.Finish(&combo_a);
-  hurt_by_b.Finish(&hurt_by_a);
-  percent_pre_b.Finish(&percent_pre_a);
-  percent_post_b.Finish(&percent_post_a);
-  action_pre_b.Finish(&action_pre_a);
-  action_post_b.Finish(&action_post_a);
-  action_fc_b.Finish(&action_fc_a);
-  face_dir_pre_b.Finish(&face_dir_pre_a);
-  face_dir_post_b.Finish(&face_dir_post_a);
-  missile_type_b.Finish(&missile_type_a);
-  turnip_face_b.Finish(&turnip_face_a);
-  is_launched_b.Finish(&is_launched_a);
-  charged_power_b.Finish(&charged_power_a);
-  hitstun_b.Finish(&hitstun_a);
-  airborne_b.Finish(&airborne_a);
-  ground_id_b.Finish(&ground_id_a);
-  jumps_b.Finish(&jumps_a);
-  l_cancel_b.Finish(&l_cancel_a);
-  hurtbox_b.Finish(&hurtbox_a);
-  hitlag_b.Finish(&hitlag_a);
-  self_air_x_b.Finish(&self_air_x_a);
-  self_air_y_b.Finish(&self_air_y_a);
-  attack_x_b.Finish(&attack_x_a);
-  attack_y_b.Finish(&attack_y_a);
-  self_grd_x_b.Finish(&self_grd_x_a);
+//   match_id_b.Finish(&match_id_a);
+//   player_id_b.Finish(&player_id_a);
+//   char_id_b.Finish(&char_id_a);
+//   follower_b.Finish(&follower_a);
+//   seed_b.Finish(&seed_a);
+//   alive_b.Finish(&alive_a);
+//   anim_index_b.Finish(&anim_index_a);
+//   pos_x_pre_b.Finish(&pos_x_pre_a);
+//   pos_y_pre_b.Finish(&pos_y_pre_a);
+//   pos_x_post_b.Finish(&pos_x_post_a);
+//   pos_y_post_b.Finish(&pos_y_post_a);
+//   joy_x_b.Finish(&joy_x_a);
+//   joy_y_b.Finish(&joy_y_a);
+//   c_x_b.Finish(&c_x_a);
+//   c_y_b.Finish(&c_y_a);
+//   trigger_b.Finish(&trigger_a);
+//   buttons_b.Finish(&buttons_a);
+//   phys_l_b.Finish(&phys_l_a);
+//   phys_r_b.Finish(&phys_r_a);
+//   shield_b.Finish(&shield_a);
+//   hit_with_b.Finish(&hit_with_a);
+//   combo_b.Finish(&combo_a);
+//   hurt_by_b.Finish(&hurt_by_a);
+//   percent_pre_b.Finish(&percent_pre_a);
+//   percent_post_b.Finish(&percent_post_a);
+//   action_pre_b.Finish(&action_pre_a);
+//   action_post_b.Finish(&action_post_a);
+//   action_fc_b.Finish(&action_fc_a);
+//   face_dir_pre_b.Finish(&face_dir_pre_a);
+//   face_dir_post_b.Finish(&face_dir_post_a);
+//   missile_type_b.Finish(&missile_type_a);
+//   turnip_face_b.Finish(&turnip_face_a);
+//   is_launched_b.Finish(&is_launched_a);
+//   charged_power_b.Finish(&charged_power_a);
+//   hitstun_b.Finish(&hitstun_a);
+//   airborne_b.Finish(&airborne_a);
+//   ground_id_b.Finish(&ground_id_a);
+//   jumps_b.Finish(&jumps_a);
+//   l_cancel_b.Finish(&l_cancel_a);
+//   hurtbox_b.Finish(&hurtbox_a);
+//   hitlag_b.Finish(&hitlag_a);
+//   self_air_x_b.Finish(&self_air_x_a);
+//   self_air_y_b.Finish(&self_air_y_a);
+//   attack_x_b.Finish(&attack_x_a);
+//   attack_y_b.Finish(&attack_y_a);
+//   self_grd_x_b.Finish(&self_grd_x_a);
 
-  std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
-    match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
-    pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
-    buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
-    percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
-    missile_type_a, turnip_face_a, is_launched_a, charged_power_a, hitstun_a, airborne_a,
-    ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a,
-    self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
-  });
+//   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
+//     match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
+//     pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
+//     buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
+//     percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
+//     missile_type_a, turnip_face_a, is_launched_a, charged_power_a, hitstun_a, airborne_a,
+//     ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a,
+//     self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
+//   });
 
   try {
 //     logError("Opening Parquet output stream...");
