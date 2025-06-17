@@ -94,7 +94,7 @@ std::string SlippiReplay::playerFramesAsParquet() {
       arrow::field("turnip_face", arrow::uint8()),
       arrow::field("is_launched", arrow::uint8()),
       arrow::field("charged_power", arrow::uint8()),
-      arrow::field("hit_stun", arrow::float32()),
+      arrow::field("hitstun", arrow::float32()),
       arrow::field("airborne", arrow::boolean()),
       arrow::field("ground_id", arrow::uint8()),
       arrow::field("jumps", arrow::uint8()),
@@ -119,8 +119,8 @@ std::string SlippiReplay::playerFramesAsParquet() {
   UInt32Builder seed_b, anim_index_b;
   FloatBuilder pos_x_pre_b, pos_y_pre_b, joy_x_b, joy_y_b, c_x_b, c_y_b;
   FloatBuilder trigger_b, pos_x_post_b, pos_y_post_b, phys_l_b, phys_r_b;
-  FloatBuilder percent_pre_b, percent_post_b, face_dir_post_b, shield_b;
-  FloatBuilder action_fc_b, hit_stun_b, self_air_x_b, self_air_y_b;
+  FloatBuilder percent_pre_b, percent_post_b, face_dir_pre_b, face_dir_post_b, shield_b;
+  FloatBuilder action_fc_b, hitstun_b, self_air_x_b, self_air_y_b;
   FloatBuilder attack_x_b, attack_y_b, self_grd_x_b, hitlag_b;
   BooleanBuilder follower_b, alive_b, airborne_b;
   StringBuilder match_id_b, player_id_b;
