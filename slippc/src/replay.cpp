@@ -289,15 +289,15 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   attack_y_b.Finish(&attack_y_a);
   self_grd_x_b.Finish(&self_grd_x_a);
 
-  std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
-    match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
-    pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
-    buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
-    percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
-    missile_type_a, turnip_face_a, is_launched_a, charged_power_a, hitstun_a, airborne_a,
-    ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a,
-    self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
-  });
+//   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
+//     match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
+//     pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
+//     buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
+//     percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
+//     missile_type_a, turnip_face_a, is_launched_a, charged_power_a, hitstun_a, airborne_a,
+//     ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a,
+//     self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
+//   });
 
 //   try {
 //     logError("Opening Parquet output stream...");
