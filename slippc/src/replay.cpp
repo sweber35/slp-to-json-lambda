@@ -136,158 +136,158 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   FloatBuilder attack_x_b, attack_y_b, self_grd_x_b, hitlag_b;
   BooleanBuilder follower_b, alive_b, airborne_b;
   StringBuilder match_id_b, player_id_b;
-//
-//   for(unsigned p = 0; p < 8; ++p) {
-//     unsigned pp = (p % 4);
-//
-//     if (s.player[p].player_type != 3) {
-//       for(unsigned f = 0; f < s.frame_count; ++f) {
-//
-//         match_id_b.Append(s.start_time);
-//         player_id_b.Append(s.player[pp].tag_code);
-//         follower_b.Append(s.player[p].frame[f].follower);
-//         seed_b.Append(s.player[p].frame[f].seed);
-//         action_pre_b.Append(s.player[p].frame[f].action_pre);
-//         pos_x_pre_b.Append(s.player[p].frame[f].pos_x_pre);
-//         pos_y_pre_b.Append(s.player[p].frame[f].pos_y_pre);
-//         face_dir_pre_b.Append(s.player[p].frame[f].face_dir_pre);
-//         joy_x_b.Append(s.player[p].frame[f].joy_x);
-//         joy_y_b.Append(s.player[p].frame[f].joy_y);
-//         c_x_b.Append(s.player[p].frame[f].c_x);
-//         c_y_b.Append(s.player[p].frame[f].c_y);
-//         trigger_b.Append(s.player[p].frame[f].trigger);
-//         buttons_b.Append(s.player[p].frame[f].buttons);
-//         phys_l_b.Append(s.player[p].frame[f].phys_l);
-//         phys_r_b.Append(s.player[p].frame[f].phys_r);
-//         ucf_x_b.Append(s.player[p].frame[f].ucf_x);
-//         percent_pre_b.Append(s.player[p].frame[f].percent_pre);
-//         char_id_b.Append(s.player[p].frame[f].char_id);
-//         action_post_b.Append(s.player[p].frame[f].action_post);
-//         pos_x_post_b.Append(s.player[p].frame[f].pos_x_post);
-//         pos_y_post_b.Append(s.player[p].frame[f].pos_y_post);
-//         face_dir_post_b.Append(s.player[p].frame[f].face_dir_post);
-//         percent_post_b.Append(s.player[p].frame[f].percent_post);
-//         shield_b.Append(s.player[p].frame[f].shield);
-//         hit_with_b.Append(s.player[p].frame[f].hit_with);
-//         combo_b.Append(s.player[p].frame[f].combo);
-//         hurt_by_b.Append(s.player[p].frame[f].hurt_by);
-//         stocks_b.Append(s.player[p].frame[f].stocks);
-//         action_fc_b.Append(s.player[p].frame[f].action_fc);
-//
-//         if(MIN_VERSION(2,0,0)) {
-//           missile_type_b.Append(s.player[p].frame[f].flags_1);
-//           turnip_face_b.Append(s.player[p].frame[f].flags_2);
-//           is_launched_b.Append(s.player[p].frame[f].flags_3);
-//           charged_power_b.Append(s.player[p].frame[f].flags_4);
-//           hitstun_b.Append(s.player[p].frame[f].hitstun);
-//           airborne_b.Append(s.player[p].frame[f].airborne);
-//           ground_id_b.Append(s.player[p].frame[f].ground_id);
-//           jumps_b.Append(s.player[p].frame[f].jumps);
-//           l_cancel_b.Append(s.player[p].frame[f].l_cancel);
-//           alive_b.Append(s.player[p].frame[f].alive);
-//         } else {
-//           missile_type_b.Append(0);
-//           turnip_face_b.Append(0);
-//           is_launched_b.Append(0);
-//           charged_power_b.Append(0);
-//           hitstun_b.Append(0);
-//           airborne_b.Append(false);
-//           ground_id_b.Append(0);
-//           jumps_b.Append(0);
-//           l_cancel_b.Append(0);
-//           alive_b.Append(false);
-//         }
-//
-//         if(MIN_VERSION(2,1,0)) {
-//           hurtbox_b.Append(s.player[p].frame[f].hurtbox);
-//         } else {
-//           hurtbox_b.Append(0);
-//         }
-//
-//         if(MIN_VERSION(3,5,0)) {
-//           self_air_x_b.Append(s.player[p].frame[f].self_air_x);
-//           self_air_y_b.Append(s.player[p].frame[f].self_air_y);
-//           attack_x_b.Append(s.player[p].frame[f].attack_x);
-//           attack_y_b.Append(s.player[p].frame[f].attack_y);
-//           self_grd_x_b.Append(s.player[p].frame[f].self_grd_x);
-//         } else {
-//           self_air_x_b.Append(0);
-//           self_air_y_b.Append(0);
-//           attack_x_b.Append(0);
-//           attack_y_b.Append(0);
-//           self_grd_x_b.Append(0);
-//         }
-//
-//         if(MIN_VERSION(3,8,0)) {
-//           hitlag_b.Append(s.player[p].frame[f].hitlag);
-//         } else {
-//           hitlag_b.Append(0);
-//         }
-//
-//         if(MIN_VERSION(3,11,0)) {
-//           anim_index_b.Append(s.player[p].frame[f].anim_index);
-//         } else {
-//           anim_index_b.Append(0);
-//         }
-//       }
-//     }
-//   }
 
-//   std::shared_ptr<arrow::Array> match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a;
-//   std::shared_ptr<arrow::Array> pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a;
-//   std::shared_ptr<arrow::Array> c_x_a, c_y_a, trigger_a, buttons_a, phys_l_a, phys_r_a, shield_a;
-//   std::shared_ptr<arrow::Array> hit_with_a, combo_a, hurt_by_a, percent_pre_a, percent_post_a;
-//   std::shared_ptr<arrow::Array> action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a;
-//   std::shared_ptr<arrow::Array> missile_type_a, turnip_face_a, is_launched_a, charged_power_a;
-//   std::shared_ptr<arrow::Array> hitstun_a, airborne_a, ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a;
-//   std::shared_ptr<arrow::Array> self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a;
+  for(unsigned p = 0; p < 8; ++p) {
+    unsigned pp = (p % 4);
 
-//   match_id_b.Finish(&match_id_a);
-//   player_id_b.Finish(&player_id_a);
-//   char_id_b.Finish(&char_id_a);
-//   follower_b.Finish(&follower_a);
-//   seed_b.Finish(&seed_a);
-//   alive_b.Finish(&alive_a);
-//   anim_index_b.Finish(&anim_index_a);
-//   pos_x_pre_b.Finish(&pos_x_pre_a);
-//   pos_y_pre_b.Finish(&pos_y_pre_a);
-//   pos_x_post_b.Finish(&pos_x_post_a);
-//   pos_y_post_b.Finish(&pos_y_post_a);
-//   joy_x_b.Finish(&joy_x_a);
-//   joy_y_b.Finish(&joy_y_a);
-//   c_x_b.Finish(&c_x_a);
-//   c_y_b.Finish(&c_y_a);
-//   trigger_b.Finish(&trigger_a);
-//   buttons_b.Finish(&buttons_a);
-//   phys_l_b.Finish(&phys_l_a);
-//   phys_r_b.Finish(&phys_r_a);
-//   shield_b.Finish(&shield_a);
-//   hit_with_b.Finish(&hit_with_a);
-//   combo_b.Finish(&combo_a);
-//   hurt_by_b.Finish(&hurt_by_a);
-//   percent_pre_b.Finish(&percent_pre_a);
-//   percent_post_b.Finish(&percent_post_a);
-//   action_pre_b.Finish(&action_pre_a);
-//   action_post_b.Finish(&action_post_a);
-//   action_fc_b.Finish(&action_fc_a);
-//   face_dir_pre_b.Finish(&face_dir_pre_a);
-//   face_dir_post_b.Finish(&face_dir_post_a);
-//   missile_type_b.Finish(&missile_type_a);
-//   turnip_face_b.Finish(&turnip_face_a);
-//   is_launched_b.Finish(&is_launched_a);
-//   charged_power_b.Finish(&charged_power_a);
-//   hitstun_b.Finish(&hitstun_a);
-//   airborne_b.Finish(&airborne_a);
-//   ground_id_b.Finish(&ground_id_a);
-//   jumps_b.Finish(&jumps_a);
-//   l_cancel_b.Finish(&l_cancel_a);
-//   hurtbox_b.Finish(&hurtbox_a);
-//   hitlag_b.Finish(&hitlag_a);
-//   self_air_x_b.Finish(&self_air_x_a);
-//   self_air_y_b.Finish(&self_air_y_a);
-//   attack_x_b.Finish(&attack_x_a);
-//   attack_y_b.Finish(&attack_y_a);
-//   self_grd_x_b.Finish(&self_grd_x_a);
+    if (s.player[p].player_type != 3) {
+      for(unsigned f = 0; f < s.frame_count; ++f) {
+
+        match_id_b.Append(s.start_time);
+        player_id_b.Append(s.player[pp].tag_code);
+        follower_b.Append(s.player[p].frame[f].follower);
+        seed_b.Append(s.player[p].frame[f].seed);
+        action_pre_b.Append(s.player[p].frame[f].action_pre);
+        pos_x_pre_b.Append(s.player[p].frame[f].pos_x_pre);
+        pos_y_pre_b.Append(s.player[p].frame[f].pos_y_pre);
+        face_dir_pre_b.Append(s.player[p].frame[f].face_dir_pre);
+        joy_x_b.Append(s.player[p].frame[f].joy_x);
+        joy_y_b.Append(s.player[p].frame[f].joy_y);
+        c_x_b.Append(s.player[p].frame[f].c_x);
+        c_y_b.Append(s.player[p].frame[f].c_y);
+        trigger_b.Append(s.player[p].frame[f].trigger);
+        buttons_b.Append(s.player[p].frame[f].buttons);
+        phys_l_b.Append(s.player[p].frame[f].phys_l);
+        phys_r_b.Append(s.player[p].frame[f].phys_r);
+        ucf_x_b.Append(s.player[p].frame[f].ucf_x);
+        percent_pre_b.Append(s.player[p].frame[f].percent_pre);
+        char_id_b.Append(s.player[p].frame[f].char_id);
+        action_post_b.Append(s.player[p].frame[f].action_post);
+        pos_x_post_b.Append(s.player[p].frame[f].pos_x_post);
+        pos_y_post_b.Append(s.player[p].frame[f].pos_y_post);
+        face_dir_post_b.Append(s.player[p].frame[f].face_dir_post);
+        percent_post_b.Append(s.player[p].frame[f].percent_post);
+        shield_b.Append(s.player[p].frame[f].shield);
+        hit_with_b.Append(s.player[p].frame[f].hit_with);
+        combo_b.Append(s.player[p].frame[f].combo);
+        hurt_by_b.Append(s.player[p].frame[f].hurt_by);
+        stocks_b.Append(s.player[p].frame[f].stocks);
+        action_fc_b.Append(s.player[p].frame[f].action_fc);
+
+        if(MIN_VERSION(2,0,0)) {
+          missile_type_b.Append(s.player[p].frame[f].flags_1);
+          turnip_face_b.Append(s.player[p].frame[f].flags_2);
+          is_launched_b.Append(s.player[p].frame[f].flags_3);
+          charged_power_b.Append(s.player[p].frame[f].flags_4);
+          hitstun_b.Append(s.player[p].frame[f].hitstun);
+          airborne_b.Append(s.player[p].frame[f].airborne);
+          ground_id_b.Append(s.player[p].frame[f].ground_id);
+          jumps_b.Append(s.player[p].frame[f].jumps);
+          l_cancel_b.Append(s.player[p].frame[f].l_cancel);
+          alive_b.Append(s.player[p].frame[f].alive);
+        } else {
+          missile_type_b.Append(0);
+          turnip_face_b.Append(0);
+          is_launched_b.Append(0);
+          charged_power_b.Append(0);
+          hitstun_b.Append(0);
+          airborne_b.Append(false);
+          ground_id_b.Append(0);
+          jumps_b.Append(0);
+          l_cancel_b.Append(0);
+          alive_b.Append(false);
+        }
+
+        if(MIN_VERSION(2,1,0)) {
+          hurtbox_b.Append(s.player[p].frame[f].hurtbox);
+        } else {
+          hurtbox_b.Append(0);
+        }
+
+        if(MIN_VERSION(3,5,0)) {
+          self_air_x_b.Append(s.player[p].frame[f].self_air_x);
+          self_air_y_b.Append(s.player[p].frame[f].self_air_y);
+          attack_x_b.Append(s.player[p].frame[f].attack_x);
+          attack_y_b.Append(s.player[p].frame[f].attack_y);
+          self_grd_x_b.Append(s.player[p].frame[f].self_grd_x);
+        } else {
+          self_air_x_b.Append(0);
+          self_air_y_b.Append(0);
+          attack_x_b.Append(0);
+          attack_y_b.Append(0);
+          self_grd_x_b.Append(0);
+        }
+
+        if(MIN_VERSION(3,8,0)) {
+          hitlag_b.Append(s.player[p].frame[f].hitlag);
+        } else {
+          hitlag_b.Append(0);
+        }
+
+        if(MIN_VERSION(3,11,0)) {
+          anim_index_b.Append(s.player[p].frame[f].anim_index);
+        } else {
+          anim_index_b.Append(0);
+        }
+      }
+    }
+  }
+
+  std::shared_ptr<arrow::Array> match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a;
+  std::shared_ptr<arrow::Array> pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a;
+  std::shared_ptr<arrow::Array> c_x_a, c_y_a, trigger_a, buttons_a, phys_l_a, phys_r_a, shield_a;
+  std::shared_ptr<arrow::Array> hit_with_a, combo_a, hurt_by_a, percent_pre_a, percent_post_a;
+  std::shared_ptr<arrow::Array> action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a;
+  std::shared_ptr<arrow::Array> missile_type_a, turnip_face_a, is_launched_a, charged_power_a;
+  std::shared_ptr<arrow::Array> hitstun_a, airborne_a, ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a;
+  std::shared_ptr<arrow::Array> self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a;
+
+  match_id_b.Finish(&match_id_a);
+  player_id_b.Finish(&player_id_a);
+  char_id_b.Finish(&char_id_a);
+  follower_b.Finish(&follower_a);
+  seed_b.Finish(&seed_a);
+  alive_b.Finish(&alive_a);
+  anim_index_b.Finish(&anim_index_a);
+  pos_x_pre_b.Finish(&pos_x_pre_a);
+  pos_y_pre_b.Finish(&pos_y_pre_a);
+  pos_x_post_b.Finish(&pos_x_post_a);
+  pos_y_post_b.Finish(&pos_y_post_a);
+  joy_x_b.Finish(&joy_x_a);
+  joy_y_b.Finish(&joy_y_a);
+  c_x_b.Finish(&c_x_a);
+  c_y_b.Finish(&c_y_a);
+  trigger_b.Finish(&trigger_a);
+  buttons_b.Finish(&buttons_a);
+  phys_l_b.Finish(&phys_l_a);
+  phys_r_b.Finish(&phys_r_a);
+  shield_b.Finish(&shield_a);
+  hit_with_b.Finish(&hit_with_a);
+  combo_b.Finish(&combo_a);
+  hurt_by_b.Finish(&hurt_by_a);
+  percent_pre_b.Finish(&percent_pre_a);
+  percent_post_b.Finish(&percent_post_a);
+  action_pre_b.Finish(&action_pre_a);
+  action_post_b.Finish(&action_post_a);
+  action_fc_b.Finish(&action_fc_a);
+  face_dir_pre_b.Finish(&face_dir_pre_a);
+  face_dir_post_b.Finish(&face_dir_post_a);
+  missile_type_b.Finish(&missile_type_a);
+  turnip_face_b.Finish(&turnip_face_a);
+  is_launched_b.Finish(&is_launched_a);
+  charged_power_b.Finish(&charged_power_a);
+  hitstun_b.Finish(&hitstun_a);
+  airborne_b.Finish(&airborne_a);
+  ground_id_b.Finish(&ground_id_a);
+  jumps_b.Finish(&jumps_a);
+  l_cancel_b.Finish(&l_cancel_a);
+  hurtbox_b.Finish(&hurtbox_a);
+  hitlag_b.Finish(&hitlag_a);
+  self_air_x_b.Finish(&self_air_x_a);
+  self_air_y_b.Finish(&self_air_y_a);
+  attack_x_b.Finish(&attack_x_a);
+  attack_y_b.Finish(&attack_y_a);
+  self_grd_x_b.Finish(&self_grd_x_a);
 
 //   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
 //     match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
