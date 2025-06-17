@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <arrow/api.h>
+#include <arrow/io/file.h>
 #include <parquet/arrow/writer.h>
 #include <vector>
 #include <memory>
