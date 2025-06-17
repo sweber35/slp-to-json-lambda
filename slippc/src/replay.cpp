@@ -67,7 +67,6 @@ std::string SlippiReplay::playerFramesAsParquet() {
   using arrow::BooleanBuilder;
   using arrow::StringBuilder;
 
-  // Example: Build schema fields for selected fields
   std::shared_ptr<arrow::Schema> schema = arrow::schema({
       arrow::field("match_id", arrow::utf8()),
       arrow::field("player_id", arrow::utf8()),
@@ -115,7 +114,6 @@ std::string SlippiReplay::playerFramesAsParquet() {
       arrow::field("hitlag", arrow::float32()),
       arrow::field("anim_index", arrow::uint32()),
   });
-
 
   Int32Builder frame_b;
   UInt8Builder ucf_x_b, char_id_b, hit_with_b, combo_b, hurt_by_b, stocks_b;
@@ -307,6 +305,8 @@ std::string SlippiReplay::playerFramesAsParquet() {
   PARQUET_THROW_NOT_OK(
     parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
   );
+
+  return arrow::Status::OK();
 }
 
 std::string SlippiReplay::playerFramesAsJson() {
