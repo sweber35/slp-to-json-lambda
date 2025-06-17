@@ -104,13 +104,13 @@ exports.handler = async (event) => {
     await parseWithSlippc(tempPath, '/tmp');
     console.log('Slippc Done!');
 
-    const putCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `error.log`,
-      Body: fs.createReadStream(`/tmp/error.log`),
-      ContentType: `text/plain`
-    });
-    await s3.send(putCommand);
+    // const putCommand = new PutObjectCommand({
+    //   Bucket: bucket,
+    //   Key: `error.log`,
+    //   Body: require('fs').createReadStream(`/tmp/error.log`),
+    //   ContentType: `text/plain`
+    // });
+    // await s3.send(putCommand);
 
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
@@ -138,11 +138,11 @@ exports.handler = async (event) => {
 
     await sendFilesToS3(startAt, bucket, puts);
 
-    const streams = [
-      { key: 'frames', type: 'parquet' }
-    ];
+    // const streams = [
+    //   { key: 'frames', type: 'parquet' }
+    // ];
 
-    await sendStreamsToS3(startAt, bucket, streams);
+    // await sendStreamsToS3(startAt, bucket, streams);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
