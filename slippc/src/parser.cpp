@@ -848,7 +848,7 @@ namespace slip {
       DOUT1("  Saved to " << outfilename << "/platforms.jsonl");
     }
 
-    playerFramesAsParquet();
+//     playerFramesAsParquet();
 
   }
 
