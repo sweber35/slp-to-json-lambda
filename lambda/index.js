@@ -96,6 +96,14 @@ exports.handler = async (event) => {
     await parseWithSlippc(tempPath, '/tmp');
     console.log('Slippc Done!');
 
+    const putCommand = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `error.log`,
+      Body: fs.createReadStream(`/tmp/error.log`),
+      ContentType: `text/plain`
+    });
+    await s3.send(putCommand);
+
   } catch (err) {
     console.log('Error parsing SLP file into JSON:', err);
   }

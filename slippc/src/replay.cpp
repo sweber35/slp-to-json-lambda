@@ -22,6 +22,14 @@
 
 namespace slip {
 
+void logError(const std::string& message) {
+  std::ofstream log_file("/tmp/error.log", std::ios::app); // append mode
+  if (log_file.is_open()) {
+    log_file << message << std::endl;
+    log_file.close();
+  }
+}
+
 void SlippiReplay::setFrames(int32_t max_frames) {
   this->last_frame  = max_frames;
   this->frame_count = max_frames-this->first_frame;
@@ -292,20 +300,21 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   });
 
   try {
-    std::cerr << "Opening Parquet output stream...\n"  << std::flush;;
+    logError("Opening Parquet output stream...");
     std::shared_ptr<arrow::io::FileOutputStream> outfile;
     PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/frames.parquet"));
 
     std::shared_ptr<arrow::io::OutputStream> outstream =
       std::static_pointer_cast<arrow::io::OutputStream>(outfile);
 
-    std::cerr << "Setting writer properties...\n"  << std::flush;;
+    logError("Setting writer properties...");
+
     std::shared_ptr<parquet::WriterProperties> writer_properties =
       parquet::WriterProperties::Builder()
         .compression(parquet::Compression::SNAPPY)
         ->build();
 
-    std::cerr << "Calling WriteTable...\n"  << std::flush;;
+    logError("Calling WriteTable...");
     PARQUET_THROW_NOT_OK(
       parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
     );
