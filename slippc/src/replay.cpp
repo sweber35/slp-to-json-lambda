@@ -292,7 +292,7 @@ std::string SlippiReplay::playerFramesAsParquet() {
   std::shared_ptr<arrow::io::FileOutputStream> outfile;
   PARQUET_ASSIGN_OR_THROW(
     outfile,
-    arrow::io::FileOutputStream::Open("/tmp/frames.parquet");
+    arrow::io::FileOutputStream::Open("/tmp/frames.parquet")
   );
 
   std::shared_ptr<arrow::io::OutputStream> outstream = std::static_pointer_cast<arrow::io::OutputStream>(outfile);
@@ -300,8 +300,8 @@ std::string SlippiReplay::playerFramesAsParquet() {
   // Set writer properties with Snappy compression
   std::shared_ptr<parquet::WriterProperties> writer_properties =
     parquet::WriterProperties::Builder()
-      .compression(parquet::Compression::SNAPPY)
-      .build();
+      ->compression(parquet::Compression::SNAPPY)
+      ->build();
 
   // Write table to Parquet file
   PARQUET_THROW_NOT_OK(parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile, 1024, writer_properties));
