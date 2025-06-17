@@ -53,7 +53,7 @@ public:
   Analysis* analyze();                   //Analyze the loaded replay file
 //   std::string asJson(bool delta);        //Convert the parsed replay structure to a JSON
   std::string playerFramesAsJson();
-  std::string playerFramesAsParquet();
+  void playerFramesAsParquet();
   std::string itemFramesAsJson();
   std::string fodPlatformChangesAsJson();
   std::string settingsAsJson();
