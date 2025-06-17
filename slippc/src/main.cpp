@@ -393,7 +393,15 @@ void write_parquet_test() {
 }
 
 int main(int argc, char** argv) {
-  std::cout << "Arrow version: " << ARROW_VERSION_STRING << std::endl;
-  slip::write_parquet_test();
-  return slip::run(argc,argv);
+  try {
+    std::cout << "Arrow version: " << ARROW_VERSION_STRING << std::endl;
+    return slip::run(argc,argv);
+  }
+  catch (const std::exception& e) {
+    std::cerr << "[FATAL std::exception] " << e.what() << std::endl;
+      return 1;
+    } catch (...) {
+      std::cerr << "[FATAL unknown exception]" << std::endl;
+      return 1;
+    }
 }
