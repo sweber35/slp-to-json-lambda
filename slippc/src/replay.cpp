@@ -51,7 +51,7 @@ void SlippiReplay::cleanup() {
   }
 }
 
-std::string SlippiReplay::playerFramesAsParquet() {
+arrow::Status SlippiReplay::playerFramesAsParquet() {
 
   SlippiReplay s = (*this);
 
