@@ -1,4 +1,5 @@
 #include "replay.h"
+#include "util.h"
 #include <iostream>
 #include <iomanip>
 #include <arrow/api.h>
