@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <arrow/status.h>
+
 
 #include "enums.h"
 #include "util.h"
