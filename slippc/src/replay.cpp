@@ -291,20 +291,31 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
   });
 
-  std::shared_ptr<arrow::io::FileOutputStream> outfile;
-  PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/frames.parquet"));
+  try {
+    std::shared_ptr<arrow::io::FileOutputStream> outfile;
+    PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/frames.parquet"));
 
-  std::shared_ptr<arrow::io::OutputStream> outstream =
-    std::static_pointer_cast<arrow::io::OutputStream>(outfile);
+    std::shared_ptr<arrow::io::OutputStream> outstream =
+      std::static_pointer_cast<arrow::io::OutputStream>(outfile);
 
-  std::shared_ptr<parquet::WriterProperties> writer_properties =
-    parquet::WriterProperties::Builder()
-      .compression(parquet::Compression::SNAPPY)
-      ->build();
+    std::shared_ptr<parquet::WriterProperties> writer_properties =
+      parquet::WriterProperties::Builder()
+        .compression(parquet::Compression::SNAPPY)
+        ->build();
 
-  PARQUET_THROW_NOT_OK(
-    parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
-  );
+    PARQUET_THROW_NOT_OK(
+      parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
+    );
+  } catch (const parquet::ParquetException& e) {
+    std::cerr << "[ParquetException] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("ParquetException: ", e.what());
+  } catch (const std::exception& e) {
+    std::cerr << "[std::exception] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("std::exception: ", e.what());
+  } catch (...) {
+    std::cerr << "[Unknown error] during Parquet file write." << std::endl;
+    return arrow::Status::ExecutionError("Unknown error during Parquet write");
+  }
 
   return arrow::Status::OK();
 }
