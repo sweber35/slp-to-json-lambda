@@ -236,8 +236,8 @@ arrow::Status Analysis::attacksAsParquet() {
       hit_id_b.Append(ap[p].attacks[i].hit_id);
       anim_frame_b.Append(ap[p].attacks[i].anim_frame);
       damage_b.Append(ap[p].attacks[i].damage);
-      opening_b.Append(Dynamic::name[ap[p].attacks[i].opening]);
-      kill_dir_b.Append(Dir::name[ap[p].attacks[i].kill_dir]);
+      opening_b.Append(ap[p].attacks[i].opening);
+      kill_dir_b.Append(ap[p].attacks[i].kill_dir);
     }
   }
 
