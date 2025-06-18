@@ -152,7 +152,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
         char_id_b.Append(s.player[p].frame[f].char_id);
         follower_b.Append(s.player[p].frame[f].follower);
         seed_b.Append(s.player[p].frame[f].seed);
-        action_pre_b.Append(s.player[p].frame[f].action_pre);
         pos_x_pre_b.Append(s.player[p].frame[f].pos_x_pre);
         pos_y_pre_b.Append(s.player[p].frame[f].pos_y_pre);
         face_dir_pre_b.Append(s.player[p].frame[f].face_dir_pre);
