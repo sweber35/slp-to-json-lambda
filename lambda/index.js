@@ -132,9 +132,6 @@ exports.handler = async (event) => {
       { key: 'settings', type: 'json' },
       // { key: 'example',  type: 'parquet' }
     ];
-    if (stageIsFod) {
-      puts.push({ key: 'platforms', type: 'jsonl' });
-    }
 
     await sendFilesToS3(startAt, bucket, puts);
 
@@ -144,6 +141,10 @@ exports.handler = async (event) => {
       { key: 'attacks', type: 'parquet' },
       { key: 'punishes', type: 'parquet' },
     ];
+
+    if (stageIsFod) {
+      streams.push({ key: 'platforms', type: 'parquet' });
+    }
 
     await sendStreamsToS3(startAt, bucket, streams);
 
