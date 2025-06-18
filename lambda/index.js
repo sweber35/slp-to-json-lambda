@@ -127,7 +127,7 @@ exports.handler = async (event) => {
       // { key: 'frames',   type: 'jsonl' },
       // { key: 'items',    type: 'jsonl' },
       // { key: 'attacks',  type: 'jsonl' },
-      { key: 'punishes', type: 'jsonl' },
+      // { key: 'punishes', type: 'jsonl' },
       { key: 'stats',    type: 'json' },
       { key: 'settings', type: 'json' },
       // { key: 'example',  type: 'parquet' }
@@ -142,6 +142,7 @@ exports.handler = async (event) => {
       { key: 'frames', type: 'parquet' },
       { key: 'items', type: 'parquet' },
       { key: 'attacks', type: 'parquet' },
+      { key: 'punishes', type: 'parquet' },
     ];
 
     await sendStreamsToS3(startAt, bucket, streams);
