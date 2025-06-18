@@ -343,11 +343,11 @@ arrow::Status Analysis::punishesAsParquet() {
     arrow::field("kill_dir", arrow::uint8()),
   });
 
-  UInt8Builder cancel_type_b, punish_id_b, opening_b, kill_dir_b, hit_id_b;
-  UInt16Builder attack_id_b, move_id_b;
-  UInt32Builder anim_frame_b, frame_b;
-  StringBuilder match_id_b, player_id_b, move_name_b, cancel_name_b;
-  FloatBuilder damage_b;
+  UInt8Builder stocks_b, last_move_name_b, kill_dir_b;
+  UInt16Builder num_moves_b, last_move_id_b;
+  UInt32Builder start_frame_b, end_frame_b;
+  StringBuilder match_id_b, player_id_b;
+  FloatBuilder start_pct_b, end_pct_b;
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
