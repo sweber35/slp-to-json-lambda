@@ -524,7 +524,8 @@ std::string Analysis::asJson() {
 
     ss << SPACE[ILEV] << "\"interaction_frames\" : {\n";
     for(unsigned d = Dynamic::__LAST-1; d > 0; --d) {
-      ss << JUIN(2,Dynamic::name[d], ap[p].dyn_counts[d]) << ((d == 1) ? "\n" : ",\n");
+      int rounded = static_cast<int>(std::lround(ap[p].dyn_counts[d]));
+      ss << JUIN(2,Dynamic::name[d], rounded) << ((d == 1) ? "\n" : ",\n");
     }
     ss << SPACE[ILEV] << "},\n";
 
