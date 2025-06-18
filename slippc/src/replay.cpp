@@ -148,7 +148,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
 
         match_id_b.Append(s.start_time);
         player_id_b.Append(s.player[pp].tag_code);
-        frame_number_b.Append(s.frame_count);
+        frame_number_b.Append(f);
         char_id_b.Append(s.player[p].frame[f].char_id);
         follower_b.Append(s.player[p].frame[f].follower);
         seed_b.Append(s.player[p].frame[f].seed);
