@@ -115,31 +115,22 @@ exports.handler = async (event) => {
     const startAt = settings.match_id;
     const stageIsFod = settings.stage === 2;
 
-    const puts = [
-      // { key: 'frames',   type: 'jsonl' },
-      // { key: 'items',    type: 'jsonl' },
-      // { key: 'attacks',  type: 'jsonl' },
-      // { key: 'punishes', type: 'jsonl' },
+    const jsonPuts = [
       { key: 'stats',    type: 'json' },
       { key: 'settings', type: 'json' },
-      // { key: 'example',  type: 'parquet' }
     ];
+    await sendFilesToS3(startAt, bucket, jsonPuts);
 
-    await sendFilesToS3(startAt, bucket, puts);
-
-    const streams = [
+    const parquetPuts = [
       { key: 'frames', type: 'parquet' },
       { key: 'items', type: 'parquet' },
       { key: 'attacks', type: 'parquet' },
       { key: 'punishes', type: 'parquet' },
     ];
-
     if (stageIsFod) {
-      console.log('FoD Detected');
-      streams.push({ key: 'platforms', type: 'parquet' });
+      parquetPuts.push({ key: 'platforms', type: 'parquet' });
     }
-
-    await sendStreamsToS3(startAt, bucket, streams);
+    await sendStreamsToS3(startAt, bucket, parquetPuts);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);

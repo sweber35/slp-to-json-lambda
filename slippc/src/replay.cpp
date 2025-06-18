@@ -666,7 +666,6 @@ arrow::Status SlippiReplay::fodPlatformChangesAsParquet() {
       platform_b.Finish(&platform_a);
       platform_height_b.Finish(&platform_height_a);
 
-
       std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
         match_id_a, frame_a, platform_a, platform_height_a
       });
@@ -713,21 +712,21 @@ std::string SlippiReplay::settingsAsJson() {
   std::stringstream ss;
   int a = 0;
 
-  ss << "{ ";
-  ss << JEND(a) << JSTR("match_id"       ,s.start_time);
-  ss << JEND(a) << JSTR("slippi_version" ,s.slippi_version);
-  ss << JEND(a) << JUIN("timer"          ,s.timer);
-  ss << JEND(a) << JINT("frame_count"    ,s.frame_count);
-  ss << JEND(a) << JINT("winner_id"      ,s.winner_id);
-  ss << JEND(a) << JUIN("stage"          ,s.stage);
-  ss << JEND(a) << JUIN("end_type"       ,s.end_type);
+  ss << "{\n";
+  ss << JEND(a) << JSTR("match_id"       ,s.start_time) << "\n";
+  ss << JEND(a) << JSTR("slippi_version" ,s.slippi_version) << "\n";
+  ss << JEND(a) << JUIN("timer"          ,s.timer) << "\n";
+  ss << JEND(a) << JINT("frame_count"    ,s.frame_count) << "\n";
+  ss << JEND(a) << JINT("winner_id"      ,s.winner_id) << "\n";
+  ss << JEND(a) << JUIN("stage"          ,s.stage) << "\n";
+  ss << JEND(a) << JUIN("end_type"       ,s.end_type) << "\n";
   for (unsigned i = 0; i < 4; ++i) {
     if (s.player[i].player_type != 3) {
-       ss << JEND(a) << JSTR(("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code);
-       ss << JEND(a) << JINT(("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id);
+       ss << JEND(a) << JSTR(("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code) << "\n";
+       ss << JEND(a) << JINT(("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id) << "\n";
     }
   }
-  ss << " }\n" << std::endl;
+  ss << "}" << std::endl;
 
   return ss.str();
 }
