@@ -483,7 +483,6 @@ arrow::Status SlippiReplay::itemFramesAsParquet() {
   using arrow::UInt8Builder;
   using arrow::UInt16Builder;
   using arrow::UInt32Builder;
-  using arrow::Int32Builder;
   using arrow::StringBuilder;
 
   std::shared_ptr<arrow::Schema> schema = arrow::schema({
@@ -573,10 +572,11 @@ arrow::Status SlippiReplay::itemFramesAsParquet() {
   owner_b.Finish(&owner_a);
 
   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
-    match_id_a, spawn_id_a, item_type_a, frame_a, owner_a,
+    match_id_a, spawn_id_a, item_type_a, frame_a, state_a,
     face_dir_a, xvel_a, yvel_a, xpos_a, ypos_a,
-    damage_a, expire_a, state_a, missile_type_a,
-    turnip_face_a, is_launched_a, charged_power_a
+    damage_a, expire_a,
+    missile_type_a, turnip_face_a, is_launched_a, charged_power_a,
+    owner_a
   });
 
   try {
