@@ -45,7 +45,7 @@ std::string Analysis::statsAsJson() {
   a = 0;
   for(unsigned p = 0; p < 2; ++p) {
     ss << "    " << "{";
-    ss << JEND(a) << JUIN(6,"port",                   ap[p].port);
+    ss << JUIN(6,"port",                   ap[p].port);
     ss << JEND(a) << JSTR(6,"tag_player",             escape_json(ap[p].tag_player));
     ss << JEND(a) << JSTR(6,"tag_css",                escape_json(ap[p].tag_css));
     ss << JEND(a) << JSTR(6,"tag_code",               escape_json(ap[p].tag_code));
