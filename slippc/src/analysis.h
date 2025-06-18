@@ -6,6 +6,7 @@
 #include <fstream>
 #include <unistd.h>  //usleep
 #include <math.h>    //sqrt
+#include <arrow/status.h>
 
 #include "enums.h"
 #include "util.h"
