@@ -131,7 +131,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   UInt8Builder missile_type_b, turnip_face_b, is_launched_b, charged_power_b;
   UInt8Builder ground_id_b, jumps_b, l_cancel_b, hurtbox_b;
   UInt16Builder action_pre_b, action_post_b, buttons_b;
-  UInt32Builder frame_number_b seed_b, anim_index_b;
+  UInt32Builder frame_number_b, seed_b, anim_index_b;
   FloatBuilder pos_x_pre_b, pos_y_pre_b, joy_x_b, joy_y_b, c_x_b, c_y_b;
   FloatBuilder trigger_b, pos_x_post_b, pos_y_post_b, phys_l_b, phys_r_b;
   FloatBuilder percent_pre_b, percent_post_b, face_dir_pre_b, face_dir_post_b, shield_b;
