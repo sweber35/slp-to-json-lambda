@@ -124,8 +124,8 @@ exports.handler = async (event) => {
     const stageIsFod = settings.stage === 2;
 
     const puts = [
-      { key: 'frames',   type: 'jsonl' },
-      { key: 'items',    type: 'jsonl' },
+      // { key: 'frames',   type: 'jsonl' },
+      // { key: 'items',    type: 'jsonl' },
       { key: 'attacks',  type: 'jsonl' },
       { key: 'punishes', type: 'jsonl' },
       { key: 'stats',    type: 'json' },
