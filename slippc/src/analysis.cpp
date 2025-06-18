@@ -218,9 +218,10 @@ arrow::Status Analysis::attacksAsParquet() {
   });
 
   UInt8Builder cancel_type_b, punish_id_b, opening_b, kill_dir_b, hit_id_b;
-  UInt16Builder attack_id_b, move_id_b, damage_b;
+  UInt16Builder attack_id_b, move_id_b;
   UInt32Builder anim_frame_b, frame_b;
   StringBuilder match_id_b, player_id_b, move_name_b, cancel_name_b;
+  FloatBuilder damage_b;
 
   for(unsigned p = 0; p < 2; ++p) {
     for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
