@@ -24,6 +24,14 @@
 
 namespace slip {
 
+void logError(const std::string& message) {
+  std::ofstream log_file("/tmp/error.log", std::ios::app); // append mode
+  if (log_file.is_open()) {
+    log_file << message << std::endl;
+    log_file.close();
+  }
+}
+
 std::string Analysis::statsAsJson() {
   int a = 0;
   std::stringstream ss;
