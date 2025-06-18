@@ -557,23 +557,23 @@ arrow::Status SlippiReplay::itemFramesAsParquet() {
   std::shared_ptr<arrow::Array> face_dir_a, xvel_a, yvel_a, xpos_a, ypos_a, damage_a, expire_a, state_a;
   std::shared_ptr<arrow::Array> missile_type_a, turnip_face_a, is_launched_a, charged_power_a;
 
-  match_id_b.Finish($match_id_a);
-  spawn_id_b.Finish($spawn_id_a);
-  item_type_b.Finish($item_type_a);
-  frame_b.Finish($frame_a);
-  state_b.Finish($state_a);
-  face_dir_b.Finish($face_dir_a);
-  xvel_b.Finish($xvel_a);
-  yvel_b.Finish($yvel_a);
-  xpos_b.Finish($xpos_a);
-  ypos_b.Finish($)ypos_a;
-  damage_b.Finish($damage_a);
-  expire_b.Finish($expire_a);
-  missile_type_b.Finish($missile_type_a);
-  turnip_face_b.Finish($turnip_face_a);
-  is_launched_b.Finish($is_launched_a);
-  charged_power_b.Finish($charged_power_a);
-  owner_b.Finish($owner_a);
+  match_id_b.Finish(&match_id_a);
+  spawn_id_b.Finish(&spawn_id_a);
+  item_type_b.Finish(&item_type_a);
+  frame_b.Finish(&frame_a);
+  state_b.Finish(&state_a);
+  face_dir_b.Finish(&face_dir_a);
+  xvel_b.Finish(&xvel_a);
+  yvel_b.Finish(&yvel_a);
+  xpos_b.Finish(&xpos_a);
+  ypos_b.Finish(&ypos_a);
+  damage_b.Finish(&damage_a);
+  expire_b.Finish(&expire_a);
+  missile_type_b.Finish(&missile_type_a);
+  turnip_face_b.Finish(&turnip_face_a);
+  is_launched_b.Finish(&is_launched_a);
+  charged_power_b.Finish(&charged_power_a);
+  owner_b.Finish(&owner_a);
 
   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
     match_id_a, spawn_id_a, item_type_a, frame_a, owner_a,
