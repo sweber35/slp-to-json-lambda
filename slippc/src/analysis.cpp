@@ -360,13 +360,12 @@ arrow::Status Analysis::punishesAsParquet() {
       stocks_b.Append(ap[p].punishes[i].stocks);
       num_moves_b.Append(ap[p].punishes[i].num_moves);
       last_move_id_b.Append(ap[p].punishes[i].last_move_id);
-      last_move_name_b.Append(ap[p].punishes[i].last_move_name);
       kill_dir_b.Append(Dir::name[ap[p].punishes[i].kill_dir]);
     }
   }
 
   std::shared_ptr<arrow::Array> match_id_a, player_id_a, start_frame_a, end_frame_a, start_pct_a, end_pct_a;
-  std::shared_ptr<arrow::Array> stocks_a, num_moves_a, last_move_id_a, last_move_name_a, kill_dir_a;
+  std::shared_ptr<arrow::Array> stocks_a, num_moves_a, last_move_id_a, kill_dir_a;
 
   match_id_b.Finish(&match_id_a);
   player_id_b.Finish(&player_id_a);
@@ -377,12 +376,11 @@ arrow::Status Analysis::punishesAsParquet() {
   stocks_b.Finish(&stocks_a);
   num_moves_b.Finish(&num_moves_a);
   last_move_id_b.Finish(&last_move_id_a);
-  last_move_name_b.Finish(&last_move_name_a);
   kill_dir_b.Finish(&kill_dir_a);
 
   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
     match_id_a, player_id_a, start_frame_a, end_frame_a, start_pct_a, end_pct_a,
-    stocks_a, num_moves_a, last_move_id_a, last_move_name_a, kill_dir_a
+    stocks_a, num_moves_a, last_move_id_a, kill_dir_a
   });
 
   try {
