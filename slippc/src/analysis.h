@@ -190,6 +190,7 @@ struct Analysis {
   std::string attacksAsJson();
   arrow::Status attacksAsParquet();
   std::string punishesAsJson();
+  arrow::Status punishesAsParquet();
   void save(const char* outfilename);        //Write the analysis out to a JSON file
 };
 

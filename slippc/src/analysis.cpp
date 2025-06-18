@@ -321,6 +321,100 @@ std::string Analysis::punishesAsJson() {
   return ss.str();
 }
 
+arrow::Status Analysis::punishesAsParquet() {
+
+  using arrow::FloatBuilder;
+  using arrow::UInt8Builder;
+  using arrow::UInt16Builder;
+  using arrow::UInt32Builder;
+  using arrow::StringBuilder;
+
+  std::shared_ptr<arrow::Schema> schema = arrow::schema({
+    arrow::field("match_id", arrow::utf8()),
+    arrow::field("player_id", arrow::utf8()),
+    arrow::field("start_frame", arrow::uint32()),
+    arrow::field("end_frame", arrow::uint32()),
+    arrow::field("start_pct", arrow::float32()),
+    arrow::field("end_pct", arrow::float32()),
+    arrow::field("stocks", arrow::uint8()),
+    arrow::field("num_moves", arrow::uint16()),
+    arrow::field("last_move_id", arrow::uint16()),
+    arrow::field("last_move_name", arrow::utf8()),
+    arrow::field("kill_dir", arrow::uint8()),
+  });
+
+  UInt8Builder cancel_type_b, punish_id_b, opening_b, kill_dir_b, hit_id_b;
+  UInt16Builder attack_id_b, move_id_b;
+  UInt32Builder anim_frame_b, frame_b;
+  StringBuilder match_id_b, player_id_b, move_name_b, cancel_name_b;
+  FloatBuilder damage_b;
+
+  for(unsigned p = 0; p < 2; ++p) {
+    for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
+      match_id_b.Append(game_time);
+      player_id_b.Append(ap[p].tag_code);
+      start_frame_b.Append(ap[p].punishes[i].start_frame);
+      end_frame_b.Append(ap[p].punishes[i].end_frame);
+      start_pct_b.Append(ap[p].punishes[i].start_pct);
+      end_pct_b.Append(ap[p].punishes[i].end_pct);
+      stocks_b.Append(ap[p].punishes[i].stocks);
+      num_moves_b.Append(ap[p].punishes[i].num_moves);
+      last_move_id_b.Append(ap[p].punishes[i].last_move_id);
+      last_move_name_b.Append(ap[p].punishes[i].last_move_id]);
+      kill_dir_b.Append(p[p].punishes[i].kill_dir);
+    }
+  }
+
+  std::shared_ptr<arrow::Array> match_id_a, player_id_a, start_frame_a, end_frame_a, start_pct_a, end_pct_a;
+  std::shared_ptr<arrow::Array> stocks_a, num_moves_name_a, last_move_id_a, last_move_name_a, kill_dir_a;
+
+  match_id_b.Finish(&match_id_a);
+  player_id_b.Finish(&player_id_a);
+  start_frame_b.Finish(&start_frame_a);
+  end_frame_b.Finish(&end_frame_a);
+  start_pct_b.Finish(&start_pct_a);
+  end_pct_b.Finish(&end_pct_a);
+  stocks_b.Finish(&stocks_a);
+  num_moves_name_b.Finish(&num_moves_name_a);
+  last_move_id_b.Finish(&last_move_id_a);
+  last_move_name_b.Finish(&last_move_name_a);
+  kill_dir__b.Finish(&kill_dir_a);
+
+  std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
+    match_id_a, player_id_a, start_frame_a, end_frame_a, start_pct_a, end_pct_a,
+    stocks_a, num_moves_name_a, last_move_id_a, last_move_name_a, kill_dir_a
+  });
+
+  try {
+    std::shared_ptr<arrow::io::FileOutputStream> outfile;
+    PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/punishes.parquet"));
+
+    std::shared_ptr<arrow::io::OutputStream> outstream =
+      std::static_pointer_cast<arrow::io::OutputStream>(outfile);
+
+    // TODO: switch from to snappy
+    std::shared_ptr<parquet::WriterProperties> writer_properties =
+      parquet::WriterProperties::Builder()
+        .compression(parquet::Compression::UNCOMPRESSED)
+        ->build();
+
+    PARQUET_THROW_NOT_OK(
+      parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
+    );
+  } catch (const parquet::ParquetException& e) {
+    std::cerr << "[ParquetException] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("ParquetException: ", e.what());
+  } catch (const std::exception& e) {
+    std::cerr << "[std::exception] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("std::exception: ", e.what());
+  } catch (...) {
+    std::cerr << "[Unknown error] during Parquet file write." << std::endl;
+    return arrow::Status::ExecutionError("Unknown error during Parquet write");
+  }
+
+  return arrow::Status::OK();
+}
+
 std::string Analysis::asJson() {
   std::stringstream ss;
   ss << "{" << std::endl;
@@ -526,6 +620,7 @@ void Analysis::save(const char* outfilename) {
   fout4.close();
 
   attacksAsParquet();
+  punishesAsParquet();
 }
 
 }
