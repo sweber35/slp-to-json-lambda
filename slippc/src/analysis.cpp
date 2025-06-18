@@ -24,14 +24,6 @@
 
 namespace slip {
 
-void logError(const std::string& message) {
-  std::ofstream log_file("/tmp/error.log", std::ios::app); // append mode
-  if (log_file.is_open()) {
-    log_file << message << std::endl;
-    log_file.close();
-  }
-}
-
 std::string Analysis::statsAsJson() {
   int a = 0;
   std::stringstream ss;
@@ -274,14 +266,11 @@ arrow::Status Analysis::attacksAsParquet() {
   });
 
   try {
-    logError("Opening Parquet output stream...");
     std::shared_ptr<arrow::io::FileOutputStream> outfile;
     PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/attacks.parquet"));
 
     std::shared_ptr<arrow::io::OutputStream> outstream =
       std::static_pointer_cast<arrow::io::OutputStream>(outfile);
-
-    logError("Setting writer properties...");
 
     // TODO: switch from to snappy
     std::shared_ptr<parquet::WriterProperties> writer_properties =
@@ -289,7 +278,6 @@ arrow::Status Analysis::attacksAsParquet() {
         .compression(parquet::Compression::UNCOMPRESSED)
         ->build();
 
-    logError("Calling WriteTable...");
     PARQUET_THROW_NOT_OK(
       parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
     );

@@ -203,8 +203,6 @@ struct SlippiReplay {
   std::string fodPlatformChangesAsJson();
   std::string settingsAsJson();
 };
-  void logError();
-
 
 }
 
