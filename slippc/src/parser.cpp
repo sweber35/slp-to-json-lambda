@@ -813,7 +813,7 @@ namespace slip {
   }
 
   void Parser::fodPlatformChangesAsParquet() {
-    return _replay.fodPlatformChangesAsParquet();
+    _replay.fodPlatformChangesAsParquet();
   }
 
   std::string Parser::settingsAsJson() {
