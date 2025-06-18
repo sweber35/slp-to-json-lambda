@@ -490,7 +490,7 @@ arrow::Status SlippiReplay::itemFramesAsParquet() {
     arrow::field("match_id", arrow::utf8()),
     arrow::field("spawn_id", arrow::uint32()),
     arrow::field("item_type", arrow::uint16()),
-    arrow::field("frame_number", arrow::uint32()),
+    arrow::field("frame", arrow::uint32()),
     arrow::field("state", arrow::uint8()),
     arrow::field("face_dir", arrow::float32()),
     arrow::field("xvel", arrow::float32()),
