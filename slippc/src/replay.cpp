@@ -474,7 +474,7 @@ std::string SlippiReplay::itemFramesAsJson() {
   return ss.str();
 }
 
-std::string SlippiReplay::itemFramesAsParquet() {
+arrow::Status SlippiReplay::itemFramesAsParquet() {
   SlippiReplay s = (*this);
 
   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
