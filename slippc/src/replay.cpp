@@ -710,20 +710,19 @@ std::string SlippiReplay::settingsAsJson() {
   uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
 
   std::stringstream ss;
-  int a = 0;
 
   ss << "{\n";
-  ss << JEND(a) << JSTR("match_id"       ,s.start_time) << "\n";
-  ss << JEND(a) << JSTR("slippi_version" ,s.slippi_version) << "\n";
-  ss << JEND(a) << JUIN("timer"          ,s.timer) << "\n";
-  ss << JEND(a) << JINT("frame_count"    ,s.frame_count) << "\n";
-  ss << JEND(a) << JINT("winner_id"      ,s.winner_id) << "\n";
-  ss << JEND(a) << JUIN("stage"          ,s.stage) << "\n";
-  ss << JEND(a) << JUIN("end_type"       ,s.end_type) << "\n";
+  ss << "  " << JSTR("match_id"       ,s.start_time) << ",\n";
+  ss << "  " << JSTR("slippi_version" ,s.slippi_version) << ",\n";
+  ss << "  " << JUIN("timer"          ,s.timer) << ",\n";
+  ss << "  " << JINT("frame_count"    ,s.frame_count) << ",\n";
+  ss << "  " << JINT("winner_id"      ,s.winner_id) << ",\n";
+  ss << "  " << JUIN("stage"          ,s.stage) << ",\n";
+  ss << "  " << JUIN("end_type"       ,s.end_type) << ",\n";
   for (unsigned i = 0; i < 4; ++i) {
     if (s.player[i].player_type != 3) {
-       ss << JEND(a) << JSTR(("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code) << "\n";
-       ss << JEND(a) << JINT(("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id) << "\n";
+       ss << "  " << JSTR(("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code) << ",\n";
+       ss << "  " << JINT(("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id) << ",\n";
     }
   }
   ss << "}" << std::endl;
