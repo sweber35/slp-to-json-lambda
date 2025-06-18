@@ -10,10 +10,10 @@
 #include "analysis.h"
 
 //JSON Output shortcuts
-#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << float(n)
-#define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << int32_t(n)
-#define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\" : " << uint32_t(n)
-#define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\" : \"" << (s) << "\""
+#define JFLT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << float(n)
+#define JINT(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << int32_t(n)
+#define JUIN(i,k,n) SPACE[ILEV*(i)] << "\"" << (k) << "\": " << uint32_t(n)
+#define JSTR(i,k,s) SPACE[ILEV*(i)] << "\"" << (k) << "\": \"" << (s) << "\""
 #define JEND(a) ((a++ == 0) ? "\n" : ",\n")
 
 #define JLFLT(k,n) " " << "\"" << (k) << "\": " << float(n)
@@ -42,9 +42,9 @@ std::string Analysis::statsAsJson() {
   ss << JEND(a) << JUIN(2,"end_type",         end_type);
   ss << JEND(a) << JINT(2,"lras",             lras_player);
   a = 0;
-  ss << "\"players\": [\n";
+  ss << JEND(a) << "\"players\": [\n";
   for(unsigned p = 0; p < 2; ++p) {
-    ss << "    " << "{\n";
+    ss << "    " << "{";
     ss << JEND(a) << JUIN(6,"port",                   ap[p].port);
     ss << JEND(a) << JSTR(6,"tag_player",             escape_json(ap[p].tag_player));
     ss << JEND(a) << JSTR(6,"tag_css",                escape_json(ap[p].tag_css));
@@ -133,7 +133,7 @@ std::string Analysis::statsAsJson() {
     ss << JEND(a) << JFLT(6,"neutral_wins_per_min",   ap[p].neutral_wins_per_min);
     ss << JEND(a) << JFLT(6,"mean_death_percent",     ap[p].mean_death_percent);
 
-    ss <<  "      " << "\"interaction_frames\": {\n";
+    ss << JEND(a) <<  "      " << "\"interaction_frames\": {\n";
     for(unsigned d = Dynamic::__LAST-1; d > 0; --d) {
       ss << JUIN(8,Dynamic::name[d], ap[p].dyn_counts[d]) << ((d == 1) ? "\n" : ",\n");
     }
