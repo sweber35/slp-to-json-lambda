@@ -238,7 +238,7 @@ arrow::Status Analysis::attacksAsParquet() {
       anim_frame_b.Append(ap[p].attacks[i].anim_frame);
       damage_b.Append(ap[p].attacks[i].damage);
       opening_b.Append(ap[p].attacks[i].opening);
-      kill_dir_b.Append(ap[p].attacks[i].kill_dir);
+      kill_dir_b.Append(Dir::name[ap[p].attacks[i].kill_dir]);
     }
   }
 
@@ -361,7 +361,7 @@ arrow::Status Analysis::punishesAsParquet() {
       num_moves_b.Append(ap[p].punishes[i].num_moves);
       last_move_id_b.Append(ap[p].punishes[i].last_move_id);
       last_move_name_b.Append(ap[p].punishes[i].last_move_id);
-      kill_dir_b.Append(p[p].punishes[i].kill_dir);
+      kill_dir_b.Append(Dir::name[ap[p].punishes[i].kill_dir]);
     }
   }
 
