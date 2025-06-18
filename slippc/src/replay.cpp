@@ -641,8 +641,15 @@ arrow::Status SlippiReplay::fodPlatformChangesAsParquet() {
 
     std::shared_ptr<arrow::Schema> schema = arrow::schema({
       arrow::field("match_id", arrow::utf8()),
-      arrow::field("spawn_id", arrow::uint32()),
+      arrow::field("frame", arrow::uint32()),
+      arrow::field("platform", arrow::uint8()),
+      arrow::field("platform_height", arrow::float32())
     });
+
+    FloatBuilder platform_height_b;
+    UInt8Builder platform_b;
+    UInt32Builder frame_b;
+    StringBuilder match_id_b;
 
     for (size_t i = 0; i < s.platform_events.size(); ++i) {
       const auto& e = s.platform_events[i];
