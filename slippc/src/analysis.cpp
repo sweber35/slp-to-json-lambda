@@ -136,13 +136,13 @@ std::string Analysis::statsAsJson() {
 
     ss << JEND(a) <<  "      " << "\"interaction_frames\": {\n";
     for(unsigned d = Dynamic::__LAST-1; d > 0; --d) {
-      ss << JUIN(6,Dynamic::name[d], ap[p].dyn_counts[d]) << ((d == 1) ? "\n" : ",\n");
+      ss << JUIN(8,Dynamic::name[d], ap[p].dyn_counts[d]) << ((d == 1) ? "\n" : ",\n");
     }
     ss << "      " << "},\n";
 
     ss << "      " << "\"interaction_damage\": {\n";
     for(unsigned d = Dynamic::__LAST-1; d > 0; --d) {
-      ss << JFLT(6,Dynamic::name[d], ap[p].dyn_damage[d]) << ((d == 1) ? "\n" : ",\n");
+      ss << JFLT(8,Dynamic::name[d], ap[p].dyn_damage[d]) << ((d == 1) ? "\n" : ",\n");
     }
     ss << "      " << "},\n";
 
@@ -150,7 +150,7 @@ std::string Analysis::statsAsJson() {
     unsigned _total_moves = 0;
     for(unsigned d = 0; d < Move::BUBBLE; ++d) {
       if ((ap[p].move_counts[d]) > 0) {
-        ss << JUIN(6,Move::name[d], ap[p].move_counts[d]) << ",\n";
+        ss << JUIN(8,Move::name[d], ap[p].move_counts[d]) << ",\n";
         _total_moves += ap[p].move_counts[d];
       }
     }
