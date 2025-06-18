@@ -207,9 +207,9 @@ arrow::Status Analysis::attacksAsParquet() {
     arrow::field("move_id", arrow::uint16()),
     arrow::field("move_name", arrow::utf8()),
     arrow::field("frame", arrow::uint32()),
+    arrow::field("punish_id", arrow::uint8()),
     arrow::field("cancel_type", arrow::uint8()),
     arrow::field("cancel_name", arrow::utf8()),
-    arrow::field("punish_id", arrow::uint8()),
     arrow::field("hit_id", arrow::uint8()),
     arrow::field("anim_frame", arrow::uint32()),
     arrow::field("damage", arrow::float32()),
@@ -230,9 +230,9 @@ arrow::Status Analysis::attacksAsParquet() {
       move_id_b.Append(ap[p].attacks[i].move_id);
       move_name_b.Append(Move::shortname[ap[p].attacks[i].move_id]);
       frame_b.Append(ap[p].attacks[i].frame);
+      punish_id_b.Append(ap[p].attacks[i].punish_id);
       cancel_type_b.Append(ap[p].attacks[i].cancel_type);
       cancel_name_b.Append(Cancel::shortname[ap[p].attacks[i].cancel_type]);
-      punish_id_b.Append(ap[p].attacks[i].punish_id);
       hit_id_b.Append(ap[p].attacks[i].hit_id);
       anim_frame_b.Append(ap[p].attacks[i].anim_frame);
       damage_b.Append(ap[p].attacks[i].damage);
@@ -242,7 +242,7 @@ arrow::Status Analysis::attacksAsParquet() {
   }
 
   std::shared_ptr<arrow::Array> match_id_a, player_id_a, attack_id_a, move_id_a, move_name_a, frame_a, punish_id_a;
-  std::shared_ptr<arrow::Array> cancel_type_a, cancel_name_a, punish_id_a, hit_id_a, anim_frame_a, damage_a, opening_a, kill_dir_a;
+  std::shared_ptr<arrow::Array> cancel_type_a, cancel_name_a, hit_id_a, anim_frame_a, damage_a, opening_a, kill_dir_a;
 
   match_id_b.Finish(&match_id_a);
   player_id_b.Finish(&player_id_a);
@@ -253,7 +253,6 @@ arrow::Status Analysis::attacksAsParquet() {
   punish_id_b.Finish(&punish_id_a);
   cancel_type_b.Finish(&cancel_type_a);
   cancel_name_b.Finish(&cancel_name_a);
-  punish_id_b.Finish(&punish_id_a);
   hit_id_b.Finish(&hit_id_a);
   anim_frame_b.Finish(&anim_frame_a);
   damage_b.Finish(&damage_a);
@@ -262,7 +261,7 @@ arrow::Status Analysis::attacksAsParquet() {
 
   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
     match_id_a, player_id_a, attack_id_a, move_id_a, move_name_a,
-    frame_a, punish_id_a, cancel_type_a, cancel_name_a, punish_id_a,
+    frame_a, punish_id_a, cancel_type_a, cancel_name_a,
     hit_id_a, anim_frame_a, damage_a, opening_a, kill_dir_a
   });
 
