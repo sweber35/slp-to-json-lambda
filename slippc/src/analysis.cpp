@@ -41,7 +41,6 @@ std::string Analysis::statsAsJson() {
   ss << JEND(a) << JUIN(2,"start_minutes",    timer);
   ss << JEND(a) << JUIN(2,"end_type",         end_type);
   ss << JEND(a) << JINT(2,"lras",             lras_player);
-  a = 0;
   ss << JEND(a) << "  " << "\"players\": [\n";
   a = 0;
   for(unsigned p = 0; p < 2; ++p) {
