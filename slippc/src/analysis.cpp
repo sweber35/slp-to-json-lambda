@@ -214,13 +214,13 @@ arrow::Status Analysis::attacksAsParquet() {
     arrow::field("anim_frame", arrow::uint32()),
     arrow::field("damage", arrow::float32()),
     arrow::field("opening", arrow::uint8()),
-    arrow::field("kill_dir", arrow::uint8()),
+    arrow::field("kill_dir", arrow::utf8()),
   });
 
-  UInt8Builder cancel_type_b, punish_id_b, opening_b, kill_dir_b, hit_id_b;
+  UInt8Builder cancel_type_b, punish_id_b, opening_b, hit_id_b;
   UInt16Builder attack_id_b, move_id_b;
   UInt32Builder anim_frame_b, frame_b;
-  StringBuilder match_id_b, player_id_b, move_name_b, cancel_name_b;
+  StringBuilder match_id_b, player_id_b, move_name_b, cancel_name_b, kill_dir_b;
   FloatBuilder damage_b;
 
   for(unsigned p = 0; p < 2; ++p) {
@@ -340,13 +340,13 @@ arrow::Status Analysis::punishesAsParquet() {
     arrow::field("num_moves", arrow::uint16()),
     arrow::field("last_move_id", arrow::uint16()),
     arrow::field("last_move_name", arrow::utf8()),
-    arrow::field("kill_dir", arrow::uint8()),
+    arrow::field("kill_dir", arrow::utf8()),
   });
 
-  UInt8Builder stocks_b, last_move_name_b, kill_dir_b;
+  UInt8Builder stocks_b, last_move_name_b;
   UInt16Builder num_moves_b, last_move_id_b;
   UInt32Builder start_frame_b, end_frame_b;
-  StringBuilder match_id_b, player_id_b;
+  StringBuilder match_id_b, player_id_b, kill_dir_b;
   FloatBuilder start_pct_b, end_pct_b;
 
   for(unsigned p = 0; p < 2; ++p) {
