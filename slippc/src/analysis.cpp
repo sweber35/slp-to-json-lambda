@@ -222,11 +222,8 @@ arrow::Status Analysis::attacksAsParquet() {
   UInt32Builder anim_frame_b, frame_b;
   StringBuilder match_id_b, player_id_b, move_name_b, cancel_name_b;
 
-  for (unsigned i = 0; i < MAX_ITEMS; ++i) {
-    if (s.item[i].spawn_id > MAX_ITEMS) {
-      break;
-    }
-    for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+  for(unsigned p = 0; p < 2; ++p) {
+    for(unsigned i = 0; ap[p].attacks[i].frame > 0; ++i) {
       match_id_b.Append(game_time);
       player_id_b.Append(ap[p].tag_code);
       attack_id_b.Append(i);
