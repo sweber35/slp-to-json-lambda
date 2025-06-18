@@ -339,7 +339,6 @@ arrow::Status Analysis::punishesAsParquet() {
     arrow::field("stocks", arrow::uint8()),
     arrow::field("num_moves", arrow::uint16()),
     arrow::field("last_move_id", arrow::uint16()),
-    arrow::field("last_move_name", arrow::utf8()),
     arrow::field("kill_dir", arrow::utf8()),
   });
 
