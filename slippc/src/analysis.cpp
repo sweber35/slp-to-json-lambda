@@ -360,7 +360,7 @@ arrow::Status Analysis::punishesAsParquet() {
       stocks_b.Append(ap[p].punishes[i].stocks);
       num_moves_b.Append(ap[p].punishes[i].num_moves);
       last_move_id_b.Append(ap[p].punishes[i].last_move_id);
-      last_move_name_b.Append(ap[p].punishes[i].last_move_id);
+      last_move_name_b.Append(ap[p].punishes[i].last_move_name);
       kill_dir_b.Append(Dir::name[ap[p].punishes[i].kill_dir]);
     }
   }
