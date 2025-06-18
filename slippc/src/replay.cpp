@@ -726,6 +726,7 @@ std::string SlippiReplay::settingsAsJson() {
     }
   }
   ss << "}" << std::endl;
+  std::cout << "Settings: " << ss << std::endl;
 
   return ss.str();
 }
