@@ -718,15 +718,16 @@ std::string SlippiReplay::settingsAsJson() {
   ss << "  " << JINT("frame_count"    ,s.frame_count) << ",\n";
   ss << "  " << JINT("winner_id"      ,s.winner_id) << ",\n";
   ss << "  " << JUIN("stage"          ,s.stage) << ",\n";
-  ss << "  " << JUIN("end_type"       ,s.end_type) << ",\n";
   for (unsigned i = 0; i < 4; ++i) {
     if (s.player[i].player_type != 3) {
        ss << "  " << JSTR(("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code) << ",\n";
        ss << "  " << JINT(("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id) << ",\n";
     }
   }
+  ss << "  " << JUIN("end_type"       ,s.end_type) << "\n";
+
   ss << "}" << std::endl;
-  std::cout << "Settings: " << ss.str() << std::endl;
+//   std::cout << "Settings: " << ss.str() << std::endl;
 
   return ss.str();
 }
