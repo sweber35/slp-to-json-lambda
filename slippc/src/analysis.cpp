@@ -42,7 +42,8 @@ std::string Analysis::statsAsJson() {
   ss << JEND(a) << JUIN(2,"end_type",         end_type);
   ss << JEND(a) << JINT(2,"lras",             lras_player);
   a = 0;
-  ss << JEND(a) << "\"players\": [\n";
+  ss << JEND(a) "    " << "\"players\": [\n";
+  int a = 0;
   for(unsigned p = 0; p < 2; ++p) {
     ss << "    " << "{";
     ss << JEND(a) << JUIN(6,"port",                   ap[p].port);
@@ -158,7 +159,7 @@ std::string Analysis::statsAsJson() {
 
     ss << "    " << "}" << ( p== 0 ? ",\n" : "\n");
   }
-  ss << "]\n";
+  ss << "  ]\n";
   ss << "}\n";
   return ss.str();
 }
