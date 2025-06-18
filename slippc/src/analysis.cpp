@@ -608,12 +608,12 @@ void Analysis::save(const char* outfilename) {
 //   fout3 << k << std::endl;
 //   fout3.close();
 
-  std::string punishesFileName = std::string(outfilename) + "/punishes.jsonl";
-  std::ofstream fout4;
-  fout4.open(punishesFileName.c_str());
-  std::string l = punishesAsJson();
-  fout4 << l << std::endl;
-  fout4.close();
+//   std::string punishesFileName = std::string(outfilename) + "/punishes.jsonl";
+//   std::ofstream fout4;
+//   fout4.open(punishesFileName.c_str());
+//   std::string l = punishesAsJson();
+//   fout4 << l << std::endl;
+//   fout4.close();
 
   attacksAsParquet();
   punishesAsParquet();
