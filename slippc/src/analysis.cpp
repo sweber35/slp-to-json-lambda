@@ -43,7 +43,7 @@ std::string Analysis::statsAsJson() {
   ss << JEND(a) << JINT(2,"lras",             lras_player);
   a = 0;
   ss << JEND(a) << "    " << "\"players\": [\n";
-  int a = 0;
+  a = 0;
   for(unsigned p = 0; p < 2; ++p) {
     ss << "    " << "{";
     ss << JEND(a) << JUIN(6,"port",                   ap[p].port);
