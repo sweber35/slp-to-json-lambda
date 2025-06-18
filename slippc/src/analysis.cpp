@@ -126,7 +126,7 @@ std::string Analysis::statsAsJson() {
     ss << JEND(a) << JUIN(6,"used_grabs",             ap[p].used_grabs);
     ss << JEND(a) << JUIN(6,"used_pummels",           ap[p].used_pummels);
     ss << JEND(a) << JUIN(6,"used_throws",            ap[p].used_throws);
-    ss << JEND(a) << JUIN6,"total_moves_used",       ap[p].total_moves_used);
+    ss << JEND(a) << JUIN(6,"total_moves_used",       ap[p].total_moves_used);
     ss << JEND(a) << JUIN(6,"total_moves_landed",     ap[p].total_moves_landed);
     ss << JEND(a) << JFLT(6,"move_accuracy",          ap[p].move_accuracy);
     ss << JEND(a) << JFLT(6,"actionability",          ap[p].actionability);
