@@ -138,11 +138,11 @@ exports.handler = async (event) => {
 
     await sendFilesToS3(startAt, bucket, puts);
 
-    // const streams = [
-    //   { key: 'frames', type: 'parquet' }
-    // ];
+    const streams = [
+      { key: 'frames', type: 'parquet' }
+    ];
 
-    // await sendStreamsToS3(startAt, bucket, streams);
+    await sendStreamsToS3(startAt, bucket, streams);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
