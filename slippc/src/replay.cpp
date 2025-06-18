@@ -317,7 +317,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     // TODO: switch from GZIP to snappy
     std::shared_ptr<parquet::WriterProperties> writer_properties =
       parquet::WriterProperties::Builder()
-        .compression(parquet::Compression::GZIP)
+        .compression(parquet::Compression::UNCOMPRESSED)
         ->build();
 
     logError("Calling WriteTable...");
