@@ -71,7 +71,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   using arrow::UInt8Builder;
   using arrow::UInt16Builder;
   using arrow::UInt32Builder;
-  using arrow::Int32Builder;
   using arrow::BooleanBuilder;
   using arrow::StringBuilder;
 
@@ -510,8 +509,7 @@ arrow::Status SlippiReplay::itemFramesAsParquet() {
   FloatBuilder face_dir_b, xvel_b, yvel_b, xpos_b, ypos_b, expire_b;
   UInt8Builder state_b, owner_b;
   UInt16Builder item_type_b, damage_b, missile_type_b, turnip_face_b, is_launched_b, charged_power_b;
-  UInt32Builder frame_b;
-  Int32Builder spawn_id_b;
+  UInt32Builder frame_b, spawn_id_b;
   StringBuilder match_id_b;
 
   for (unsigned i = 0; i < MAX_ITEMS; ++i) {
