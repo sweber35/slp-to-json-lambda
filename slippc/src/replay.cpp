@@ -78,12 +78,17 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   std::shared_ptr<arrow::Schema> schema = arrow::schema({
     arrow::field("match_id", arrow::utf8()),
     arrow::field("player_id", arrow::utf8()),
+    arrow::field("char_id", arrow::uint8()),
     arrow::field("follower", arrow::boolean()),
     arrow::field("seed", arrow::uint32()),
-    arrow::field("action_pre", arrow::uint16()),
-    arrow::field("action_post", arrow::uint16()),
+    arrow::field("ucf_x", arrow::uint8()),
+    arrow::field("stocks", arrow::uint8()),
+    arrow::field("alive", arrow::boolean()),
+    arrow::field("anim_index", arrow::uint32()),
     arrow::field("pos_x_pre", arrow::float32()),
     arrow::field("pos_y_pre", arrow::float32()),
+    arrow::field("pos_x_post", arrow::float32()),
+    arrow::field("pos_y_post", arrow::float32()),
     arrow::field("joy_x", arrow::float32()),
     arrow::field("joy_y", arrow::float32()),
     arrow::field("c_x", arrow::float32()),
@@ -92,17 +97,17 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     arrow::field("buttons", arrow::uint16()),
     arrow::field("phys_l", arrow::float32()),
     arrow::field("phys_r", arrow::float32()),
-    arrow::field("ucf_x", arrow::uint8()),
-    arrow::field("percent_pre", arrow::float32()),
-    arrow::field("char_id", arrow::uint8()),
-    arrow::field("face_dir_post", arrow::float32()),
-    arrow::field("percent_post", arrow::float32()),
     arrow::field("shield", arrow::float32()),
     arrow::field("hit_with", arrow::uint8()),
     arrow::field("combo", arrow::uint8()),
     arrow::field("hurt_by", arrow::uint8()),
-    arrow::field("stocks", arrow::uint8()),
+    arrow::field("percent_pre", arrow::float32()),
+    arrow::field("percent_post", arrow::float32()),
+    arrow::field("action_pre", arrow::uint16()),
+    arrow::field("action_post", arrow::uint16()),
     arrow::field("action_fc", arrow::float32()),
+    arrow::field("face_dir_pre", arrow::float32()),
+    arrow::field("face_dir_post", arrow::float32()),
     arrow::field("missile_type", arrow::uint8()),
     arrow::field("turnip_face", arrow::uint8()),
     arrow::field("is_launched", arrow::uint8()),
@@ -112,15 +117,13 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     arrow::field("ground_id", arrow::uint8()),
     arrow::field("jumps", arrow::uint8()),
     arrow::field("l_cancel", arrow::uint8()),
-    arrow::field("alive", arrow::boolean()),
     arrow::field("hurtbox", arrow::uint8()),
+    arrow::field("hitlag", arrow::float32()),
     arrow::field("self_air_x", arrow::float32()),
     arrow::field("self_air_y", arrow::float32()),
     arrow::field("attack_x", arrow::float32()),
     arrow::field("attack_y", arrow::float32()),
     arrow::field("self_grd_x", arrow::float32()),
-    arrow::field("hitlag", arrow::float32()),
-    arrow::field("anim_index", arrow::uint32()),
   });
 
   Int32Builder frame_b;
@@ -247,6 +250,8 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   char_id_b.Finish(&char_id_a);
   follower_b.Finish(&follower_a);
   seed_b.Finish(&seed_a);
+  ucf_x_b.Finish(&ucf_x_a);
+  stocks_b.Finish(&stocks_a);
   alive_b.Finish(&alive_a);
   anim_index_b.Finish(&anim_index_a);
   pos_x_pre_b.Finish(&pos_x_pre_a);
@@ -289,51 +294,46 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   attack_y_b.Finish(&attack_y_a);
   self_grd_x_b.Finish(&self_grd_x_a);
 
-//   try {
-//     std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
-//       match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
-//       pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
-//       buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
-//       percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
-//       missile_type_a, turnip_face_a, is_launched_a, charged_power_a, hitstun_a, airborne_a,
-//       ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a,
-//       self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
-//     });
-//   } catch (const parquet::ParquetException& e) {
-//     std::cerr << "[ParquetException] " << e.what() << std::endl;
-//     logError("Error in Table::Make");
-//     return arrow::Status::ExecutionError("ParquetException: ", e.what());
-//   }
+  std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
+    match_id_a, player_id_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
+    pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
+    buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
+    percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
+    missile_type_a, turnip_face_a, is_launched_a, charged_power_a, hitstun_a, airborne_a,
+    ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a,
+    self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
+  });
 
-//   try {
-//     logError("Opening Parquet output stream...");
-//     std::shared_ptr<arrow::io::FileOutputStream> outfile;
-//     PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/frames.parquet"));
-//
-//     std::shared_ptr<arrow::io::OutputStream> outstream =
-//       std::static_pointer_cast<arrow::io::OutputStream>(outfile);
-//
-//     logError("Setting writer properties...");
-//
-//     std::shared_ptr<parquet::WriterProperties> writer_properties =
-//       parquet::WriterProperties::Builder()
-//         .compression(parquet::Compression::SNAPPY)
-//         ->build();
-//
-//     logError("Calling WriteTable...");
-//     PARQUET_THROW_NOT_OK(
-//       parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
-//     );
-//   } catch (const parquet::ParquetException& e) {
-//     std::cerr << "[ParquetException] " << e.what() << std::endl;
-//     return arrow::Status::ExecutionError("ParquetException: ", e.what());
-//   } catch (const std::exception& e) {
-//     std::cerr << "[std::exception] " << e.what() << std::endl;
-//     return arrow::Status::ExecutionError("std::exception: ", e.what());
-//   } catch (...) {
-//     std::cerr << "[Unknown error] during Parquet file write." << std::endl;
-//     return arrow::Status::ExecutionError("Unknown error during Parquet write");
-//   }
+  try {
+    logError("Opening Parquet output stream...");
+    std::shared_ptr<arrow::io::FileOutputStream> outfile;
+    PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/frames.parquet"));
+
+    std::shared_ptr<arrow::io::OutputStream> outstream =
+      std::static_pointer_cast<arrow::io::OutputStream>(outfile);
+
+    logError("Setting writer properties...");
+
+    // TODO: switch from GZIP to snappy
+    std::shared_ptr<parquet::WriterProperties> writer_properties =
+      parquet::WriterProperties::Builder()
+        .compression(parquet::Compression::GZIP)
+        ->build();
+
+    logError("Calling WriteTable...");
+    PARQUET_THROW_NOT_OK(
+      parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
+    );
+  } catch (const parquet::ParquetException& e) {
+    std::cerr << "[ParquetException] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("ParquetException: ", e.what());
+  } catch (const std::exception& e) {
+    std::cerr << "[std::exception] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("std::exception: ", e.what());
+  } catch (...) {
+    std::cerr << "[Unknown error] during Parquet file write." << std::endl;
+    return arrow::Status::ExecutionError("Unknown error during Parquet write");
+  }
 
   return arrow::Status::OK();
 }
