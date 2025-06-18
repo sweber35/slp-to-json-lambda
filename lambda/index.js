@@ -126,7 +126,7 @@ exports.handler = async (event) => {
     const puts = [
       // { key: 'frames',   type: 'jsonl' },
       // { key: 'items',    type: 'jsonl' },
-      { key: 'attacks',  type: 'jsonl' },
+      // { key: 'attacks',  type: 'jsonl' },
       { key: 'punishes', type: 'jsonl' },
       { key: 'stats',    type: 'json' },
       { key: 'settings', type: 'json' },
@@ -140,7 +140,8 @@ exports.handler = async (event) => {
 
     const streams = [
       { key: 'frames', type: 'parquet' },
-      { key: 'items', type: 'parquet' }
+      { key: 'items', type: 'parquet' },
+      { key: 'attacks', type: 'parquet' },
     ];
 
     await sendStreamsToS3(startAt, bucket, streams);

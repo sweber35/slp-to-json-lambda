@@ -183,6 +183,117 @@ std::string Analysis::attacksAsJson() {
   return ss.str();
 }
 
+arrow::Status SlippiReplay::attacksAsParquet() {
+
+  using arrow::FloatBuilder;
+  using arrow::UInt8Builder;
+  using arrow::UInt16Builder;
+  using arrow::UInt32Builder;
+  using arrow::StringBuilder;
+
+  std::shared_ptr<arrow::Schema> schema = arrow::schema({
+    arrow::field("match_id", arrow::utf8()),
+    arrow::field("player_id", arrow::utf8()),
+    arrow::field("attack_id", arrow::uint16()),
+    arrow::field("move_id", arrow::uint16()),
+    arrow::field("move_name", arrow::utf8()),
+    arrow::field("frame", arrow::uint32()),
+    arrow::field("cancel_type", arrow::uint8()),
+    arrow::field("cancel_name", arrow::utf8()),
+    arrow::field("punish_id", arrow::uint8()),
+    arrow::field("hit_id", arrow::uint8()),
+    arrow::field("anim_frame", arrow::uint32()),
+    arrow::field("damage", arrow::float32()),
+    arrow::field("opening", arrow::uint8()),
+    arrow::field("kill_dir", arrow::uint8()),
+  });
+
+  UInt8Builder cancel_type_b, punish_id_b, opening_b, kill_dir_b, hit_id_b;
+  UInt16Builder attack_id_b, move_id_b, damage_b;
+  UInt32Builder anim_frame_b, frame_b;
+  StringBuilder match_id_b, player_id_b, move_name_b, cancel_name_b;
+
+  for (unsigned i = 0; i < MAX_ITEMS; ++i) {
+    if (s.item[i].spawn_id > MAX_ITEMS) {
+      break;
+    }
+    for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+      match_id_b.Append(game_time);
+      player_id_b.Append(ap[p].tag_code);
+      attack_id_b.Append(i);
+      move_id_b.Append(ap[p].attacks[i].move_id);
+      move_name_b.Append(Move::shortname[ap[p].attacks[i].move_id]);
+      frame_b.Append(ap[p].attacks[i].frame);
+      cancel_type_b.Append(ap[p].attacks[i].cancel_type);
+      cancel_name_b.Append(Cancel::shortname[ap[p].attacks[i].cancel_type]);
+      punish_id_b.Append(ap[p].attacks[i].punish_id);
+      hit_id_b.Append(ap[p].attacks[i].hit_id);
+      anim_frame_b.Append(ap[p].attacks[i].anim_frame);
+      damage_b.Append(ap[p].attacks[i].damage);
+      opening_b.Append(Dynamic::name[ap[p].attacks[i].opening]);
+      kill_dir_b.Append(Dir::name[ap[p].attacks[i].kill_dir]);
+    }
+  }
+
+  std::shared_ptr<arrow::Array> match_id_a, player_id_a, attack_id_a, move_id_a, move_name_a, frame_a, punish_id_a;
+  std::shared_ptr<arrow::Array> cancel_type_a, cancel_name_a, punish_id_a, hit_id_a, anim_frame_a, damage_a, opening_a, kill_dir_a;
+
+  match_id_b.Finish(&match_id_a);
+  player_id_b.Finish(&player_id_a);
+  attack_id_b.Finish(&attack_id_a);
+  move_id_b.Finish(&move_id_a);
+  move_name_b.Finish(&move_name_a);
+  frame_b.Finish(&frame_a);
+  punish_id_b.Finish(&punish_id_a);
+  cancel_type_b.Finish(&cancel_type_a);
+  cancel_name_b.Finish(&cancel_name_a);
+  punish_id_b.Finish(&punish_id_a);
+  hit_id_b.Finish(&hit_id_a);
+  anim_frame_b.Finish(&anim_frame_a);
+  damage_b.Finish(&damage_a);
+  opening_b.Finish(&opening_a);
+  kill_dir_b.Finish(&kill_dir_a);
+
+  std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
+    match_id_a, player_id_a, attack_id_a, move_id_a, move_name_a,
+    frame_a, punish_id_a, cancel_type_a, cancel_name_a, punish_id_a,
+    hit_id_a, anim_frame_a, damage_a, opening_a, kill_dir_a
+  });
+
+  try {
+    logError("Opening Parquet output stream...");
+    std::shared_ptr<arrow::io::FileOutputStream> outfile;
+    PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/attacks.parquet"));
+
+    std::shared_ptr<arrow::io::OutputStream> outstream =
+      std::static_pointer_cast<arrow::io::OutputStream>(outfile);
+
+    logError("Setting writer properties...");
+
+    // TODO: switch from to snappy
+    std::shared_ptr<parquet::WriterProperties> writer_properties =
+      parquet::WriterProperties::Builder()
+        .compression(parquet::Compression::UNCOMPRESSED)
+        ->build();
+
+    logError("Calling WriteTable...");
+    PARQUET_THROW_NOT_OK(
+      parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
+    );
+  } catch (const parquet::ParquetException& e) {
+    std::cerr << "[ParquetException] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("ParquetException: ", e.what());
+  } catch (const std::exception& e) {
+    std::cerr << "[std::exception] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("std::exception: ", e.what());
+  } catch (...) {
+    std::cerr << "[Unknown error] during Parquet file write." << std::endl;
+    return arrow::Status::ExecutionError("Unknown error during Parquet write");
+  }
+
+  return arrow::Status::OK();
+}
+
 std::string Analysis::punishesAsJson() {
   std::stringstream ss;
   int a = 1;
@@ -398,12 +509,12 @@ void Analysis::save(const char* outfilename) {
   fout2 << j << std::endl;
   fout2.close();
 
-  std::string attacksFileName = std::string(outfilename) + "/attacks.jsonl";
-  std::ofstream fout3;
-  fout3.open(attacksFileName.c_str());
-  std::string k = attacksAsJson();
-  fout3 << k << std::endl;
-  fout3.close();
+//   std::string attacksFileName = std::string(outfilename) + "/attacks.jsonl";
+//   std::ofstream fout3;
+//   fout3.open(attacksFileName.c_str());
+//   std::string k = attacksAsJson();
+//   fout3 << k << std::endl;
+//   fout3.close();
 
   std::string punishesFileName = std::string(outfilename) + "/punishes.jsonl";
   std::ofstream fout4;
@@ -411,6 +522,8 @@ void Analysis::save(const char* outfilename) {
   std::string l = punishesAsJson();
   fout4 << l << std::endl;
   fout4.close();
+
+  attacksAsParquet();
 }
 
 }

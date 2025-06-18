@@ -187,6 +187,7 @@ struct Analysis {
   std::string asJson();                      //Convert the analysis structure to a JSON
   std::string statsAsJson();
   std::string attacksAsJson();
+  arrow::Status attacksAsParquet();
   std::string punishesAsJson();
   void save(const char* outfilename);        //Write the analysis out to a JSON file
 };
