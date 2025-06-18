@@ -201,6 +201,7 @@ struct SlippiReplay {
   std::string itemFramesAsJson();
   arrow::Status itemFramesAsParquet();
   std::string fodPlatformChangesAsJson();
+  arrow::Status fodPlatformChangesAsParquet();
   std::string settingsAsJson();
 };
 

@@ -624,6 +624,78 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
   return "";
 }
 
+arrow::Status SlippiReplay::fodPlatformChangesAsParquet() {
+  SlippiReplay s = (*this);
+
+  uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
+  uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
+  uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
+
+  if (!s.platform_events.empty()) {
+
+    using arrow::FloatBuilder;
+    using arrow::UInt8Builder;
+    using arrow::UInt16Builder;
+    using arrow::UInt32Builder;
+    using arrow::StringBuilder;
+
+    std::shared_ptr<arrow::Schema> schema = arrow::schema({
+      arrow::field("match_id", arrow::utf8()),
+      arrow::field("spawn_id", arrow::uint32()),
+    });
+
+    for (size_t i = 0; i < s.platform_events.size(); ++i) {
+      const auto& e = s.platform_events[i];
+      match_id_b.Append(s.start_time);
+      frame_b.Append(e.frame);
+      platform_b.Append(e.platform);
+      platform_height_b.Append(e.platform_height);
+    }
+
+      std::shared_ptr<arrow::Array> match_id_a, frame_a, platform_a, platform_height_a;
+
+      match_id_b.Finish(&match_id_a);
+      frame_b.Finish(&frame_a);
+      platform_b.Finish(&platform_a);
+      platform_height_b.Finish(&platform_height_a);
+
+
+      std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
+        match_id_a, frame_a, platform_a, platform_height_a
+      });
+
+      try {
+        std::shared_ptr<arrow::io::FileOutputStream> outfile;
+        PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/platforms.parquet"));
+
+        std::shared_ptr<arrow::io::OutputStream> outstream =
+          std::static_pointer_cast<arrow::io::OutputStream>(outfile);
+
+        // TODO: switch from to snappy
+        std::shared_ptr<parquet::WriterProperties> writer_properties =
+          parquet::WriterProperties::Builder()
+            .compression(parquet::Compression::UNCOMPRESSED)
+            ->build();
+
+        PARQUET_THROW_NOT_OK(
+          parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
+        );
+      } catch (const parquet::ParquetException& e) {
+        std::cerr << "[ParquetException] " << e.what() << std::endl;
+        return arrow::Status::ExecutionError("ParquetException: ", e.what());
+      } catch (const std::exception& e) {
+        std::cerr << "[std::exception] " << e.what() << std::endl;
+        return arrow::Status::ExecutionError("std::exception: ", e.what());
+      } catch (...) {
+        std::cerr << "[Unknown error] during Parquet file write." << std::endl;
+        return arrow::Status::ExecutionError("Unknown error during Parquet write");
+      }
+
+      return arrow::Status::OK();
+  }
+  return arrow::Status::OK();
+}
+
 std::string SlippiReplay::settingsAsJson() {
   SlippiReplay s = (*this);
 

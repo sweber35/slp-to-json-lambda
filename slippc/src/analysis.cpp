@@ -345,7 +345,7 @@ arrow::Status Analysis::punishesAsParquet() {
   UInt8Builder stocks_b;
   UInt16Builder num_moves_b, last_move_id_b;
   UInt32Builder start_frame_b, end_frame_b;
-  StringBuilder match_id_b, player_id_b, kill_dir_b, last_move_name_b;
+  StringBuilder match_id_b, player_id_b, kill_dir_b;
   FloatBuilder start_pct_b, end_pct_b;
 
   for(unsigned p = 0; p < 2; ++p) {

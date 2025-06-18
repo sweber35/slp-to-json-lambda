@@ -812,6 +812,10 @@ namespace slip {
     return _replay.fodPlatformChangesAsJson();
   }
 
+  void Parser::fodPlatformChangesAsParquet() {
+    return _replay.fodPlatformChangesAsParquet();
+  }
+
   std::string Parser::settingsAsJson() {
     return _replay.settingsAsJson();
   }
@@ -842,18 +846,19 @@ namespace slip {
     ofile3.close();
     DOUT1("  Saved to " << outfilename << "/settings.json");
 
-    if (fodPlatformChangesAsJson() != "") {
-      DOUT1("  Saving FoD Platform Height Changes");
-      std::string platformsFileName = std::string(outfilename) + "/platforms.jsonl";
-      std::ofstream ofile4;
-      ofile4.open(platformsFileName.c_str());
-      ofile4 << fodPlatformChangesAsJson() << std::endl;
-      ofile4.close();
-      DOUT1("  Saved to " << outfilename << "/platforms.jsonl");
-    }
+//     if (fodPlatformChangesAsJson() != "") {
+//       DOUT1("  Saving FoD Platform Height Changes");
+//       std::string platformsFileName = std::string(outfilename) + "/platforms.jsonl";
+//       std::ofstream ofile4;
+//       ofile4.open(platformsFileName.c_str());
+//       ofile4 << fodPlatformChangesAsJson() << std::endl;
+//       ofile4.close();
+//       DOUT1("  Saved to " << outfilename << "/platforms.jsonl");
+//     }
 
     playerFramesAsParquet();
     itemFramesAsParquet();
+    fodPlatformChangesAsParquet();
 
   }
 
