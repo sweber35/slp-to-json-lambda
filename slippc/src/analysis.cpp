@@ -154,7 +154,7 @@ std::string Analysis::statsAsJson() {
         _total_moves += ap[p].move_counts[d];
       }
     }
-    ss << JUIN(6,"_total", _total_moves) << "\n";
+    ss << JUIN(8,"_total", _total_moves) << "\n";
     ss << "      " << "},\n";
 
     ss << "    " << "}" << ( p== 0 ? ",\n" : "\n");
