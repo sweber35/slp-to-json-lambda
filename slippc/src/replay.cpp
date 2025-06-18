@@ -166,6 +166,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
         phys_r_b.Append(s.player[p].frame[f].phys_r);
         ucf_x_b.Append(s.player[p].frame[f].ucf_x);
         percent_pre_b.Append(s.player[p].frame[f].percent_pre);
+        action_pre_b.Append(s.player[p].frame[f].action_pre);
         action_post_b.Append(s.player[p].frame[f].action_post);
         pos_x_post_b.Append(s.player[p].frame[f].pos_x_post);
         pos_y_post_b.Append(s.player[p].frame[f].pos_y_post);
@@ -316,7 +317,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
 
     logError("Setting writer properties...");
 
-    // TODO: switch from GZIP to snappy
+    // TODO: switch to snappy
     std::shared_ptr<parquet::WriterProperties> writer_properties =
       parquet::WriterProperties::Builder()
         .compression(parquet::Compression::UNCOMPRESSED)
@@ -357,7 +358,7 @@ std::string SlippiReplay::playerFramesAsJson() {
         ss << "{";
 
         int a = 1; //True for only the first thing output per line
-        ss << JSTR("match_id"      ,s.start_time);
+        ss << JSTR("match_id"                 ,s.start_time);
         ss << JEND(a) << JSTR("player_id"     ,s.player[pp].tag_code);
         ss << JEND(a) << JUIN("follower"      ,s.player[p].frame[f].follower);
         ss << JEND(a) << JUIN("seed"          ,s.player[p].frame[f].seed);
@@ -471,6 +472,148 @@ std::string SlippiReplay::itemFramesAsJson() {
     }
   }
   return ss.str();
+}
+
+std::string SlippiReplay::itemFramesAsParquet() {
+  SlippiReplay s = (*this);
+
+  uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
+  uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
+  uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
+
+  using arrow::FloatBuilder;
+  using arrow::UInt8Builder;
+  using arrow::UInt16Builder;
+  using arrow::UInt32Builder;
+  using arrow::Int32Builder;
+  using arrow::StringBuilder;
+
+  std::shared_ptr<arrow::Schema> schema = arrow::schema({
+    arrow::field("match_id", arrow::utf8()),
+    arrow::field("spawn_id", arrow::uint32()),
+    arrow::field("item_type", arrow::uint16()),
+    arrow::field("frame_number", arrow::uint32()),
+    arrow::field("state", arrow::uint8()),
+    arrow::field("face_dir", arrow::float32()),
+    arrow::field("xvel", arrow::float32()),
+    arrow::field("yvel", arrow::float32()),
+    arrow::field("xpos", arrow::float32()),
+    arrow::field("ypos", arrow::float32()),
+    arrow::field("damage", arrow::uint16()),
+    arrow::field("expire", arrow::float32()),
+    arrow::field("missile_type", arrow::uint16()),
+    arrow::field("turnip_face", arrow::uint16()),
+    arrow::field("is_launched", arrow::uint16()),
+    arrow::field("charged_power", arrow::uint16()),
+    arrow::field("owner", arrow::uint8()),
+  });
+
+  FloatBuilder face_dir_b, xvel_b, yvel_b, xpos_b, ypos_b, expire_b;
+  UInt8Builder state_b, owner_b;
+  UInt16Builder item_type_b, damage_b, missile_type_b, turnip_face_b, is_launched_b, charged_power_b;
+  UInt32Builder frame_number_b;
+  Int32Builder spawn_id_b;
+  StringBuilder match_id_b;
+
+  for (unsigned i = 0; i < MAX_ITEMS; ++i) {
+    if (s.item[i].spawn_id > MAX_ITEMS) {
+      break;
+    }
+    for (unsigned f = 0; f < s.item[i].num_frames; ++f) {
+      match_id_b.Append(s.start_time);
+      spawn_id_b.Append(s.item[i].spawn_id);
+      item_type_b.Append(s.item[i].type);
+      frame_b.Append(s.item[i].frame[f].frame);
+      state_b.Append(s.item[i].frame[f].state);
+      face_dir_b.Append(s.item[i].frame[f].face_dir);
+      xvel_b.Append(s.item[i].frame[f].xvel);
+      yvel_b.Append(s.item[i].frame[f].yvel);
+      xpos_b.Append(s.item[i].frame[f].xpos);
+      ypos_b.Append(s.item[i].frame[f].ypos);
+      damage_b.Append(s.item[i].frame[f].damage);
+      expire_b.Append(s.item[i].frame[f].expire);
+
+      if (MIN_VERSION(3, 2, 0)) {
+        missile_type_b.Append(s.item[i].frame[f].flags_1);
+        turnip_face_b.Append(s.item[i].frame[f].flags_2);
+        is_launched_b.Append(s.item[i].frame[f].flags_3);
+        charged_power_b.Append(s.item[i].frame[f].flags_4);
+      } else {
+        missile_type_b.Append(0);
+        turnip_face_b.Append(0);
+        is_launched_b.Append(0);
+        charged_power_b.Append(0);
+      }
+
+      if (MIN_VERSION(3, 6, 0)) {
+        owner_b.Append(s.item[i].frame[f].owner);
+      } else {
+        owner_b.Append(-1);
+      }
+    }
+  }
+
+  std::shared_ptr<arrow::Array> match_id_a, spawn_id_a, item_type_a, frame_a, owner_a;
+  std::shared_ptr<arrow::Array> face_dir_a, xvel_a, yvel_a, xpos_a, ypos_a, damage_a, expire_a, state_a;
+  std::shared_ptr<arrow::Array> missile_type_a, turnip_face_a, is_launched_a, charged_power_a;
+
+  match_id_b.Finish($match_id_a);
+  spawn_id_b.Finish($spawn_id_a);
+  item_type_b.Finish($item_type_a);
+  frame_b.Finish($frame_a);
+  state_b.Finish($state_a);
+  face_dir_b.Finish($face_dir_a);
+  xvel_b.Finish($xvel_a);
+  yvel_b.Finish($yvel_a);
+  xpos_b.Finish($xpos_a);
+  ypos_b.Finish($)ypos_a;
+  damage_b.Finish($damage_a);
+  expire_b.Finish($expire_a);
+  missile_type_b.Finish($missile_type_a);
+  turnip_face_b.Finish($turnip_face_a);
+  is_launched_b.Finish($is_launched_a);
+  charged_power_b.Finish($charged_power_a);
+  owner_b.Finish($owner_a);
+
+  std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
+    match_id_a, spawn_id_a, item_type_a, frame_a, owner_a,
+    face_dir_a, xvel_a, yvel_a, xpos_a, ypos_a,
+    damage_a, expire_a, state_a, missile_type_a,
+    turnip_face_a, is_launched_a, charged_power_a
+  });
+
+  try {
+    logError("Opening Parquet output stream...");
+    std::shared_ptr<arrow::io::FileOutputStream> outfile;
+    PARQUET_ASSIGN_OR_THROW(outfile, arrow::io::FileOutputStream::Open("/tmp/items.parquet"));
+
+    std::shared_ptr<arrow::io::OutputStream> outstream =
+      std::static_pointer_cast<arrow::io::OutputStream>(outfile);
+
+    logError("Setting writer properties...");
+
+    // TODO: switch from to snappy
+    std::shared_ptr<parquet::WriterProperties> writer_properties =
+      parquet::WriterProperties::Builder()
+        .compression(parquet::Compression::UNCOMPRESSED)
+        ->build();
+
+    logError("Calling WriteTable...");
+    PARQUET_THROW_NOT_OK(
+      parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outstream, 1024, writer_properties)
+    );
+  } catch (const parquet::ParquetException& e) {
+    std::cerr << "[ParquetException] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("ParquetException: ", e.what());
+  } catch (const std::exception& e) {
+    std::cerr << "[std::exception] " << e.what() << std::endl;
+    return arrow::Status::ExecutionError("std::exception: ", e.what());
+  } catch (...) {
+    std::cerr << "[Unknown error] during Parquet file write." << std::endl;
+    return arrow::Status::ExecutionError("Unknown error during Parquet write");
+  }
+
+  return arrow::Status::OK();
 }
 
 std::string SlippiReplay::fodPlatformChangesAsJson() {

@@ -804,6 +804,10 @@ namespace slip {
     return _replay.itemFramesAsJson();
   }
 
+  void Parser::itemFramesAsParquet() {
+    _replay.itemFramesAsParquet();
+  }
+
   std::string Parser::fodPlatformChangesAsJson() {
     return _replay.fodPlatformChangesAsJson();
   }
@@ -814,21 +818,21 @@ namespace slip {
 
   void Parser::save(const char* outfilename, bool delta) {
 
-    DOUT1("  Saving Player Frames");
-    std::string framesFileName = std::string(outfilename) + "/frames.jsonl";
-    std::ofstream ofile1;
-    ofile1.open(framesFileName.c_str());
-    ofile1 << playerFramesAsJson() << std::endl;
-    ofile1.close();
-    DOUT1("  Saved to " << outfilename << "/frames.jsonl");
-
-    DOUT1("  Saving Item Frames");
-    std::string itemsFileName = std::string(outfilename) + "/items.jsonl";
-    std::ofstream ofile2;
-    ofile2.open(itemsFileName.c_str());
-    ofile2 << itemFramesAsJson() << std::endl;
-    ofile2.close();
-    DOUT1("  Saved to " << outfilename << "/items.jsonl");
+//     DOUT1("  Saving Player Frames");
+//     std::string framesFileName = std::string(outfilename) + "/frames.jsonl";
+//     std::ofstream ofile1;
+//     ofile1.open(framesFileName.c_str());
+//     ofile1 << playerFramesAsJson() << std::endl;
+//     ofile1.close();
+//     DOUT1("  Saved to " << outfilename << "/frames.jsonl");
+//
+//     DOUT1("  Saving Item Frames");
+//     std::string itemsFileName = std::string(outfilename) + "/items.jsonl";
+//     std::ofstream ofile2;
+//     ofile2.open(itemsFileName.c_str());
+//     ofile2 << itemFramesAsJson() << std::endl;
+//     ofile2.close();
+//     DOUT1("  Saved to " << outfilename << "/items.jsonl");
 
     DOUT1("  Saving Settings");
     std::string settingsFileName = std::string(outfilename) + "/settings.json";
@@ -849,6 +853,7 @@ namespace slip {
     }
 
     playerFramesAsParquet();
+    itemFramesAsParquet();
 
   }
 

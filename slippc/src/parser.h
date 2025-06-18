@@ -55,6 +55,7 @@ public:
   std::string playerFramesAsJson();
   void playerFramesAsParquet();
   std::string itemFramesAsJson();
+  void itemFramesAsParquet();
   std::string fodPlatformChangesAsJson();
   std::string settingsAsJson();
   void save(const char* outfilename, bool delta); //Save a replay file
