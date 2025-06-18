@@ -183,7 +183,7 @@ std::string Analysis::attacksAsJson() {
   return ss.str();
 }
 
-arrow::Status SlippiReplay::attacksAsParquet() {
+arrow::Status Analysis::attacksAsParquet() {
 
   using arrow::FloatBuilder;
   using arrow::UInt8Builder;
