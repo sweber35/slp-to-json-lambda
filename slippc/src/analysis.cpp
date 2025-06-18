@@ -154,7 +154,7 @@ std::string Analysis::statsAsJson() {
       }
     }
     ss << JUIN(8,"_total", _total_moves) << "\n";
-    ss << "      " << "},\n";
+    ss << "      " << "}\n";
 
     ss << "    " << "}" << ( p== 0 ? ",\n" : "\n");
   }
