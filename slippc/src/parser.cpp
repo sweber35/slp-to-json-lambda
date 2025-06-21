@@ -824,6 +824,10 @@ namespace slip {
     return _replay.playerSettingsAsJson();
   }
 
+  std::string Parser::matchSettingsAsJson() {
+    return _replay.matchSettingsAsJson();
+  }
+
   void Parser::save(const char* outfilename, bool delta) {
 
     DOUT1("  Saving Settings");
