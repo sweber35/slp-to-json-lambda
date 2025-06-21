@@ -14,23 +14,7 @@ async function streamToBuffer(stream) {
   return Buffer.concat(chunks);
 }
 
-async function sendFilesToS3( startAt, bucket, files ) {
-  const fs = require('fs');
-  for await (const file of files) {
-
-    const { key } = file;
-
-    const putCommand = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `${key}/${startAt}_${key}.${file.type }`,
-      Body: fs.createReadStream(`/tmp/${key}.${file.type}`, 'utf-8'),
-      ContentType: `application/${file.type}`
-    });
-    await s3.send(putCommand);
-  }
-}
-
-async function sendStreamsToS3( startAt, bucket, streams ) {
+async function sendFilesToS3( startAt, bucket, streams ) {
   const fs = require('fs');
   for await (const stream of streams) {
 
@@ -115,13 +99,7 @@ exports.handler = async (event) => {
     const startAt = settings.match_id;
     const stageIsFod = settings.stage === 2;
 
-    const jsonPuts = [
-      // { key: 'stats',    type: 'json' },
-      // { key: 'settings', type: 'json' },
-    ];
-    await sendFilesToS3(startAt, bucket, jsonPuts);
-
-    const streamPuts = [
+    const puts = [
       { key: 'frames', type: 'parquet' },
       { key: 'items', type: 'parquet' },
       { key: 'attacks', type: 'parquet' },
@@ -130,9 +108,9 @@ exports.handler = async (event) => {
       { key: 'player-settings', type: 'jsonl' },
     ];
     if (stageIsFod) {
-      streamPuts.push({ key: 'platforms', type: 'parquet' });
+      puts.push({ key: 'platforms', type: 'parquet' });
     }
-    await sendStreamsToS3(startAt, bucket, streamPuts);
+    await sendFilesToS3(startAt, bucket, puts);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);
