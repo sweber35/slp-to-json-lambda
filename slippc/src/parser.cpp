@@ -820,23 +820,15 @@ namespace slip {
     return _replay.settingsAsJson();
   }
 
-  void Parser::save(const char* outfilename, bool delta) {
+  std::string Parser::playerSettingsAsJson() {
+    return _replay.playerSettingsAsJson();
+  }
 
-//     DOUT1("  Saving Player Frames");
-//     std::string framesFileName = std::string(outfilename) + "/frames.jsonl";
-//     std::ofstream ofile1;
-//     ofile1.open(framesFileName.c_str());
-//     ofile1 << playerFramesAsJson() << std::endl;
-//     ofile1.close();
-//     DOUT1("  Saved to " << outfilename << "/frames.jsonl");
-//
-//     DOUT1("  Saving Item Frames");
-//     std::string itemsFileName = std::string(outfilename) + "/items.jsonl";
-//     std::ofstream ofile2;
-//     ofile2.open(itemsFileName.c_str());
-//     ofile2 << itemFramesAsJson() << std::endl;
-//     ofile2.close();
-//     DOUT1("  Saved to " << outfilename << "/items.jsonl");
+  std::string Parser::settingsAsJson() {
+    return _replay.settingsAsJson();
+  }
+
+  void Parser::save(const char* outfilename, bool delta) {
 
     DOUT1("  Saving Settings");
     std::string settingsFileName = std::string(outfilename) + "/settings.json";
@@ -846,15 +838,21 @@ namespace slip {
     ofile3.close();
     DOUT1("  Saved to " << outfilename << "/settings.json");
 
-//     if (fodPlatformChangesAsJson() != "") {
-//       DOUT1("  Saving FoD Platform Height Changes");
-//       std::string platformsFileName = std::string(outfilename) + "/platforms.jsonl";
-//       std::ofstream ofile4;
-//       ofile4.open(platformsFileName.c_str());
-//       ofile4 << fodPlatformChangesAsJson() << std::endl;
-//       ofile4.close();
-//       DOUT1("  Saved to " << outfilename << "/platforms.jsonl");
-//     }
+    DOUT1("  Saving Match Settings");
+    std::string settingsFileName = std::string(outfilename) + "/match-settings.jsonl";
+    std::ofstream ofile3;
+    ofile3.open(settingsFileName.c_str());
+    ofile3 << matchSettingsAsJson() << std::endl;
+    ofile3.close();
+    DOUT1("  Saved to " << outfilename << "/match-settings.jsonl");
+
+    DOUT1("  Saving Player Settings");
+    std::string settingsFileName = std::string(outfilename) + "/player-settings.jsonl";
+    std::ofstream ofile3;
+    ofile3.open(settingsFileName.c_str());
+    ofile3 << playerSettingsAsJson() << std::endl;
+    ofile3.close();
+    DOUT1("  Saved to " << outfilename << "/player-settings.jsonl");
 
     playerFramesAsParquet();
     itemFramesAsParquet();

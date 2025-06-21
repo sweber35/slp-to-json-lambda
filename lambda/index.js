@@ -116,21 +116,23 @@ exports.handler = async (event) => {
     const stageIsFod = settings.stage === 2;
 
     const jsonPuts = [
-      { key: 'stats',    type: 'json' },
-      { key: 'settings', type: 'json' },
+      // { key: 'stats',    type: 'json' },
+      // { key: 'settings', type: 'json' },
     ];
     await sendFilesToS3(startAt, bucket, jsonPuts);
 
-    const parquetPuts = [
+    const streamPuts = [
       { key: 'frames', type: 'parquet' },
       { key: 'items', type: 'parquet' },
       { key: 'attacks', type: 'parquet' },
       { key: 'punishes', type: 'parquet' },
+      { key: 'match-settings', type: 'jsonl' },
+      { key: 'player-settings', type: 'jsonl' },
     ];
     if (stageIsFod) {
-      parquetPuts.push({ key: 'platforms', type: 'parquet' });
+      streamPuts.push({ key: 'platforms', type: 'parquet' });
     }
-    await sendStreamsToS3(startAt, bucket, parquetPuts);
+    await sendStreamsToS3(startAt, bucket, streamPuts);
 
   } catch (err) {
     console.log('Error writing JSON to S3:', err);

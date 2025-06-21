@@ -59,6 +59,9 @@ public:
   std::string fodPlatformChangesAsJson();
   void fodPlatformChangesAsParquet();
   std::string settingsAsJson();
+  std::string playerSettingsAsJson();
+  std::string matchSettingsAsJson();
+
   void save(const char* outfilename, bool delta); //Save a replay file
 
   //Getter function for exposing read-only access to underlying replay

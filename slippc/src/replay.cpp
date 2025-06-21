@@ -713,20 +713,56 @@ std::string SlippiReplay::settingsAsJson() {
 
   ss << "{\n";
   ss << "  " << JSTR("match_id"       ,s.start_time) << ",\n";
+  ss << "  " << JUIN("stage"          ,s.stage) << ",\n";
+  ss << "}" << std::endl;
+
+  return ss.str();
+}
+
+std::string SlippiReplay::matchSettingsAsJson() {
+  SlippiReplay s = (*this);
+
+  uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
+  uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
+  uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
+
+  std::stringstream ss;
+
+  ss << "{\n";
+  ss << "  " << JSTR("match_id"       ,s.start_time) << ",\n";
   ss << "  " << JSTR("slippi_version" ,s.slippi_version) << ",\n";
   ss << "  " << JUIN("timer"          ,s.timer) << ",\n";
   ss << "  " << JINT("frame_count"    ,s.frame_count) << ",\n";
   ss << "  " << JINT("winner_id"      ,s.winner_id) << ",\n";
   ss << "  " << JUIN("stage"          ,s.stage) << ",\n";
-  for (unsigned i = 0; i < 4; ++i) {
-    if (s.player[i].player_type != 3) {
-       ss << "  " << JSTR(("player_" + std::to_string(i + 1) + "_code")     ,s.player[i].tag_code) << ",\n";
-       ss << "  " << JINT(("player_" + std::to_string(i + 1) + "_ext_char") ,s.player[i].ext_char_id) << ",\n";
-    }
-  }
   ss << "  " << JUIN("end_type"       ,s.end_type) << "\n";
 
   ss << "}" << std::endl;
+
+  return ss.str();
+}
+
+std::string SlippiReplay::playerSettingsAsJson() {
+  SlippiReplay s = (*this);
+
+  uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
+  uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
+  uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
+
+  std::stringstream ss;
+
+
+  for (unsigned i = 0; i < 4; ++i) {
+    if (s.player[i].player_type != 3) {
+      ss << "{ ";
+      ss << "  " << JSTR(("match_id")        ,s.start_time) << ", ";
+      ss << "  " << JSTR(("player_code")     ,s.player[i].tag_code) << ", ";
+      ss << "  " << JSTR(("player_tag")      ,s.player[i].tag) << ", ";
+      ss << "  " << JINT(("player_ext_char") ,s.player[i].ext_char_id);
+      ss << " }" << std::endl;
+    }
+  }
+
 
   return ss.str();
 }
