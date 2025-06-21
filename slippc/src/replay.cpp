@@ -748,21 +748,26 @@ std::string SlippiReplay::playerSettingsAsJson() {
   uint8_t _slippi_min = (s.slippi_version_raw >> 16) & 0xff;
   uint8_t _slippi_rev = (s.slippi_version_raw >>  8) & 0xff;
 
+  unsigned num_players = 0;
   std::stringstream ss;
 
-
-  for (unsigned i = 0; i < 4; ++i) {
+  for(uint8_t i = 0; i < 4; ++i) {
     if (s.player[i].player_type != 3) {
+      if (num_players == 2) {
+        return false;
+      }
       ss << "{";
       ss << JSTR(("match_id")        ,s.start_time)         << ",";
+      ss << JSTR(("player_index")    ,i)                    << ",";
       ss << JSTR(("player_code")     ,s.player[i].tag_code) << ",";
       ss << JSTR(("player_tag")      ,s.player[i].tag)      << ",";
       ss << JINT(("player_ext_char") ,s.player[i].ext_char_id);
       ss << " }" << std::endl;
     }
+    if (i == 3 && num_players != 2) {
+      return false;
+    }
   }
-
-
   return ss.str();
 }
 }
