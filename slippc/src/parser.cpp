@@ -832,18 +832,18 @@ namespace slip {
 
     DOUT1("  Saving Settings");
     std::string settingsFileName = std::string(outfilename) + "/settings.json";
-    std::ofstream ofile3;
-    ofile3.open(settingsFileName.c_str());
-    ofile3 << settingsAsJson() << std::endl;
-    ofile3.close();
+    std::ofstream ofile1;
+    ofile1.open(settingsFileName.c_str());
+    ofile1 << settingsAsJson() << std::endl;
+    ofile1.close();
     DOUT1("  Saved to " << outfilename << "/settings.json");
 
     DOUT1("  Saving Match Settings");
     std::string settingsFileName = std::string(outfilename) + "/match-settings.jsonl";
-    std::ofstream ofile3;
-    ofile3.open(settingsFileName.c_str());
-    ofile3 << matchSettingsAsJson() << std::endl;
-    ofile3.close();
+    std::ofstream ofile2;
+    ofile2.open(settingsFileName.c_str());
+    ofile2 << matchSettingsAsJson() << std::endl;
+    ofile2.close();
     DOUT1("  Saved to " << outfilename << "/match-settings.jsonl");
 
     DOUT1("  Saving Player Settings");
