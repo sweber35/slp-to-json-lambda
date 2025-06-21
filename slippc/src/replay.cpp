@@ -713,7 +713,7 @@ std::string SlippiReplay::settingsAsJson() {
 
   ss << "{\n";
   ss << "  " << JSTR("match_id"       ,s.start_time) << ",\n";
-  ss << "  " << JUIN("stage"          ,s.stage) << ",\n";
+  ss << "  " << JUIN("stage"          ,s.stage) << "\n";
   ss << "}" << std::endl;
 
   return ss.str();
