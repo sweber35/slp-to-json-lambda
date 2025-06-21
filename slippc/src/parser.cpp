@@ -839,17 +839,17 @@ namespace slip {
     DOUT1("  Saved to " << outfilename << "/settings.json");
 
     DOUT1("  Saving Match Settings");
-    std::string settingsFileName = std::string(outfilename) + "/match-settings.jsonl";
+    std::string matchSettingsFileName = std::string(outfilename) + "/match-settings.jsonl";
     std::ofstream ofile2;
-    ofile2.open(settingsFileName.c_str());
+    ofile2.open(matchSettingsFileName.c_str());
     ofile2 << matchSettingsAsJson() << std::endl;
     ofile2.close();
     DOUT1("  Saved to " << outfilename << "/match-settings.jsonl");
 
     DOUT1("  Saving Player Settings");
-    std::string settingsFileName = std::string(outfilename) + "/player-settings.jsonl";
+    std::string playerSettingsFileName = std::string(outfilename) + "/player-settings.jsonl";
     std::ofstream ofile3;
-    ofile3.open(settingsFileName.c_str());
+    ofile3.open(playerSettingsFileName.c_str());
     ofile3 << playerSettingsAsJson() << std::endl;
     ofile3.close();
     DOUT1("  Saved to " << outfilename << "/player-settings.jsonl");
