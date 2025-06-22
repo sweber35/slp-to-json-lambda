@@ -13,9 +13,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Build binary in Docker (x86_64)
-        run: |
-          docker build -t slippc-builder -f ./Dockerfile .
+      - name: Build binary using Buildx (with auth)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: slippc-builder
+          load: true
+          platforms: linux/amd64
 
       - name: Copy binary out of container
         run: |
