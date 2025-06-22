@@ -69,6 +69,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   std::shared_ptr<arrow::Schema> schema = arrow::schema({
     arrow::field("match_id", arrow::utf8()),
     arrow::field("player_id", arrow::utf8()),
+    arrow::field("player_index", arrow::uint8()),
     arrow::field("frame_number", arrow::uint32()),
     arrow::field("char_id", arrow::uint8()),
     arrow::field("follower", arrow::boolean()),
@@ -120,7 +121,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
 
   UInt8Builder ucf_x_b, char_id_b, hit_with_b, combo_b, hurt_by_b, stocks_b;
   UInt8Builder missile_type_b, turnip_face_b, is_launched_b, charged_power_b;
-  UInt8Builder ground_id_b, jumps_b, l_cancel_b, hurtbox_b;
+  UInt8Builder ground_id_b, jumps_b, l_cancel_b, hurtbox_b, player_index_b;
   UInt16Builder action_pre_b, action_post_b, buttons_b;
   UInt32Builder frame_number_b, seed_b, anim_index_b;
   FloatBuilder pos_x_pre_b, pos_y_pre_b, joy_x_b, joy_y_b, c_x_b, c_y_b;
@@ -139,6 +140,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
 
         match_id_b.Append(s.start_time);
         player_id_b.Append(s.player[pp].tag_code);
+        player_index_b.Append(p);
         frame_number_b.Append(f);
         char_id_b.Append(s.player[p].frame[f].char_id);
         follower_b.Append(s.player[p].frame[f].follower);
@@ -228,7 +230,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     }
   }
 
-  std::shared_ptr<arrow::Array> match_id_a, player_id_a, frame_number_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a;
+  std::shared_ptr<arrow::Array> match_id_a, player_id_a, player_index_a, frame_number_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a;
   std::shared_ptr<arrow::Array> pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a;
   std::shared_ptr<arrow::Array> c_x_a, c_y_a, trigger_a, buttons_a, phys_l_a, phys_r_a, shield_a;
   std::shared_ptr<arrow::Array> hit_with_a, combo_a, hurt_by_a, percent_pre_a, percent_post_a;
@@ -239,6 +241,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
 
   match_id_b.Finish(&match_id_a);
   player_id_b.Finish(&player_id_a);
+  player_index_b.Finish(&player_index_a);
   frame_number_b.Finish(&frame_number_a);
   char_id_b.Finish(&char_id_a);
   follower_b.Finish(&follower_a);
@@ -288,7 +291,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   self_grd_x_b.Finish(&self_grd_x_a);
 
   std::shared_ptr<arrow::Table> table = arrow::Table::Make(schema, {
-    match_id_a, player_id_a, frame_number_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
+    match_id_a, player_id_a, player_index_a, frame_number_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
     pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
     buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
     percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
@@ -346,6 +349,7 @@ std::string SlippiReplay::playerFramesAsJson() {
         int a = 1; //True for only the first thing output per line
         ss << JSTR("match_id"                 ,s.start_time);
         ss << JEND(a) << JSTR("player_id"     ,s.player[pp].tag_code);
+        ss << JEND(a) << JINT("player_index"  ,i);
         ss << JEND(a) << JUIN("follower"      ,s.player[p].frame[f].follower);
         ss << JEND(a) << JUIN("seed"          ,s.player[p].frame[f].seed);
         ss << JEND(a) << JUIN("action_pre"    ,s.player[p].frame[f].action_pre);
