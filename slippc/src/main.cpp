@@ -265,7 +265,7 @@ int handleSingleFile(const cmdoptions &c, const int debug) {
   if (c.outfile || c.analysisfile) {
     DOUT1(" Parsing");
     slip::Parser p(debug);
-  if (not p.load(std::string("/tmp/") + c.infile.c_str())) {
+  if (not p.load((std::string("/tmp/") + c.infile).c_str())) {
       FAIL("    Could not load input; exiting");
       return 2;
     }
