@@ -593,8 +593,8 @@ void Analysis::save(const char* outfilename) {
 //   std::string j = asJson();
 //   fout << j << std::endl;
 //   fout.close();
-
-  std::string statsFileName = std::string(outfilename) + "/stats.json";
+  std::string fileNameWithPath = "/tmp/" + std::string(outfilename);
+  std::string statsFileName = fileNameWithPath + "/stats.json";
   std::ofstream fout2;
   fout2.open(statsFileName.c_str());
   std::string j = statsAsJson();
