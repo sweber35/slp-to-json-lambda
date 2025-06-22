@@ -60,7 +60,7 @@ public:
   void fodPlatformChangesAsParquet();
   std::string settingsAsJson();
   std::string playerSettingsAsJson();
-  std::string matchSettingsAsJson();
+  std::string matchSettingsAsJson(const std::string& filename);
 
   void save(const char* outfilename, bool delta); //Save a replay file
 
