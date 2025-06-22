@@ -101,10 +101,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     arrow::field("action_fc", arrow::float32()),
     arrow::field("face_dir_pre", arrow::float32()),
     arrow::field("face_dir_post", arrow::float32()),
-    arrow::field("missile_type", arrow::uint8()),
-    arrow::field("turnip_face", arrow::uint8()),
-    arrow::field("is_launched", arrow::uint8()),
-    arrow::field("charged_power", arrow::uint8()),
     arrow::field("hitstun", arrow::float32()),
     arrow::field("airborne", arrow::boolean()),
     arrow::field("ground_id", arrow::uint16()),
@@ -120,7 +116,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   });
 
   UInt8Builder ucf_x_b, char_id_b, hit_with_b, combo_b, hurt_by_b, stocks_b;
-  UInt8Builder missile_type_b, turnip_face_b, is_launched_b, charged_power_b;
   UInt8Builder jumps_b, l_cancel_b, hurtbox_b, player_index_b;
   UInt16Builder action_pre_b, action_post_b, buttons_b, ground_id_b;
   UInt32Builder frame_number_b, seed_b, anim_index_b;
@@ -172,10 +167,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
         action_fc_b.Append(s.player[p].frame[f].action_fc);
 
         if(MIN_VERSION(2,0,0)) {
-          missile_type_b.Append(s.player[p].frame[f].flags_1);
-          turnip_face_b.Append(s.player[p].frame[f].flags_2);
-          is_launched_b.Append(s.player[p].frame[f].flags_3);
-          charged_power_b.Append(s.player[p].frame[f].flags_4);
           hitstun_b.Append(s.player[p].frame[f].hitstun);
           airborne_b.Append(s.player[p].frame[f].airborne);
           ground_id_b.Append(s.player[p].frame[f].ground_id);
@@ -183,10 +174,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
           l_cancel_b.Append(s.player[p].frame[f].l_cancel);
           alive_b.Append(s.player[p].frame[f].alive);
         } else {
-          missile_type_b.Append(0);
-          turnip_face_b.Append(0);
-          is_launched_b.Append(0);
-          charged_power_b.Append(0);
           hitstun_b.Append(0);
           airborne_b.Append(false);
           ground_id_b.Append(0);
@@ -235,7 +222,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   std::shared_ptr<arrow::Array> c_x_a, c_y_a, trigger_a, buttons_a, phys_l_a, phys_r_a, shield_a;
   std::shared_ptr<arrow::Array> hit_with_a, combo_a, hurt_by_a, percent_pre_a, percent_post_a;
   std::shared_ptr<arrow::Array> action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a;
-  std::shared_ptr<arrow::Array> missile_type_a, turnip_face_a, is_launched_a, charged_power_a;
   std::shared_ptr<arrow::Array> hitstun_a, airborne_a, ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a;
   std::shared_ptr<arrow::Array> self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a;
 
@@ -273,10 +259,6 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
   action_fc_b.Finish(&action_fc_a);
   face_dir_pre_b.Finish(&face_dir_pre_a);
   face_dir_post_b.Finish(&face_dir_post_a);
-  missile_type_b.Finish(&missile_type_a);
-  turnip_face_b.Finish(&turnip_face_a);
-  is_launched_b.Finish(&is_launched_a);
-  charged_power_b.Finish(&charged_power_a);
   hitstun_b.Finish(&hitstun_a);
   airborne_b.Finish(&airborne_a);
   ground_id_b.Finish(&ground_id_a);
@@ -294,8 +276,7 @@ arrow::Status SlippiReplay::playerFramesAsParquet() {
     match_id_a, player_id_a, player_index_a, frame_number_a, char_id_a, follower_a, seed_a, ucf_x_a, stocks_a, alive_a, anim_index_a,
     pos_x_pre_a, pos_y_pre_a, pos_x_post_a, pos_y_post_a, joy_x_a, joy_y_a, c_x_a, c_y_a, trigger_a,
     buttons_a, phys_l_a, phys_r_a, shield_a, hit_with_a, combo_a, hurt_by_a, percent_pre_a,
-    percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a,
-    missile_type_a, turnip_face_a, is_launched_a, charged_power_a, hitstun_a, airborne_a,
+    percent_post_a, action_pre_a, action_post_a, action_fc_a, face_dir_pre_a, face_dir_post_a, hitstun_a, airborne_a,
     ground_id_a, jumps_a, l_cancel_a, hurtbox_a, hitlag_a,
     self_air_x_a, self_air_y_a, attack_x_a, attack_y_a, self_grd_x_a
   });
