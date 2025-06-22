@@ -1,11 +1,31 @@
 #include <algorithm>
 #include <sys/stat.h>
 #include <filesystem>
+#include <iostream>
+
+#include <arrow/api.h>
+#include <parquet/arrow/writer.h>
+#include <arrow/util/logging.h>
+#include <arrow/status.h>
+#include <arrow/result.h>
+#include <arrow/io/file.h>
+#include <parquet/exception.h>
+#include <arrow/util/config.h>
 
 #include "util.h"
 #include "parser.h"
 #include "analyzer.h"
 #include "compressor.h"
+
+#ifndef ARROW_THROW_NOT_OK
+#define ARROW_THROW_NOT_OK(expr)             \
+  do {                                       \
+    ::arrow::Status _s = (expr);             \
+    if (!_s.ok()) {                          \
+      throw std::runtime_error(_s.ToString()); \
+    }                                        \
+  } while (0)
+#endif
 
 // #define GUI_ENABLED 1  //debug, normally enable this from the makefile
 
@@ -160,9 +180,6 @@ inline void cleanupCommandOptions(cmdoptions &c) {
   if(c.outfile) {
     delete[] c.outfile;
   }
-  if(c.analysisfile) {
-    delete[] c.analysisfile;
-  }
 }
 
 int handleCompression(const cmdoptions &c, const int debug) {
@@ -216,7 +233,7 @@ int handleAnalysis(const cmdoptions &c, const int debug, slip::Parser &p) {
       if (debug) {
         DOUT1("  Saving analysis to file");
       }
-      a->save(c.analysisfile);
+      a->save(c.outfile);
     }
   }
 
@@ -230,12 +247,12 @@ int handleJson(const cmdoptions &c, const int debug, slip::Parser &p) {
     if (debug) {
       DOUT1("  Writing Slippi JSON data to stdout");
     }
-    std::cout << p.asJson(!c.nodelta) << std::endl;
+//     std::cout << p.asJson(!c.nodelta) << std::endl;
   } else {
     if (debug) {
       DOUT1("  Saving Slippi JSON data to file");
     }
-    p.save(c.outfile,!c.nodelta);
+    p.save(c.outfile, c.infile, !c.nodelta);
   }
   return 0;
 }
@@ -248,16 +265,13 @@ int handleSingleFile(const cmdoptions &c, const int debug) {
   if (c.outfile || c.analysisfile) {
     DOUT1(" Parsing");
     slip::Parser p(debug);
-    if (not p.load(c.infile)) {
+  if (not p.load((std::string("/tmp/") + c.infile).c_str())) {
       FAIL("    Could not load input; exiting");
       return 2;
     }
 
     if (c.outfile) {
       retj = handleJson(c,debug,p);
-    }
-
-    if (c.analysisfile) {
       reta = handleAnalysis(c,debug,p);
     }
   }
@@ -354,8 +368,40 @@ int run(int argc, char** argv) {
   return handleSingleFile(c,c.debug);
 }
 
+void write_parquet_test() {
+  arrow::Int32Builder builder;
+
+  ARROW_THROW_NOT_OK(builder.Append(10));
+  ARROW_THROW_NOT_OK(builder.Append(20));
+  ARROW_THROW_NOT_OK(builder.Append(30));
+
+  std::shared_ptr<arrow::Array> array;
+  ARROW_THROW_NOT_OK(builder.Finish(&array));
+
+  auto schema = arrow::schema({arrow::field("example", arrow::int32())});
+  auto table = arrow::Table::Make(schema, {array});
+
+  std::shared_ptr<arrow::io::FileOutputStream> outfile;
+  PARQUET_ASSIGN_OR_THROW(
+      outfile,
+      arrow::io::FileOutputStream::Open("/tmp/example.parquet")
+  );
+
+  PARQUET_THROW_NOT_OK(parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile, 1024));
+}
+
 }
 
 int main(int argc, char** argv) {
-  return slip::run(argc,argv);
+  try {
+    std::cout << "Arrow version: " << ARROW_VERSION_STRING << std::endl;
+    return slip::run(argc,argv);
+  }
+  catch (const std::exception& e) {
+    std::cerr << "[FATAL std::exception] " << e.what() << std::endl;
+      return 1;
+    } catch (...) {
+      std::cerr << "[FATAL unknown exception]" << std::endl;
+      return 1;
+    }
 }
