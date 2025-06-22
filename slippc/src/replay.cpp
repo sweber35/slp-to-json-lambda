@@ -704,7 +704,7 @@ std::string SlippiReplay::settingsAsJson() {
   return ss.str();
 }
 
-std::string SlippiReplay::matchSettingsAsJson() {
+std::string SlippiReplay::matchSettingsAsJson(const std::string& filename) {
   SlippiReplay s = (*this);
 
   uint8_t _slippi_maj = (s.slippi_version_raw >> 24) & 0xff;
@@ -715,6 +715,7 @@ std::string SlippiReplay::matchSettingsAsJson() {
 
   ss << "{";
   ss << JSTR("match_id"       ,s.start_time) << ",";
+  ss << JSTR("slp_file_name"       ,filename) << ",";
   ss << JSTR("slippi_version" ,s.slippi_version) << ",";
   ss << JUIN("timer"          ,s.timer) << ",";
   ss << JINT("frame_count"    ,s.frame_count) << ",";

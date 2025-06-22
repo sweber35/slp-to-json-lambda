@@ -30,14 +30,14 @@ async function sendFilesToS3( startAt, bucket, streams ) {
   }
 }
 
-function parseWithSlippc(inputPath, outputPath) {
+function parseWithSlippc(fileName, outputPath) {
   const slippcPath = path.join(__dirname, 'slippc');
 
   return new Promise((resolve, reject) => {
     execFile(
         slippcPath,
         [
-          '-i', inputPath,
+          '-i', fileName,
           '-j', outputPath,
           '-a', outputPath + '/analysis.json',
           '-f',
@@ -67,7 +67,8 @@ exports.handler = async (event) => {
   const record = event.Records[0];
   const bucket = record.s3.bucket.name;
   const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
-  const tempPath = '/tmp/game.slp';
+  const fileName = path.basename(key);
+  const tempPath = path.join('/tmp', fileName);
 
   try {
     console.log('Retrieving SLP file from S3:', key);
@@ -85,7 +86,7 @@ exports.handler = async (event) => {
   try {
     console.log('Parsing SLP file into JSON');
 
-    await parseWithSlippc(tempPath, '/tmp');
+    await parseWithSlippc(fileName, '/tmp');
     console.log('Slippc Done!');
 
   } catch (err) {

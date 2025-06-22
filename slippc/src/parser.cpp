@@ -830,29 +830,31 @@ namespace slip {
 
   void Parser::save(const char* outfilename, bool delta) {
 
+    std::string fileNameWithPath = "/tmp/" + std::string(outfilename);
+
     DOUT1("  Saving Settings");
-    std::string settingsFileName = std::string(outfilename) + "/settings.json";
+    std::string settingsFileName = fileNameWithPath + "/settings.json";
     std::ofstream ofile1;
     ofile1.open(settingsFileName.c_str());
     ofile1 << settingsAsJson() << std::endl;
     ofile1.close();
-    DOUT1("  Saved to " << outfilename << "/settings.json");
+    DOUT1("  Saved to " << fileNameWithPath << "/settings.json");
 
     DOUT1("  Saving Match Settings");
-    std::string matchSettingsFileName = std::string(outfilename) + "/match-settings.jsonl";
+    std::string matchSettingsFileName = fileNameWithPath + "/match-settings.jsonl";
     std::ofstream ofile2;
     ofile2.open(matchSettingsFileName.c_str());
-    ofile2 << matchSettingsAsJson() << std::endl;
+    ofile2 << matchSettingsAsJson(std::string(outfilename)) << std::endl;
     ofile2.close();
-    DOUT1("  Saved to " << outfilename << "/match-settings.jsonl");
+    DOUT1("  Saved to " << fileNameWithPath << "/match-settings.jsonl");
 
     DOUT1("  Saving Player Settings");
-    std::string playerSettingsFileName = std::string(outfilename) + "/player-settings.jsonl";
+    std::string playerSettingsFileName = fileNameWithPath + "/player-settings.jsonl";
     std::ofstream ofile3;
     ofile3.open(playerSettingsFileName.c_str());
     ofile3 << playerSettingsAsJson() << std::endl;
     ofile3.close();
-    DOUT1("  Saved to " << outfilename << "/player-settings.jsonl");
+    DOUT1("  Saved to " << fileNameWithPath << "/player-settings.jsonl");
 
     playerFramesAsParquet();
     itemFramesAsParquet();
