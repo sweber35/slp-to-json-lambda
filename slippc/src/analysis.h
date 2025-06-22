@@ -6,6 +6,7 @@
 #include <fstream>
 #include <unistd.h>  //usleep
 #include <math.h>    //sqrt
+#include <arrow/status.h>
 
 #include "enums.h"
 #include "util.h"
@@ -187,7 +188,9 @@ struct Analysis {
   std::string asJson();                      //Convert the analysis structure to a JSON
   std::string statsAsJson();
   std::string attacksAsJson();
+  arrow::Status attacksAsParquet();
   std::string punishesAsJson();
+  arrow::Status punishesAsParquet();
   void save(const char* outfilename);        //Write the analysis out to a JSON file
 };
 

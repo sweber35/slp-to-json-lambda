@@ -48,16 +48,8 @@ OLEVEL := -O3
 
 all: directories base
 
-ARROW_HOME = /usr/local
-base: INCLUDES += -I$(ARROW_HOME)/include
-# shared linking
-LIBS += -L$(ARROW_HOME)/lib \
-        -larrow \
-        -larrow_io \
-        -larrow_dataset \
-        -lparquet \
-        -lparquet_arrow \
-        -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldl
+base: INCLUDES += -I/usr/include/lzma
+base: LIBS += -llzma
 base: slippc
 
 test: INCLUDES += -I/usr/include/lzma
@@ -67,14 +59,12 @@ test: slippc-tests
 gui: GUI = -DGUI_ENABLED=1
 gui: base
 
-ARROW_STATIC_LIBS := \
-  $(ARROW_HOME)/lib/libarrow.a \
-  $(ARROW_HOME)/lib/libarrow_io.a \
-  $(ARROW_HOME)/lib/libarrow_dataset.a \
-  $(ARROW_HOME)/lib/libparquet.a \
-  $(ARROW_HOME)/lib/libparquet_arrow.a \
+static: INCLUDES += -I/usr/local/include
+static: LIBS += -L/usr/local/lib -static \
+  -lparquet \
+  -larrow \
+  -larrow_bundled_dependencies \
   -lz -lzstd -llzma -lbz2 -llz4 -lpthread -ldl
-
 static: slippc
 
 statictest: LIBS += -L ./lib-lin -static -llzma

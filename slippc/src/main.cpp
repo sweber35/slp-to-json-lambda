@@ -252,7 +252,7 @@ int handleJson(const cmdoptions &c, const int debug, slip::Parser &p) {
     if (debug) {
       DOUT1("  Saving Slippi JSON data to file");
     }
-    p.save(c.outfile, !c.nodelta);
+    p.save(c.outfile, c.infile, !c.nodelta);
   }
   return 0;
 }
@@ -265,7 +265,7 @@ int handleSingleFile(const cmdoptions &c, const int debug) {
   if (c.outfile || c.analysisfile) {
     DOUT1(" Parsing");
     slip::Parser p(debug);
-    if (not p.load(c.infile)) {
+  if (not p.load((std::string("/tmp/") + c.infile).c_str())) {
       FAIL("    Could not load input; exiting");
       return 2;
     }
@@ -384,7 +384,7 @@ void write_parquet_test() {
   std::shared_ptr<arrow::io::FileOutputStream> outfile;
   PARQUET_ASSIGN_OR_THROW(
       outfile,
-      arrow::io::FileOutputStream::Open("example.parquet")
+      arrow::io::FileOutputStream::Open("/tmp/example.parquet")
   );
 
   PARQUET_THROW_NOT_OK(parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile, 1024));
@@ -393,7 +393,15 @@ void write_parquet_test() {
 }
 
 int main(int argc, char** argv) {
-  std::cout << "Arrow version: " << ARROW_VERSION_STRING << std::endl;
-  // slip::write_parquet_test();
-  return slip::run(argc,argv);
+  try {
+    std::cout << "Arrow version: " << ARROW_VERSION_STRING << std::endl;
+    return slip::run(argc,argv);
+  }
+  catch (const std::exception& e) {
+    std::cerr << "[FATAL std::exception] " << e.what() << std::endl;
+      return 1;
+    } catch (...) {
+      std::cerr << "[FATAL unknown exception]" << std::endl;
+      return 1;
+    }
 }
