@@ -828,7 +828,7 @@ namespace slip {
     return _replay.matchSettingsAsJson(filename);
   }
 
-  void Parser::save(const char* outfilename, bool delta) {
+  void Parser::save(const char* outfilename, const char* infilename, bool delta) {
 
     DOUT1("  Saving Settings");
     std::string settingsFileName = std::string(outfilename) + "/settings.json";
@@ -842,7 +842,7 @@ namespace slip {
     std::string matchSettingsFileName = std::string(outfilename) + "/match-settings.jsonl";
     std::ofstream ofile2;
     ofile2.open(matchSettingsFileName.c_str());
-    ofile2 << matchSettingsAsJson(std::string(outfilename)) << std::endl;
+    ofile2 << matchSettingsAsJson(std::string(infilename)) << std::endl;
     ofile2.close();
     DOUT1("  Saved to " << matchSettingsFileName);
 

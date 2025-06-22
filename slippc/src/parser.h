@@ -62,7 +62,7 @@ public:
   std::string playerSettingsAsJson();
   std::string matchSettingsAsJson(const std::string& filename);
 
-  void save(const char* outfilename, bool delta); //Save a replay file
+  void save(const char* outfilename, const char* infilename, bool delta); //Save a replay file
 
   //Getter function for exposing read-only access to underlying replay
   inline const SlippiReplay* replay() const {
