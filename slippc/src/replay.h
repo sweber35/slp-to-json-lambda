@@ -203,7 +203,7 @@ struct SlippiReplay {
   std::string fodPlatformChangesAsJson();
   arrow::Status fodPlatformChangesAsParquet();
   std::string settingsAsJson();
-  std::string matchSettingsAsJson();
+  std::string matchSettingsAsJson(const std::string& filename);
   std::string playerSettingsAsJson();
 };
 
