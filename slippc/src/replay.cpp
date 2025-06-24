@@ -718,7 +718,7 @@ std::string SlippiReplay::matchSettingsAsJson(const std::string& filename) {
   ss << JSTR("slp_file_name"  ,filename) << ",";
   ss << JSTR("slippi_version" ,s.slippi_version) << ",";
   ss << JUIN("timer"          ,s.timer) << ",";
-  ss << JINT("frame_count"    ,s.frame_count) << ",";
+  ss << JINT("frame_count"    ,s.frame_count + 123) << ",";
   ss << JINT("winner_id"      ,s.winner_id) << ",";
   ss << JUIN("stage"          ,s.stage) << ",";
   ss << JUIN("end_type"       ,s.end_type);
