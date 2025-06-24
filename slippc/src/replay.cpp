@@ -492,7 +492,7 @@ arrow::Status SlippiReplay::itemFramesAsParquet() {
       match_id_b.Append(s.start_time);
       spawn_id_b.Append(s.item[i].spawn_id);
       item_type_b.Append(s.item[i].type);
-      frame_b.Append(s.item[i].frame[f].frame);
+      frame_b.Append(s.item[i].frame[f].frame + 123);
       state_b.Append(s.item[i].frame[f].state);
       face_dir_b.Append(s.item[i].frame[f].face_dir);
       xvel_b.Append(s.item[i].frame[f].xvel);
@@ -718,7 +718,7 @@ std::string SlippiReplay::matchSettingsAsJson(const std::string& filename) {
   ss << JSTR("slp_file_name"  ,filename) << ",";
   ss << JSTR("slippi_version" ,s.slippi_version) << ",";
   ss << JUIN("timer"          ,s.timer) << ",";
-  ss << JINT("frame_count"    ,s.frame_count + 123) << ",";
+  ss << JINT("frame_count"    ,s.frame_count) << ",";
   ss << JINT("winner_id"      ,s.winner_id) << ",";
   ss << JUIN("stage"          ,s.stage) << ",";
   ss << JUIN("end_type"       ,s.end_type);
