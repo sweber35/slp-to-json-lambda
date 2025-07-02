@@ -3,7 +3,7 @@ name: Build Binary and Deploy Lambda
 on:
   push:
     branches:
-      - main
+      - feature/data-refactor
 
 jobs:
   build-and-deploy:
