@@ -598,7 +598,7 @@ std::string SlippiReplay::fodPlatformChangesAsJson() {
       int a = 0;
       ss << "{ ";
       ss << JEND(a) << JSTR("match_id", s.start_time);
-      ss << JEND(a) << JUIN("frame", e.frame);
+      ss << JEND(a) << JUIN("frame", e.frame - 123);
       ss << JEND(a) << JUIN("platform", e.platform);
       ss << JEND(a) << JFLT("height", e.platform_height);
       ss << " }\n";
