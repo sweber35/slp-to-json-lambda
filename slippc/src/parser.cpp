@@ -525,6 +525,7 @@ namespace slip {
   bool Parser::_parseItemUpdate() {
     DOUT2("  Parsing item frame event at byte " << +_bp);
     int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
+    int32_t relativeFrame    = fnum - LOAD_FRAME;
 
     if (fnum < LOAD_FRAME) {
       FAIL_CORRUPT("    Frame index " << fnum << " less than " << +LOAD_FRAME);
@@ -554,7 +555,7 @@ namespace slip {
     if (f < MAX_ITEM_LIFE) {
       _replay.item[id].num_frames       += 1;
       _replay.item[id].type              = readBE2U(&_rb[_bp+O_ITEM_TYPE]);
-      _replay.item[id].frame[f].frame    = fnum;
+      _replay.item[id].frame[f].frame    = relativeFrame;
       _replay.item[id].frame[f].state    = uint8_t(_rb[_bp+O_ITEM_STATE]);
       _replay.item[id].frame[f].face_dir = readBE4F(&_rb[_bp+O_ITEM_FACING]);
       _replay.item[id].frame[f].xvel     = readBE4F(&_rb[_bp+O_ITEM_XVEL]);
@@ -581,7 +582,8 @@ namespace slip {
 
   bool Parser::_parseFodPlatform() {
     DOUT2("  Parsing FoD platform event at byte " << +_bp);
-    int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]) + 123;
+    int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
+    int32_t f    = fnum - LOAD_FRAME;
 
     if (fnum < LOAD_FRAME) {
       FAIL_CORRUPT("    Frame index " << fnum << " less than " << +LOAD_FRAME);
@@ -596,7 +598,7 @@ namespace slip {
     uint8_t platform = _rb[_bp+O_PLATFORM];
     float platform_height = readBE4F(&_rb[_bp+O_PLAT_HEIGHT]);
 
-    SlippiFodPlatform event = { fnum, platform, platform_height };
+    SlippiFodPlatform event = { f, platform, platform_height };
     _replay.platform_events.push_back(event);
 
     return true;
