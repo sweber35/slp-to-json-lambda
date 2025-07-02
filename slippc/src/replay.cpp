@@ -639,7 +639,7 @@ arrow::Status SlippiReplay::fodPlatformChangesAsParquet() {
     for (size_t i = 0; i < s.platform_events.size(); ++i) {
       const auto& e = s.platform_events[i];
       match_id_b.Append(s.start_time);
-      frame_b.Append(e.frame);
+      frame_b.Append(e.frame + 123);
       platform_b.Append(e.platform);
       platform_height_b.Append(e.platform_height);
     }
