@@ -581,7 +581,7 @@ namespace slip {
 
   bool Parser::_parseFodPlatform() {
     DOUT2("  Parsing FoD platform event at byte " << +_bp);
-    int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]);
+    int32_t fnum = readBE4S(&_rb[_bp+O_FRAME]) + 123;
 
     if (fnum < LOAD_FRAME) {
       FAIL_CORRUPT("    Frame index " << fnum << " less than " << +LOAD_FRAME);
